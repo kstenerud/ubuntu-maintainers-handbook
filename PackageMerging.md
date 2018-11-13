@@ -34,8 +34,21 @@ Example:
 
 You'll be merging from debian unstable, which in this case is 3.1.23-1.
 
+
+Check existing bug entries
+--------------------------
+
+Check for any low hanging fruit in the debian or ubuntu bug list that can be wrapped into this merge.
+
+https://bugs.launchpad.net/ubuntu/+source/[package]
+https://tracker.debian.org/pkg/[package]
+
+
+
 Make a bug report for the merge
 -------------------------------
+
+Search for an existing merge request bug entry in launchpad, and if you don't find one:
 
 Go to https://bugs.launchpad.net/ubuntu/+source/[package] and create a new bug report, requesting a merge.
 
