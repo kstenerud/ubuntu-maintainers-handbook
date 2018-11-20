@@ -41,6 +41,7 @@ Check existing bug entries
 Check for any low hanging fruit in the debian or ubuntu bug list that can be wrapped into this merge.
 
 https://bugs.launchpad.net/ubuntu/+source/[package]
+
 https://tracker.debian.org/pkg/[package]
 
 
@@ -125,10 +126,49 @@ In this case, the commits are already deconstructed.
 
     git ubuntu tag --deconstruct --bug 1802914
 
+If not deconstructed. For example nspr:
+
+List changes in merge commit:
+
+    git log --oneline
+
+Get all commit hashes since old/debian, and:
+
+    git show [hash] | diffstat
+
+Example (nspr):
+
+    $ git show 4326585 | diffstat
+     changelog                                   |  501 ++++++++++++++++++++++++++++
+     control                                     |    3 
+	 patches/fix_test_errcodes_for_runpath.patch |   11 
+	 patches/series                              |    1 
+	 rules                                       |    5 
+	 5 files changed, 520 insertions(+), 1 deletion(-)
+
+ * All changelog changes go to one commit.
+ * Update maintainer (in debian/control) goes to one commit.
+ * All other logically separatable commits go into individual commits.
+
+debian/changelog:
+
+	nspr (2:4.18-1ubuntu1) bionic; urgency=medium
+
+	  * Resynchronize with Debian, remaining changes
+	    - rules: Enable Thumb2 build on armel, armhf.
+	    - d/p/fix_test_errcodes_for_runpath.patch: Fix testcases to handle
+	      zesty linker default changing to --enable-new-dtags for -rpath.
+
+There are two logical commits to deconstruct.
+
+View individual files using git show:
+
+    git show 4326585 -- debian/rules
 
 ### Create logical tag
 
 Here, you squash commits that are imports, changelog, maintainer, etc.
+Also look for revert pairs to remove since together they resolve to a noop.
 
     git rebase -i lp1802914/old/debian
 
@@ -136,7 +176,14 @@ Here, you squash commits that are imports, changelog, maintainer, etc.
 * Delete changelog, maintainer
 * Possibly rearrange commits
 
-.
+Check to make sure you didn't remove something by mistake:
+
+$ git diff lp1803296/deconstruct/1%2.3.2.1-1ubuntu3 |diffstat
+ changelog |  762 --------------------------------------------------------------
+ control   |    3 
+ 2 files changed, 1 insertion(+), 764 deletions(-)
+
+ Only changelog and control were changed, which is what we want.
 
     git ubuntu tag --logical --bug 1802914
 
@@ -144,18 +191,31 @@ Here, you squash commits that are imports, changelog, maintainer, etc.
 
     git tag -a -m "Logical delta of 3.1.20-3.1ubuntu2" lp1802914/logical/3.1.20-3.1ubuntu2
 
+Note: Certain characters aren't allowed in git. For example, `:` should be replaced with `%`.
 
 ### Rebase onto new debian
 
     git rebase -i --onto lp1802914/new/debian lp1802914/old/debian HEAD 
+
+Check that the patches still apply cleanly:
+
+    quilt push -a --fuzz=0
+
+If the patches fail, one of the patchfiles in the rebase is no longer needed because it's been fixed upstream. Identify it and remove from the rebase.
+
+    quilt pop -a
+
+
+### Generate the merge branch
+
     git checkout -b merge-3.1.23-1-disco
-
-
 
 
 ### Finish the merge
 
-git ubuntu merge finish
+    git ubuntu merge finish ubuntu/devel --bug 1802886
+
+The reconstructed changelog is not perfect; check it to make sure it follows the standards.
 
 #### If that fails
 
@@ -196,15 +256,27 @@ Ubuntu doesn't know about the new tarball yet, so we must create it.
 
 #### If this fails:
 
-	git checkout pkg/importer/debian/pristine-tar
+	git checkout -b pkg/importer/debian/pristine-tar
 	pristine-tar checkout at_3.1.23.orig.tar.gz
 	git checkout merge-3.1.23-1-disco
 
 ##### If git checkout also fails:
+
+	git checkout merge-3.1.23-1-disco
 	cd /tmp
 	pull-debian-source at
 	mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
 	cd -
+
+### Check the source for errors
+
+	git ubuntu lint --target-branch debian/sid --lint-namespace lp1802914
+
+This may spit out errors such as:
+
+    E: More than one changelog diff hunk detected
+
+You decide which are important to fix. In this case, it's acceptable because we want to include multiple changelog entries.
 
 ### Build a source package
 
@@ -218,17 +290,7 @@ The switches are:
  * -sa = include orig tarball (required on a merge)
  * -vXYZ = include changelog since XYZ
 
-### Chck the packaging for errors
-
-	git ubuntu lint --target-branch debian/sid --lint-namespace lp1802914
-
-This may spit out errors such as:
-
-    E: More than one changelog diff hunk detected
-
-You decide which are important to fix. In this case, it's acceptable because we want to include multiple changelog entries.
-
-Lintian:
+### Check the built package for errors
 
     lintian --pedantic --display-info --verbose --info --profile ubuntu ../at_3.1.23-1ubuntu1.dsc
 
@@ -298,6 +360,9 @@ Then continue with the test:
 	apt update
 	apt dist-upgrade -y
 	echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+
+Try running regression tests:
+https://git.launchpad.net/qa-regression-testing
 
 
 ### Update the merge proposal

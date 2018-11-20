@@ -1027,13 +1027,45 @@ clone repo
 
 Go into scripts and run: sudo ./install-packages test-foo.py
 
+
+-----------------------------
     
 
+WIP:
+---
 
------
 pull-debian-source <pakage>
 
 salsa.debian.org
 
 Make sure pulled source matches what's in salsa
 
+https://code.launchpad.net/~kstenerud/+activereviews
+
+Bug
+Make a fix
+make a ppa
+Open merge proposal
+merge is approved
+merge is sponsored
+If for existing release:
+    package is moved to unapproved
+    package is approved by SRU, moved to proposed
+    SRU team adds tags to bug page:
+    - verification-needed-[release]
+else:
+    package moved to proposed
+From proposed:
+    package built
+    autopkgtests are run
+    installability checked
+if for existing release (SRU):
+    re-run regression (autopkgtests) and case tests (test of the bug) using package in proposed
+    update bug, mentioning tests and results
+    update tags: change verification-needed-[release] to:
+    - verification-done-[release]
+    - verification-failed-[release]
+    Minimal maturing period of 7 days.
+    released (phased release)
+else:
+    migrates from proposed into release
