@@ -297,6 +297,8 @@ The switches are:
 
 ### Submit merge proposal
 
+NOTE: Git branch with % in name doesn't work. Use something like _
+
 	$ git ubuntu submit --reviewer canonical-server-packageset-reviewers --target-branch debian/sid
 	Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
 	If it looks ok, please move it to the 'Needs Review' state.
@@ -386,3 +388,16 @@ Example:
 
 Change the MP status from "work in progress" to "needs review"
 
+
+
+More Notes
+----------
+
+Check package tests, e.g. http://autopkgtest.ubuntu.com/packages/o/openssh/cosmic/amd64
+
+From http://people.canonical.com/~ubuntu-archive/proposed-migration
+
+update_excuses.html shows which packages are stuck
+update_output.txt gives more info
+These are for the current dev.
+subdirs contain info for specific releases (so, SRUs)

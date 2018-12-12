@@ -929,6 +929,9 @@ Once your MP has been reviewed, request sponsorship, pointing to the git commit 
 
     Please sponsor this MP. Git commit: 566d8c9eff6a13c25c2ef5f5d9e176f49c52a3b4
 
+The sponsor will tag the upload and dput it to where it belongs.
+
+
 Update the Bug Report
 ---------------------
 
@@ -975,6 +978,11 @@ You'll receive an email notification that the bugfix was accepted:
     ** Tags added: verification-needed verification-needed-bionic
 
 Follow the build link (https://launchpad.net/ubuntu/+source/postfix/3.3.0-1ubuntu0.1) and make sure that it's publishing to the correct place (bionic), and that the builds completed (green checkmarks).
+
+
+### IRC Monitoring
+
+Join #ubuntu-ci-eng on the freenode IRC server to get pinged with your name when CI events occur.
 
 
 ### The Excuses Page
@@ -1069,3 +1077,21 @@ if for existing release (SRU):
     released (phased release)
 else:
     migrates from proposed into release
+
+
+More Notes
+----------
+
+https://code.launchpad.net/~ubuntu-release/britney/hints-ubuntu
+https://code.launchpad.net/~ubuntu-sru/britney/hints-ubuntu-cosmic
+
+These repos determine which failing tests are to be ignored. Example:
+
+    ubuntu-release:64:force-badtest gvfs/1.36.1-0ubuntu3/ppc64el gvfs/1.36.1-0ubuntu3/s390x gvfs/1.38.0-2ubuntu2/s390
+
+09:45 <@cpaelzer> so it is only masked on those arches
+09:45 <@cpaelzer> 1.38 is the current version
+09:46 <@cpaelzer> you'd wait for the rertried tests to show up
+09:46 <@cpaelzer> if they still fail you'd satrt to investigate case by case
+09:46 <@cpaelzer> and then either open an MP to maske the tests on the linked repo
+09:46 <@cpaelzer> or you'd open a bug/discussion for some package change (if you want to fix a test for example)
