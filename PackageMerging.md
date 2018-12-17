@@ -89,8 +89,11 @@ For example:
 | Tag        | Source             |
 | ---------- | ------------------ |
 | old/ubuntu | ubuntu/disco-devel |
-| old/debian | last import tag    |
+| old/debian | last import tag prior to old/ubuntu without ubuntu suffix in version    |
 | new/debian | debian/sid         |
+
+per: https://www.debian.org/releases/
+"debian/sid" always matches to debian unstable.
 
 you can find the last import tag using `git log`:
 
@@ -105,7 +108,8 @@ So, we create the following tags:
 
 
 #### Start a rebase
-git rebase -i pkg/import/3.1.20-3.1
+
+git rebase -i lp1802914/old/debian
 
 #### Clear any history prior to the last debian version
 
@@ -169,6 +173,7 @@ View individual files using git show:
 
 Here, you squash commits that are imports, changelog, maintainer, etc.
 Also look for revert pairs to remove since together they resolve to a noop.
+Also squash anywhere you see multiple changes to the same patch file.
 
     git rebase -i lp1802914/old/debian
 
@@ -195,7 +200,7 @@ Note: Certain characters aren't allowed in git. For example, `:` should be repla
 
 ### Rebase onto new debian
 
-    git rebase -i --onto lp1802914/new/debian lp1802914/old/debian HEAD 
+    git rebase -i --onto lp1802914/new/debian lp1802914/old/debian
 
 Check that the patches still apply cleanly:
 
@@ -401,3 +406,48 @@ update_excuses.html shows which packages are stuck
 update_output.txt gives more info
 These are for the current dev.
 subdirs contain info for specific releases (so, SRUs)
+
+
+-----------------------
+Bug template before sponsor
+
+Upload, or get sponsor (tag & sponsor)
+Say on mp, please tag & sponsor
+
+Non-sru:
+
+  After sponsoring, goes into disco-proposed.
+
+SRU path:
+
+  Goes to unapproved
+  SRU team does review checking for regressions
+  SRU team says yes, goes into xyz-proposed.
+
+In proposed:
+- builds
+- track migration (check if it built successfully)
+- next, autopackagetests: check excuses page for test results. Can take a day to run tests.
+
+When tests succeeded, built fine:
+- In disco, it would migrate from proposed to release
+- special cases: not installable, waiting on dependency
+3 things needed:
+-- not installable: depends on something not existing, for example
+-- dependency: Dependent package has not gone into release yet.
+-- all pkg tests are ok
+
+SRU path:
+- builds, tests
+- SRU team puts template response  in bug "please test and verify"
+- reporter verifies fix, switches tags.
+- if not, fixer can verify:
+- deb http://archive.ubuntu.com/ubuntu/ xenial-proposed restricted main multiverse universe
+If
+
+# Once a week, go to http://people.canonical.com/~ubuntu-archive/pending-sru
+# Look for bugs that are currently SRUs in flight
+# change tags as needed
+
+# 2 things needed: pending sru needs to be green, and there for at least 7 days
+# Eventually SRU team member migrates to release
