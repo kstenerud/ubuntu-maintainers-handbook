@@ -26,7 +26,7 @@ Suite (Package) Model
 
 There are binary and source packages, each in effectively parallel namespaces.
 
-In practice, binary and source packages are stored together in a master directory. Their namespaces are parallel because they have different filename endings (.deb for binary packages, .dsc for source packages). By convention, we give binary and source packages the same base name.
+In practice, binary and source packages are stored together in a master directory. Their namespaces are parallel because they have different filename endings (.deb for binary packages, .dsc for source packages). By convention, we give binary and source packages the same base name. Note, however, that a single source package can generate multiple binary packages, so the name of a binary package may not match exactly with the source package.
 
 For example, in http://archive.ubuntu.com/ubuntu/pool/main/b/bash:
 
@@ -50,7 +50,7 @@ For example, in http://archive.ubuntu.com/ubuntu/pool/main/b/bash:
 
 All packages for all ubuntu releases are stored together in one master directory, and pointed to by the various releases. This means that you cannot have two packages with the same version, even across releases, but you can have multiple releases point to the same package version.
 
-Once a package is uploaded to the archive, it is permanent, and cannot be replaced or erased.
+Once a package is uploaded to Launchpad, it cannot be replaced, even if the package Launchpad uploads to the apt repository gets deleted (for whatever reason). If a package does get deleted from the archive, it will show as "Deleted" in Launchpad.
 
 
 ### Suites
@@ -216,27 +216,3 @@ See Also
 https://www.debian.org/doc/debian-policy/
 
 http://people.canonical.com/~cjwatson/ubuntu-policy/
-
-
-
-
-Older notes to be processed
-===========================
-
-ubuntu releases: launchpad.net/ubuntu
-
-setup .chdist
-- basically like running apt in a chroot
-apt cache policy bash
-chdist apt-get disco update
-chdist apt-cache disco policy bash
-make an alias to reverse them
-
--------------------
-
-Apt reads metadata from Packages (.gz, .xz)
-- important: Depends
-
------------------
-
-Nowadays we use debhelper, and debian/rules just calls that.

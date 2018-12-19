@@ -295,6 +295,8 @@ The switches are:
  * -sa = include orig tarball (required on a merge)
  * -vXYZ = include changelog since XYZ
 
+Changes should be from the last ubuntu version
+
 ### Check the built package for errors
 
     lintian --pedantic --display-info --verbose --info --profile ubuntu ../at_3.1.23-1ubuntu1.dsc

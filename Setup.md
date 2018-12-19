@@ -196,9 +196,9 @@ Optionally, you can mount your homedir inside the container:
 A template `.sbuildrc`:
 
 Replace the following:
- * $maintainer_name='Your Full Name <your@email.com>';
- * $build_dir='/home/my_user/schroot/build';
- * $log_dir="/home/my_user/schroot/logs";
+ * `$maintainer_name='Your Full Name <your@email.com>';`
+ * `$build_dir='/home/my_user/schroot/build';`
+ * `$log_dir="/home/my_user/schroot/logs";`
 
 
 Template:
