@@ -97,3 +97,13 @@ Now click "Activate".
 When it finishes, you should be able to see it e.g. https://launchpad.net/~kstenerud/+archive/ubuntu/bionic-postfix-postconf-segfault-1753470/+packages
 
 Note: You must wait for the package to build server-side before you can use the PPA to install packages. This might take time depending on how busy things are!
+
+
+
+
+karl, fwiw 'build-source' in git-ubuntu is expected to go away i think
+and be replaced by just 'build -uS -uC' (as with debuild)
+You5:10 PM
+ok
+Scott Moser5:10 PM
+https://bugs.launchpad.net/usd-importer/+bug/1799466

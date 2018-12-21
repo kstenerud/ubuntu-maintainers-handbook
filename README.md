@@ -8,10 +8,13 @@ Sections
 
  * [High Level Concepts](Concepts.md)
  * [Setting up Your Environment](Setup.md)
- * Package Maintenance
+ * Common Tasks
    - [Making Patch Files](DebianPatch.md)
    - [Committing Your Changes](CommittingChanges.md)
    - [Package Building](PackageBuilding.md)
+   - [Package Tests](PackageTests.md)
+   - [Merge Proposals](MergeProposal.md)
+ * Package Maintenance
    - [Package Fixing & SRUs](PackageFixing.md)
    - [Package Merging](PackageMerging.md)
  * [Reviewing Merge Proposals](Reviewing.md)

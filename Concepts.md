@@ -210,6 +210,139 @@ If you click on the latest version in the `+source/some-package` page, you'll se
 Once built, the build artifacts are queued for publication, and eventually get pushed to the apt master mirror. If the build fails, the build info page will show the build log.
 
 
+
+Change Process
+--------------
+
+All changes to Ubuntu packages follow a similar process:
+
+ 1. Open a bug report listing the reason why a change is needed. You use the same process even for merges (which technically aren't bugs).
+ 2. Clone the source repository.
+ 3. Make a branch for yourself.
+ 4. Make your changes and push them to your launchpad repository.
+ 5. Open a merge proposal and get reviews.
+ 6. Upload, or get a sponsor for your changes.
+ 7. Track migration of your package through the build system.
+ 8. Verify that the package works as intended, and han't introduced regressions.
+
+
+
+Source Code Repositories
+------------------------
+
+All changes to packages are done through their source code repositories. This used to be done through bazaar, but is now done through git. The preferred method is to use `git-ubuntu`, which you can install using apt.
+
+
+### Cloning a Repository
+
+    git ubuntu clone hello
+
+This will attempt to clone the `hello` Ubuntu source code repository into a subdirectory `hello`. There will be many branches and tags set up, for example:
+
+    $ git ubuntu clone hello
+    From https://git.launchpad.net/~usd-import-team/ubuntu/+source/hello
+     * [new branch]      applied/debian/buster          -> pkg/applied/debian/buster
+     * [new branch]      applied/debian/jessie          -> pkg/applied/debian/jessie
+     ...
+     * [new branch]      applied/ubuntu/artful          -> pkg/applied/ubuntu/artful
+     * [new branch]      applied/ubuntu/artful-devel    -> pkg/applied/ubuntu/artful-devel
+     * [new branch]      applied/ubuntu/bionic          -> pkg/applied/ubuntu/bionic
+     * [new branch]      applied/ubuntu/bionic-devel    -> pkg/applied/ubuntu/bionic-devel
+    ...
+     * [new branch]      debian/buster                  -> pkg/debian/buster
+     * [new branch]      debian/jessie                  -> pkg/debian/jessie
+    ...
+     * [new branch]      importer/debian/dsc            -> pkg/importer/debian/dsc
+     * [new branch]      importer/debian/pristine-tar   -> pkg/importer/debian/pristine-tar
+     * [new branch]      importer/ubuntu/dsc            -> pkg/importer/ubuntu/dsc
+     * [new branch]      importer/ubuntu/pristine-tar   -> pkg/importer/ubuntu/pristine-tar
+    ...
+     * [new branch]      ubuntu/artful                  -> pkg/ubuntu/artful
+     * [new branch]      ubuntu/artful-devel            -> pkg/ubuntu/artful-devel
+     * [new branch]      ubuntu/bionic                  -> pkg/ubuntu/bionic
+     * [new branch]      ubuntu/bionic-devel            -> pkg/ubuntu/bionic-devel
+     ...
+     * [new branch]      ubuntu/devel                   -> pkg/ubuntu/devel
+     ...
+     * [new tag]         applied/2.1.1-4                -> pkg/applied/2.1.1-4
+     * [new tag]         applied/2.1.1-5                -> pkg/applied/2.1.1-5
+     * [new tag]         applied/2.10-1                 -> pkg/applied/2.10-1
+     * [new tag]         applied/2.10-1build1           -> pkg/applied/2.10-1build1
+     * [new tag]         applied/2.10-1ubuntu1          -> pkg/applied/2.10-1ubuntu1
+    ...
+     * [new tag]         import/2.1.1-4                 -> pkg/import/2.1.1-4
+     * [new tag]         import/2.1.1-5                 -> pkg/import/2.1.1-5
+     * [new tag]         import/2.10-1                  -> pkg/import/2.10-1
+     * [new tag]         import/2.10-1build1            -> pkg/import/2.10-1build1
+     * [new tag]         import/2.10-1ubuntu1           -> pkg/import/2.10-1ubuntu1
+    ...
+     * [new tag]         upstream/debian/2.10.gz        -> pkg/upstream/debian/2.10.gz
+     * [new tag]         upstream/debian/2.2.gz         -> pkg/upstream/debian/2.2.gz
+     * [new tag]         upstream/debian/2.4.gz         -> pkg/upstream/debian/2.4.gz
+
+The branches you'll be interested in are `ubuntu/somerelease-devel`. `ubuntu/somerelease` is the package set as it was on release day. the `-devel` branch is the release + all changes to date. There is also a special `ubuntu-devel` branch which is the most up to date branch.
+
+You'll be using the `-devel` branches for your changes.
+
+
+### Creating a branch for your work
+
+Before making changes, create a branch for yourself. It's recommended to give the branch a meaningful name that will remind you of its purpose after not looking at it for a few months. For example:
+
+    bionic-hello-fix-segfault-1234567
+
+Where:
+
+ * `bionic`: The Ubuntu release this change is for.
+ * `hello`: The package you are changing.
+ * `fix-segfault`: A 1-3 word description of the change.
+ * `1234567`: The launchpad bug number that this change addresses.
+
+Using this format allows you to use the same identifier for git branches and for PPAs, making it easy to match them up.
+
+Create the branch like so:
+
+    git branch bionic-hello-fix-segfault-1234567 pkg/ubuntu/bionic-devel
+
+
+### Pushing Your Changes
+
+Once your changes are ready to push, do so:
+
+    git push mylaunchpadusername bionic-hello-fix-segfault-1234567
+
+Now you'll be able to see it on launchpad. Go to your code section: https://code.launchpad.net/~your-launchpad-username/+git
+
+You'll see a list of repositories:
+
+    lp:~yourlaunchpadname/ubuntu/+source/hello      2018-12-20
+    lp:~yourlaunchpadname/ubuntu/+source/logwatch   2018-12-18
+    lp:~yourlaunchpadname/ubuntu/+source/tomcat8    2018-12-10
+    lp:~yourlaunchpadname/ubuntu/+source/php7.3     2018-12-05
+
+Click on a repository, and you'll see a list of branches at the bottom:
+
+    Name                                Last Modified   Last Commit
+    bionic-hello-fix-segfault-1234567   2018-12-10      changelog 
+
+Click on the branch to get to its merge status:
+
+You'll either have a merge status like so:
+
+     Approved for merging into ubuntu/+source/hello:ubuntu/bionic-devel
+
+        John Smith: Approve on 2018-12-20
+        Canonical Server Team: Pending requested 2018-12-21
+        Diff: 171 lines (+149/-0)
+        3 files modified
+
+Clicking the merge link (`Approved` in this case) brings you to the actual merge proposal.
+
+Or you can start a merge proposal by clicking `Propose for merging`.
+
+
+
+
 See Also
 --------
 
