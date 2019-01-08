@@ -8,8 +8,10 @@ Merging takes a new version of a package from Debian and merges in any Ubuntu ch
 https://wiki.ubuntu.com/UbuntuDevelopment/Merging/GitWorkflow
 
 
-Discover the current version
-----------------------------
+Preliminary Steps
+-----------------
+
+### Discover the current version
 
 rmadison [package]
 rmadison -u debian [package]
@@ -35,8 +37,7 @@ Example:
 You'll be merging from debian unstable, which in this case is 3.1.23-1.
 
 
-Check existing bug entries
---------------------------
+### Check existing bug entries
 
 Check for any low hanging fruit in the debian or ubuntu bug list that can be wrapped into this merge.
 
@@ -45,9 +46,7 @@ https://bugs.launchpad.net/ubuntu/+source/[package]
 https://tracker.debian.org/pkg/[package]
 
 
-
-Make a bug report for the merge
--------------------------------
+### Make a bug report for the merge
 
 Search for an existing merge request bug entry in launchpad, and if you don't find one:
 
@@ -61,8 +60,8 @@ For example:
 
 	result: https://bugs.launchpad.net/ubuntu/+source/at/+bug/1802914
 
-Clone the package repository
-----------------------------
+
+### Clone the package repository
 
     git ubuntu clone [package]
 
@@ -71,10 +70,11 @@ For example:
     git ubuntu clone at
 
 
-Start a merge
+
+Merge Process
 -------------
 
-### With Git Ubuntu
+### Start a merge
 
     git ubuntu merge start ubuntu/devel --bug [bug number]
 
@@ -82,44 +82,7 @@ For example:
 
     git ubuntu merge start ubuntu/devel --bug 1802914
 
-### Manually
-
-#### Create tags
-
-| Tag        | Source             |
-| ---------- | ------------------ |
-| old/ubuntu | ubuntu/disco-devel |
-| old/debian | last import tag prior to old/ubuntu without ubuntu suffix in version    |
-| new/debian | debian/sid         |
-
-per: https://www.debian.org/releases/
-"debian/sid" always matches to debian unstable.
-
-you can find the last import tag using `git log`:
-
-    ...
-    commit 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404 (tag: pkg/import/3.1.20-3.1)
-
-So, we create the following tags:
-
-	git tag lp1802914/old/ubuntu pkg/ubuntu/disco-devel
-	git tag lp1802914/old/debian 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404
-	git tag lp1802914/new/debian pkg/debian/sid
-
-
-#### Start a rebase
-
-git rebase -i lp1802914/old/debian
-
-#### Clear any history prior to the last debian version
-
-If the package hasn't been updated since the git repository structure has changed, it will grab all changes throughout time rather than since the last debian version. Simply delete the older lines from the interactive rebase
-
-In this case, before 3.1.20-3.1
-
-#### Create reconstruct tag
-
-    git ubuntu tag --reconstruct --bug 1802914
+* If this fails, [do it manully](#start-a-merge-manually)
 
 
 ### Deconstruct commits
@@ -169,6 +132,7 @@ View individual files using git show:
 
     git show 4326585 -- debian/rules
 
+
 ### Create logical tag
 
 Here, you squash commits that are imports, changelog, maintainer, etc.
@@ -192,11 +156,8 @@ $ git diff lp1803296/deconstruct/1%2.3.2.1-1ubuntu3 |diffstat
 
     git ubuntu tag --logical --bug 1802914
 
-#### If this fails, do it manually:
+* If this fails, [do it manully](#create-a-logical-tag-manually)
 
-    git tag -a -m "Logical delta of 3.1.20-3.1ubuntu2" lp1802914/logical/3.1.20-3.1ubuntu2
-
-Note: Certain characters aren't allowed in git. For example, `:` should be replaced with `%`.
 
 ### Rebase onto new debian
 
@@ -222,36 +183,8 @@ If the patches fail, one of the patchfiles in the rebase is no longer needed bec
 
 The reconstructed changelog is not perfect; check it to make sure it follows the standards.
 
-#### If that fails
+* If this fails, [do it manully](#finish-the-merge-manually)
 
-Merge changelogs of old ubuntu and new debian:
-
-	git show lp1802914/new/debian:debian/changelog >/tmp/debnew.txt
-	git show lp1802914/old/ubuntu:debian/changelog >/tmp/ubuntuold.txt
-	merge-changelog /tmp/debnew.txt /tmp/ubuntuold.txt >debian/changelog 
-	git commit -m "Merge changelogs" debian/changelog
-
-Create new changelog entry for the merge:
-
-	dch -i
-
-Which creates for example:
-
-	at (3.1.23-1ubuntu1) disco; urgency=medium
-
-	  * Merge with Debian unstable (LP: #1802914). Remaining changes:
-	    - Suggest an MTA rather than Recommending one.
-
-	 -- Karl Stenerud <karl.stenerud@canonical.com>  Mon, 12 Nov 2018 18:11:53 +0100
-
-Commit the changelog:
-
-	git commit -m "changelog: Merge of 3.1.23-1" debian/changelog
-
-Update maintainer:
-
-    update-maintainer
-    git commit -m "Update maintainer" debian/control
 
 ### Get orig tarball
 
@@ -259,19 +192,8 @@ Ubuntu doesn't know about the new tarball yet, so we must create it.
 
 	git ubuntu export-orig
 
-#### If this fails:
+* If this fails, [do it manully](#get-orig-tarball-manually)
 
-	git checkout -b pkg/importer/debian/pristine-tar
-	pristine-tar checkout at_3.1.23.orig.tar.gz
-	git checkout merge-3.1.23-1-disco
-
-##### If git checkout also fails:
-
-	git checkout merge-3.1.23-1-disco
-	cd /tmp
-	pull-debian-source at
-	mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
-	cd -
 
 ### Check the source for errors
 
@@ -282,6 +204,7 @@ This may spit out errors such as:
     E: More than one changelog diff hunk detected
 
 You decide which are important to fix. In this case, it's acceptable because we want to include multiple changelog entries.
+
 
 ### Build a source package
 
@@ -297,6 +220,7 @@ The switches are:
 
 Changes should be from the last ubuntu version
 
+
 ### Check the built package for errors
 
     lintian --pedantic --display-info --verbose --info --profile ubuntu ../at_3.1.23-1ubuntu1.dsc
@@ -310,11 +234,8 @@ NOTE: Git branch with % in name doesn't work. Use something like _
 	Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
 	If it looks ok, please move it to the 'Needs Review' state.
 
-#### If this fails:
+* If this fails, [do it manully](#submit-merge-proposal-manually)
 
-    git push kstenerud merge-3.1.23-1-disco
-
-Then, create a MP manually in launchpad, and save the URL.
 
 ### Push all your tags
 
@@ -327,15 +248,18 @@ Then, create a MP manually in launchpad, and save the URL.
 	 * [new tag]         lp1802914/old/ubuntu -> lp1802914/old/ubuntu
 	 * [new tag]         lp1802914/reconstruct/3.1.20-3.1ubuntu2 -> lp1802914/reconstruct/3.1.20-3.1ubuntu2
 
+
 ### Create PPA
 
 https://launchpad.net/~kstenerud/+activate-ppa
 
 Call it `disco-at-merge-1802914`
 
+
 #### Upload files
 
 	dput ppa:kstenerud/disco-at-merge-1802914 ../at_3.1.23-1ubuntu1~ppa1_source.changes
+
 
 #### Check the results after a bit
 
@@ -391,65 +315,141 @@ Example:
 
 	This package contains no tests.
 
+
 #### Open the review
 
 Change the MP status from "work in progress" to "needs review"
 
 
 
-More Notes
-----------
+Following Migration
+-------------------
 
-Check package tests, e.g. http://autopkgtest.ubuntu.com/packages/o/openssh/cosmic/amd64
+Once the merge proposal goes through, you must follow the package to make sure it gets to its destination.
 
-From http://people.canonical.com/~ubuntu-archive/proposed-migration
+### Package Tests
 
-update_excuses.html shows which packages are stuck
-update_output.txt gives more info
-These are for the current dev.
-subdirs contain info for specific releases (so, SRUs)
+The results from the latest package tests will be published for each ubuntu release.
+
+For example: http://autopkgtest.ubuntu.com/packages/o/openssh/cosmic/amd64
+
+### Proposed Migration
+
+The status of all packages will be available from http://people.canonical.com/~ubuntu-archive/proposed-migration or one of its subdirectories. The top level directory is for the current dev release. Previous releases are in subdirectories.
 
 
------------------------
-Bug template before sponsor
 
-Upload, or get sponsor (tag & sponsor)
-Say on mp, please tag & sponsor
+-----------------------------------------------------------------------------
 
-Non-sru:
+Manual Steps
+------------
 
-  After sponsoring, goes into disco-proposed.
+### Start a merge manually
 
-SRU path:
+#### Create tags
 
-  Goes to unapproved
-  SRU team does review checking for regressions
-  SRU team says yes, goes into xyz-proposed.
+| Tag        | Source             |
+| ---------- | ------------------ |
+| old/ubuntu | ubuntu/disco-devel |
+| old/debian | last import tag prior to old/ubuntu without ubuntu suffix in version    |
+| new/debian | debian/sid         |
 
-In proposed:
-- builds
-- track migration (check if it built successfully)
-- next, autopackagetests: check excuses page for test results. Can take a day to run tests.
+per: https://www.debian.org/releases/
+"debian/sid" always matches to debian unstable.
 
-When tests succeeded, built fine:
-- In disco, it would migrate from proposed to release
-- special cases: not installable, waiting on dependency
-3 things needed:
--- not installable: depends on something not existing, for example
--- dependency: Dependent package has not gone into release yet.
--- all pkg tests are ok
+you can find the last import tag using `git log`:
 
-SRU path:
-- builds, tests
-- SRU team puts template response  in bug "please test and verify"
-- reporter verifies fix, switches tags.
-- if not, fixer can verify:
-- deb http://archive.ubuntu.com/ubuntu/ xenial-proposed restricted main multiverse universe
-If
+    ...
+    commit 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404 (tag: pkg/import/3.1.20-3.1)
 
-# Once a week, go to http://people.canonical.com/~ubuntu-archive/pending-sru
-# Look for bugs that are currently SRUs in flight
-# change tags as needed
+So, we create the following tags:
 
-# 2 things needed: pending sru needs to be green, and there for at least 7 days
-# Eventually SRU team member migrates to release
+	git tag lp1802914/old/ubuntu pkg/ubuntu/disco-devel
+	git tag lp1802914/old/debian 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404
+	git tag lp1802914/new/debian pkg/debian/sid
+
+
+#### Start a rebase
+
+git rebase -i lp1802914/old/debian
+
+#### Clear any history prior to the last debian version
+
+If the package hasn't been updated since the git repository structure has changed, it will grab all changes throughout time rather than since the last debian version. Simply delete the older lines from the interactive rebase
+
+In this case, before 3.1.20-3.1
+
+#### Create reconstruct tag
+
+    git ubuntu tag --reconstruct --bug 1802914
+
+Next step: [Deconstruct Commits](#deconstruct-commits)
+
+
+### Create logical tag manually
+
+    git tag -a -m "Logical delta of 3.1.20-3.1ubuntu2" lp1802914/logical/3.1.20-3.1ubuntu2
+
+Note: Certain characters aren't allowed in git. For example, `:` should be replaced with `%`.
+
+Next step: [Rebase onto new debian](#rebase-onto-new-debian)
+
+
+### Finish the merge manually
+
+Merge changelogs of old ubuntu and new debian:
+
+	git show lp1802914/new/debian:debian/changelog >/tmp/debnew.txt
+	git show lp1802914/old/ubuntu:debian/changelog >/tmp/ubuntuold.txt
+	merge-changelog /tmp/debnew.txt /tmp/ubuntuold.txt >debian/changelog 
+	git commit -m "Merge changelogs" debian/changelog
+
+Create new changelog entry for the merge:
+
+	dch -i
+
+Which creates for example:
+
+	at (3.1.23-1ubuntu1) disco; urgency=medium
+
+	  * Merge with Debian unstable (LP: #1802914). Remaining changes:
+	    - Suggest an MTA rather than Recommending one.
+
+	 -- Karl Stenerud <karl.stenerud@canonical.com>  Mon, 12 Nov 2018 18:11:53 +0100
+
+Commit the changelog:
+
+	git commit -m "changelog: Merge of 3.1.23-1" debian/changelog
+
+Update maintainer:
+
+    update-maintainer
+    git commit -m "Update maintainer" debian/control
+
+Next step: [Get Orig Tarball](#get-orig-tarball)
+
+
+### Get orig tarball manually
+
+	git checkout -b pkg/importer/debian/pristine-tar
+	pristine-tar checkout at_3.1.23.orig.tar.gz
+	git checkout merge-3.1.23-1-disco
+
+#### If git checkout also fails:
+
+	git checkout merge-3.1.23-1-disco
+	cd /tmp
+	pull-debian-source at
+	mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
+	cd -
+
+Next step: [Check the source for errors](#check-the-source-for-errors)
+
+
+### Submit merge proposal manually
+
+    git push kstenerud merge-3.1.23-1-disco
+
+Then, create a MP manually in launchpad, and save the URL.
+
+Next step: [Push all your tags](#push-all-your-tags)
