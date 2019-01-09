@@ -156,14 +156,45 @@ $ git diff lp1803296/deconstruct/1%2.3.2.1-1ubuntu3 |diffstat
 
     git ubuntu tag --logical --bug 1802914
 
-* If this fails, [do it manully](#create-a-logical-tag-manually)
+* If this fails, [do it manully](#create-logical-tag-manually)
 
 
 ### Rebase onto new debian
 
     git rebase -i --onto lp1802914/new/debian lp1802914/old/debian
 
-Check that the patches still apply cleanly:
+#### Conflicts
+
+If a conflict occurs, you must resolve it. We do so by modifying the conflicting commit during the rebase.
+
+An example, merging logwatch 7.5.0-1:
+
+    $ git rebase -i --onto lp1810928/new/debian lp1810928/old/debian
+    ...
+	CONFLICT (content): Merge conflict in debian/control
+	error: could not apply c0efd06... - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to
+    ...
+
+Take a look at the conflict in debian/control:
+
+	<<<<<<< HEAD
+	Recommends: libdate-manip-perl, libsys-cpu-perl, libsys-meminfo-perl
+	=======
+	Recommends: libdate-manip-perl
+	Suggests: fortune-mod, libsys-cpu-perl, libsys-meminfo-perl
+	>>>>>>> c0efd06... - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to
+
+Upstream removed `fortune-mod`, and deleted the entire line since it was no longer needed. Resolve it to:
+
+	Recommends: libdate-manip-perl
+	Suggests: libsys-cpu-perl, libsys-meminfo-perl
+
+Continue with the rebase:
+
+    git add debian/control
+
+
+#### Check that the patches still apply cleanly:
 
     quilt push -a --fuzz=0
 
@@ -173,6 +204,8 @@ If the patches fail, one of the patchfiles in the rebase is no longer needed bec
 
 
 ### Generate the merge branch
+
+Use the version you intend to merge from debian (in this case `3.1.23-1`), and the ubuntu version it's going into (in this case `disco`).
 
     git checkout -b merge-3.1.23-1-disco
 
@@ -357,7 +390,7 @@ Manual Steps
 per: https://www.debian.org/releases/
 "debian/sid" always matches to debian unstable.
 
-you can find the last import tag using `git log`:
+you can find the last import tag using `git log | grep "tag: pkg/import" | head -1`:
 
     ...
     commit 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404 (tag: pkg/import/3.1.20-3.1)
@@ -373,11 +406,11 @@ So, we create the following tags:
 
 git rebase -i lp1802914/old/debian
 
-#### Clear any history prior to the last debian version
+#### Clear any history prior to, and including the last debian version
 
 If the package hasn't been updated since the git repository structure has changed, it will grab all changes throughout time rather than since the last debian version. Simply delete the older lines from the interactive rebase
 
-In this case, before 3.1.20-3.1
+In this case, up to, and including 3.1.20-3.1
 
 #### Create reconstruct tag
 
