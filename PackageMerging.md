@@ -223,7 +223,7 @@ If the patches fail, one of the patchfiles in the rebase is no longer needed bec
 
 ### Fix debian/changelog
 
-Git ubuntu attempts to put together a changelog entry, but it will likely have problems. Fix it up to make sure it follows the standards.
+Git ubuntu attempts to put together a changelog entry, but it will likely have problems. Fix it up to make sure it follows the standards. See [Committing your Changes](CommittingChanges.md) for information about what it should look like.
 
 
 ### Get orig tarball
