@@ -225,6 +225,30 @@ If the patches fail, one of the patchfiles in the rebase is no longer needed bec
 
 Git ubuntu attempts to put together a changelog entry, but it will likely have problems. Fix it up to make sure it follows the standards. See [Committing your Changes](CommittingChanges.md) for information about what it should look like.
 
+Commit the fix:
+
+    git commit debian/changelog -m changelog
+
+Now you must rebase and squash the changelog changes into the "reconstruct-changelog" commit. Do a rebase with the new/debian tag:
+
+	git rebase -i lp1810928/new/debian
+
+Change the order from:
+
+	pick e431327 merge-changelogs
+	pick cf3b93a reconstruct-changelog
+	pick 21cea1a update-maintainer
+	pick 08c2f4d changelog
+
+to:
+
+	pick e431327 merge-changelogs
+	pick cf3b93a reconstruct-changelog
+	f 08c2f4d changelog
+	pick 21cea1a update-maintainer
+
+also changing the `changelog` entry to `fixup` (or `f`).
+
 
 ### Get orig tarball
 
