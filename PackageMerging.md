@@ -218,9 +218,12 @@ If the patches fail, one of the patchfiles in the rebase is no longer needed bec
 
     git ubuntu merge finish ubuntu/devel --bug 1802886
 
-The reconstructed changelog is not perfect; check it to make sure it follows the standards.
-
 * If this fails, [do it manully](#finish-the-merge-manually)
+
+
+### Fix debian/changelog
+
+Git ubuntu attempts to put together a changelog entry, but it will likely have problems. Fix it up to make sure it follows the standards.
 
 
 ### Get orig tarball
