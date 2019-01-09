@@ -85,6 +85,13 @@ For example:
 * If this fails, [do it manully](#start-a-merge-manually)
 
 
+### Generate the merge branch (if you didn't do so manually before)
+
+Use the version you intend to merge from debian (for example `3.1.23-1`), and the ubuntu version it's going into (for example `disco`).
+
+    git checkout -b merge-3.1.23-1-disco
+
+
 ### Deconstruct commits
 
 Here, you would split out the commits to one item per commit.
@@ -156,7 +163,11 @@ $ git diff lp1803296/deconstruct/1%2.3.2.1-1ubuntu3 |diffstat
 
     git ubuntu tag --logical --bug 1802914
 
-* If this fails, [do it manully](#create-logical-tag-manually)
+This may fail with an error like:
+
+    ERROR:HEAD is not a defined object in this git repository.
+
+* If it fails, [do it manully](#create-logical-tag-manually)
 
 
 ### Rebase onto new debian
@@ -201,13 +212,6 @@ Continue with the rebase:
 If the patches fail, one of the patchfiles in the rebase is no longer needed because it's been fixed upstream. Identify it and remove from the rebase.
 
     quilt pop -a
-
-
-### Generate the merge branch
-
-Use the version you intend to merge from debian (in this case `3.1.23-1`), and the ubuntu version it's going into (in this case `disco`).
-
-    git checkout -b merge-3.1.23-1-disco
 
 
 ### Finish the merge
@@ -378,6 +382,13 @@ Manual Steps
 ------------
 
 ### Start a merge manually
+
+#### Generate the merge branch
+
+Use the version you intend to merge from debian (for example `3.1.23-1`), and the ubuntu version it's going into (for example `disco`).
+
+    git checkout -b merge-3.1.23-1-disco
+
 
 #### Create tags
 
