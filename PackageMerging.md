@@ -94,17 +94,15 @@ Use the version you intend to merge from debian (for example `3.1.23-1`), and th
 
 ### Deconstruct commits
 
-Here, you would split out the commits to one item per commit.
+In this phase, you split out old-style commits that lumped multiple changes together.
 
-In this case, the commits are already deconstructed.
-
-    git ubuntu tag --deconstruct --bug 1802914
-
-If not deconstructed. For example nspr:
-
-List changes in merge commit:
+#### Check if there are commits to split
 
     git log --oneline
+
+	d7ebe661 (HEAD -> merge-2%4.19-disco, tag: lp1803562/reconstruct/2%4.18-1ubuntu1, tag: lp1803562/deconstruct/2%4.18-1ubuntu1) Import patches-unapplied version 2:4.18-1ubuntu1 to ubuntu/disco-proposed
+	0f8dd64f (tag: pkg/import/2%4.18, tag: lp1803562/old/debian) Import patches-unapplied version 2:4.18-1 to debian/sid
+    ...
 
 Get all commit hashes since old/debian, and:
 
@@ -112,7 +110,7 @@ Get all commit hashes since old/debian, and:
 
 Example (nspr):
 
-    $ git show 4326585 | diffstat
+    $ git show d7ebe661 | diffstat
      changelog                                   |  501 ++++++++++++++++++++++++++++
      control                                     |    3 
 	 patches/fix_test_errcodes_for_runpath.patch |   11 
@@ -120,11 +118,19 @@ Example (nspr):
 	 rules                                       |    5 
 	 5 files changed, 520 insertions(+), 1 deletion(-)
 
- * All changelog changes go to one commit.
- * Update maintainer (in debian/control) goes to one commit.
+Because more than `changelog` has changed, we have commits to deconstruct.
+
+If there are no commits to deconstruct, continue to [Finish deconstructing](#finish-deconstructing).
+
+#### Identify logical changes
+
+5 files have changed. We'd like to separate the changes into logical units, where:
+
+ * All changelog changes go to one commit called `changelog`.
+ * Update maintainer (in debian/control) goes to one commit called `update maintainers`.
  * All other logically separatable commits go into individual commits.
 
-debian/changelog:
+Look in `debian/changelog`:
 
 	nspr (2:4.18-1ubuntu1) bionic; urgency=medium
 
@@ -133,11 +139,69 @@ debian/changelog:
 	    - d/p/fix_test_errcodes_for_runpath.patch: Fix testcases to handle
 	      zesty linker default changing to --enable-new-dtags for -rpath.
 
-There are two logical commits to deconstruct.
+There are two logical changes, which we'll need to separate. Look at the changes in individual files to see which file changes should be logically grouped together.
 
-View individual files using git show:
+Example:
 
-    git show 4326585 -- debian/rules
+    git show d7ebe661 -- debian/rules
+
+In this case, we have the following file changes to separate:
+
+ * `debian/rules`: Enable Thumb2 build on armel, armhf.
+ * `debian/patches/*`: Fix testcases to handle zesty linker default changing to --enable-new-dtags for -rpath.
+ * `debian/control`: Change maintainer
+ * `debian/changelog`: Changelog
+
+
+#### Create logical commits
+
+Start at old/debian, and then reset to HEAD^ to bring back the changes as uncommitted changes.
+
+	git rebase -i lp1803562/old/debian
+
+Now change the commit(s) to deconstruct from `pick` to `edit`. Then, git reset to get your changes back:
+
+	git reset HEAD^
+
+Now we add the commits:
+
+First commit:
+
+	git add debian/patches/*
+	git commit
+
+Commit message:
+
+	  * d/p/fix_test_errcodes_for_runpath.patch: Fix testcases to handle
+	    zesty linker default changing to --enable-new-dtags for -rpath.
+
+Next commit:
+
+	git add debian/rules
+	git commit
+
+Commit message:
+
+	  * d/rules: Enable Thumb2 build on armel, armhf.
+
+Maintainers:
+
+    git commit -m "update maintainers" debian/control
+
+Changelog:
+
+    git commit -m changelog debian/changelog
+
+Now finish off the rebase:
+
+	git rebase --continue
+
+
+#### Finish deconstructing
+
+Note: Do this even if there were no commits to deconstruct.
+
+    git ubuntu tag --deconstruct --bug 1803562
 
 
 ### Create logical tag
