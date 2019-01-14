@@ -427,6 +427,8 @@ https://launchpad.net/~kstenerud/+activate-ppa
 
 Call it `disco-at-merge-1802914`
 
+Be sure to enable all architectures to check that it builds (click on `Change details` in the top right corner of the newly created PPA page).
+
 
 #### Upload files
 

@@ -69,6 +69,7 @@ Other flags are similar to `git ubuntu build-source`.
 
 Launchpad can build binary packages from your signed source packages and store them in PPA archives. This is especially useful because reviewers of your merge proposal will have a ready binary to test from. The disadvantage is that during busy times, it can take awhile for your package to come up in the build queue.
 
+
 #### Set the Version String
 
 For the PPA, we need to change the version in the changelog that's lower than the version we plan to release. Since the tilde `~` character sorts lower than everything else in launchpad, we can simply append `~ppa1` to the version string in `debian/changelog`. For example:
@@ -89,6 +90,8 @@ For example:
  * **Description:** (leave it empty)
 
 Now click "Activate".
+
+It is also helpful to enable all architectures to ensure no build regressions were introduced. Do so by clicking on `Change Details` in the newly created PPA page, and then selecting the other architectures.
 
 #### Upload the source package
 
