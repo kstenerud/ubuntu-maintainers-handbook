@@ -273,7 +273,33 @@ Continue with the rebase:
 
     quilt push -a --fuzz=0
 
-If the patches fail, one of the patchfiles in the rebase is no longer needed because it's been fixed upstream. Identify it and remove from the rebase.
+##### If quilt fails:
+
+Quilt can fail at this point if the file being patched has changed significantly upstream. The most common reason is that the issue the patch addresses has since been fixed upstream.
+
+For example:
+
+    $ quilt push -a --fuzz=0
+    ...
+    Applying patch ssh-ignore-disconnected.patch
+    patching file scripts/services/sshd
+    Hunk #1 FAILED at 297.
+    1 out of 1 hunk FAILED -- rejects in file scripts/services/sshd
+    Patch ssh-ignore-disconnected.patch does not apply (enforce with -f)
+
+If this patch fails because the changes in `ssh-ignore-disconnected.patch` are already applied upstream, you must remove this patch.
+
+    git log --oneline
+
+    1aed93f (HEAD -> ubuntu/devel)   * d/p/ssh-ignore-disconnected.patch: [sshd] ignore disconnected from user     USER (LP: 1644057)
+    7d9d752 - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to   Suggests as they are in universe.
+
+Removing `1aed93f` will remove the patch.
+
+ * Save the commit message from `1aed93f` for later inclusing in the `Dropped Changes` section of the new changelog entry.
+ * `git rebase -i 7d9d752` and delete commit `1aed93f`.
+
+#### Unapply patches before continuing
 
     quilt pop -a
 
@@ -289,9 +315,19 @@ If the patches fail, one of the patchfiles in the rebase is no longer needed bec
 
 Git ubuntu attempts to put together a changelog entry, but it will likely have problems. Fix it up to make sure it follows the standards. See [Committing your Changes](CommittingChanges.md) for information about what it should look like.
 
-Commit the fix:
+#### Add dropped changes
+
+If you dropped any changes (due to upstream fixes), you must note them in the changelog entry:
+
+      * Dropped Changes:
+        - Foo: change to bar
+          [now in Debian]
+
+#### Commit the changelog fix:
 
     git commit debian/changelog -m changelog
+
+#### Rebase and squash changelog
 
 Now you must rebase and squash the changelog changes into the "reconstruct-changelog" commit. Do a rebase with the new/debian tag:
 
@@ -311,7 +347,7 @@ to:
     f 08c2f4d changelog
     pick 21cea1a update-maintainer
 
-also changing the `changelog` entry to `fixup` (or `f`).
+Notice above that you must also change the `changelog` rebase command to `fixup` (or `f`).
 
 
 ### Get orig tarball
