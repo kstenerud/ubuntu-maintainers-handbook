@@ -18,21 +18,21 @@ rmadison -u debian [package]
 
 Example:
 
-	$ rmadison at
-	 at | 3.1.13-1ubuntu1   | precise | source, amd64, armel, armhf, i386, powerpc
-	 at | 3.1.14-1ubuntu1   | trusty  | source, amd64, arm64, armhf, i386, powerpc, ppc64el
-	 at | 3.1.18-2ubuntu1   | xenial  | source, amd64, arm64, armhf, i386, powerpc, ppc64el, s390x
-	 at | 3.1.20-3.1ubuntu2 | bionic  | source, amd64, arm64, armhf, i386, ppc64el, s390x
-	 at | 3.1.20-3.1ubuntu2 | cosmic  | source, amd64, arm64, armhf, i386, ppc64el, s390x
-	 at | 3.1.20-3.1ubuntu2 | disco   | source, amd64, arm64, armhf, i386, ppc64el, s390x
-	$ rmadison -u debian at
-	at         | 3.1.13-2+deb7u1 | oldoldstable       | source, amd64, armel, armhf, i386, ia64, kfreebsd-amd64, kfreebsd-i386, mips, mipsel, powerpc, s390, s390x, sparc
-	at         | 3.1.16-1        | oldstable          | source, amd64, arm64, armel, armhf, i386, mips, mipsel, powerpc, ppc64el, s390x
-	at         | 3.1.16-1        | oldstable-kfreebsd | source, kfreebsd-amd64, kfreebsd-i386
-	at         | 3.1.20-3        | stable             | source, amd64, arm64, armel, armhf, i386, mips, mips64el, mipsel, ppc64el, s390x
-	at         | 3.1.23-1        | testing            | source, amd64, arm64, armel, armhf, i386, mips, mips64el, mipsel, ppc64el, s390x
-	at         | 3.1.23-1        | unstable           | source, amd64, arm64, armel, armhf, hurd-i386, i386, kfreebsd-amd64, kfreebsd-i386, mips, mips64el, mipsel, ppc64el, s390x
-	at         | 3.1.23-1        | unstable-debug     | source
+    $ rmadison at
+     at | 3.1.13-1ubuntu1   | precise | source, amd64, armel, armhf, i386, powerpc
+     at | 3.1.14-1ubuntu1   | trusty  | source, amd64, arm64, armhf, i386, powerpc, ppc64el
+     at | 3.1.18-2ubuntu1   | xenial  | source, amd64, arm64, armhf, i386, powerpc, ppc64el, s390x
+     at | 3.1.20-3.1ubuntu2 | bionic  | source, amd64, arm64, armhf, i386, ppc64el, s390x
+     at | 3.1.20-3.1ubuntu2 | cosmic  | source, amd64, arm64, armhf, i386, ppc64el, s390x
+     at | 3.1.20-3.1ubuntu2 | disco   | source, amd64, arm64, armhf, i386, ppc64el, s390x
+    $ rmadison -u debian at
+    at         | 3.1.13-2+deb7u1 | oldoldstable       | source, amd64, armel, armhf, i386, ia64, kfreebsd-amd64, kfreebsd-i386, mips, mipsel, powerpc, s390, s390x, sparc
+    at         | 3.1.16-1        | oldstable          | source, amd64, arm64, armel, armhf, i386, mips, mipsel, powerpc, ppc64el, s390x
+    at         | 3.1.16-1        | oldstable-kfreebsd | source, kfreebsd-amd64, kfreebsd-i386
+    at         | 3.1.20-3        | stable             | source, amd64, arm64, armel, armhf, i386, mips, mips64el, mipsel, ppc64el, s390x
+    at         | 3.1.23-1        | testing            | source, amd64, arm64, armel, armhf, i386, mips, mips64el, mipsel, ppc64el, s390x
+    at         | 3.1.23-1        | unstable           | source, amd64, arm64, armel, armhf, hurd-i386, i386, kfreebsd-amd64, kfreebsd-i386, mips, mips64el, mipsel, ppc64el, s390x
+    at         | 3.1.23-1        | unstable-debug     | source
 
 You'll be merging from debian unstable, which in this case is 3.1.23-1.
 
@@ -54,11 +54,11 @@ Go to https://bugs.launchpad.net/ubuntu/+source/[package] and create a new bug r
 
 For example:
 
-	URL: https://bugs.launchpad.net/ubuntu/+source/at/+filebug
-	Summary: "Please merge 3.1.23-1 into disco"
-	Description: "tracking bug"
+    URL: https://bugs.launchpad.net/ubuntu/+source/at/+filebug
+    Summary: "Please merge 3.1.23-1 into disco"
+    Description: "tracking bug"
 
-	result: https://bugs.launchpad.net/ubuntu/+source/at/+bug/1802914
+    result: https://bugs.launchpad.net/ubuntu/+source/at/+bug/1802914
 
 
 ### Clone the package repository
@@ -100,8 +100,8 @@ In this phase, you split out old-style commits that lumped multiple changes toge
 
     git log --oneline
 
-	d7ebe661 (HEAD -> merge-2%4.19-disco, tag: lp1803562/reconstruct/2%4.18-1ubuntu1, tag: lp1803562/deconstruct/2%4.18-1ubuntu1) Import patches-unapplied version 2:4.18-1ubuntu1 to ubuntu/disco-proposed
-	0f8dd64f (tag: pkg/import/2%4.18, tag: lp1803562/old/debian) Import patches-unapplied version 2:4.18-1 to debian/sid
+    d7ebe661 (HEAD -> merge-2%4.19-disco, tag: lp1803562/reconstruct/2%4.18-1ubuntu1, tag: lp1803562/deconstruct/2%4.18-1ubuntu1) Import patches-unapplied version 2:4.18-1ubuntu1 to ubuntu/disco-proposed
+    0f8dd64f (tag: pkg/import/2%4.18, tag: lp1803562/old/debian) Import patches-unapplied version 2:4.18-1 to debian/sid
     ...
 
 Get all commit hashes since old/debian, and:
@@ -113,10 +113,10 @@ Example (nspr):
     $ git show d7ebe661 | diffstat
      changelog                                   |  501 ++++++++++++++++++++++++++++
      control                                     |    3 
-	 patches/fix_test_errcodes_for_runpath.patch |   11 
-	 patches/series                              |    1 
-	 rules                                       |    5 
-	 5 files changed, 520 insertions(+), 1 deletion(-)
+     patches/fix_test_errcodes_for_runpath.patch |   11 
+     patches/series                              |    1 
+     rules                                       |    5 
+     5 files changed, 520 insertions(+), 1 deletion(-)
 
 Because more than `changelog` has changed, we have commits to deconstruct.
 
@@ -132,12 +132,12 @@ If there are no commits to deconstruct, continue to [Finish deconstructing](#fin
 
 Look in `debian/changelog`:
 
-	nspr (2:4.18-1ubuntu1) bionic; urgency=medium
+    nspr (2:4.18-1ubuntu1) bionic; urgency=medium
 
-	  * Resynchronize with Debian, remaining changes
-	    - rules: Enable Thumb2 build on armel, armhf.
-	    - d/p/fix_test_errcodes_for_runpath.patch: Fix testcases to handle
-	      zesty linker default changing to --enable-new-dtags for -rpath.
+      * Resynchronize with Debian, remaining changes
+        - rules: Enable Thumb2 build on armel, armhf.
+        - d/p/fix_test_errcodes_for_runpath.patch: Fix testcases to handle
+          zesty linker default changing to --enable-new-dtags for -rpath.
 
 There are two logical changes, which we'll need to separate. Look at the changes in individual files to see which file changes should be logically grouped together.
 
@@ -157,32 +157,32 @@ In this case, we have the following file changes to separate:
 
 Start at old/debian, and then reset to HEAD^ to bring back the changes as uncommitted changes.
 
-	git rebase -i lp1803562/old/debian
+    git rebase -i lp1803562/old/debian
 
 Now change the commit(s) to deconstruct from `pick` to `edit`. Then, git reset to get your changes back:
 
-	git reset HEAD^
+    git reset HEAD^
 
 Now we add the commits:
 
 First commit:
 
-	git add debian/patches/*
-	git commit
+    git add debian/patches/*
+    git commit
 
 Commit message:
 
-	  * d/p/fix_test_errcodes_for_runpath.patch: Fix testcases to handle
-	    zesty linker default changing to --enable-new-dtags for -rpath.
+      * d/p/fix_test_errcodes_for_runpath.patch: Fix testcases to handle
+        zesty linker default changing to --enable-new-dtags for -rpath.
 
 Next commit:
 
-	git add debian/rules
-	git commit
+    git add debian/rules
+    git commit
 
 Commit message:
 
-	  * d/rules: Enable Thumb2 build on armel, armhf.
+      * d/rules: Enable Thumb2 build on armel, armhf.
 
 Maintainers:
 
@@ -194,7 +194,7 @@ Changelog:
 
 Now finish off the rebase:
 
-	git rebase --continue
+    git rebase --continue
 
 
 #### Finish deconstructing
@@ -246,23 +246,23 @@ An example, merging logwatch 7.5.0-1:
 
     $ git rebase -i --onto lp1810928/new/debian lp1810928/old/debian
     ...
-	CONFLICT (content): Merge conflict in debian/control
-	error: could not apply c0efd06... - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to
+    CONFLICT (content): Merge conflict in debian/control
+    error: could not apply c0efd06... - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to
     ...
 
 Take a look at the conflict in debian/control:
 
-	<<<<<<< HEAD
-	Recommends: libdate-manip-perl, libsys-cpu-perl, libsys-meminfo-perl
-	=======
-	Recommends: libdate-manip-perl
-	Suggests: fortune-mod, libsys-cpu-perl, libsys-meminfo-perl
-	>>>>>>> c0efd06... - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to
+    <<<<<<< HEAD
+    Recommends: libdate-manip-perl, libsys-cpu-perl, libsys-meminfo-perl
+    =======
+    Recommends: libdate-manip-perl
+    Suggests: fortune-mod, libsys-cpu-perl, libsys-meminfo-perl
+    >>>>>>> c0efd06... - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to
 
 Upstream removed `fortune-mod`, and deleted the entire line since it was no longer needed. Resolve it to:
 
-	Recommends: libdate-manip-perl
-	Suggests: libsys-cpu-perl, libsys-meminfo-perl
+    Recommends: libdate-manip-perl
+    Suggests: libsys-cpu-perl, libsys-meminfo-perl
 
 Continue with the rebase:
 
@@ -295,21 +295,21 @@ Commit the fix:
 
 Now you must rebase and squash the changelog changes into the "reconstruct-changelog" commit. Do a rebase with the new/debian tag:
 
-	git rebase -i lp1810928/new/debian
+    git rebase -i lp1810928/new/debian
 
 Change the order from:
 
-	pick e431327 merge-changelogs
-	pick cf3b93a reconstruct-changelog
-	pick 21cea1a update-maintainer
-	pick 08c2f4d changelog
+    pick e431327 merge-changelogs
+    pick cf3b93a reconstruct-changelog
+    pick 21cea1a update-maintainer
+    pick 08c2f4d changelog
 
 to:
 
-	pick e431327 merge-changelogs
-	pick cf3b93a reconstruct-changelog
-	f 08c2f4d changelog
-	pick 21cea1a update-maintainer
+    pick e431327 merge-changelogs
+    pick cf3b93a reconstruct-changelog
+    f 08c2f4d changelog
+    pick 21cea1a update-maintainer
 
 also changing the `changelog` entry to `fixup` (or `f`).
 
@@ -318,14 +318,14 @@ also changing the `changelog` entry to `fixup` (or `f`).
 
 Ubuntu doesn't know about the new tarball yet, so we must create it.
 
-	git ubuntu export-orig
+    git ubuntu export-orig
 
 * If this fails, [do it manully](#get-orig-tarball-manually)
 
 
 ### Check the source for errors
 
-	git ubuntu lint --target-branch debian/sid --lint-namespace lp1802914
+    git ubuntu lint --target-branch debian/sid --lint-namespace lp1802914
 
 This may spit out errors such as:
 
@@ -333,10 +333,18 @@ This may spit out errors such as:
 
 You decide which are important to fix. In this case, it's acceptable because we want to include multiple changelog entries.
 
+Note: This may fail due to empty directories referenced by the git repository:
+
+    E: Expected pkg/import/4.91-6ubuntu2 (f450aa28b9b600ed0b8bad7d527a0f13d2e63097) is not the same tree as lp1811095/reconstruct/4.91-6ubuntu2 (16052af5787ea45416e3f162e305255aa1fb5026)
+
+In such a case, verify that the two refs are indeed identical, and if so, skip this step.
+
+    git diff f450aa28b9b600ed0b8bad7d527a0f13d2e63097 16052af5787ea45416e3f162e305255aa1fb5026
+
 
 ### Build a source package
 
-	dpkg-buildpackage -S -nc -d -sa -v3.1.20-3.1ubuntu2
+    dpkg-buildpackage -S -nc -d -sa -v3.1.20-3.1ubuntu2
 
 The switches are:
 
@@ -358,23 +366,23 @@ Changes should be from the last ubuntu version
 
 NOTE: Git branch with % in name doesn't work. Use something like _
 
-	$ git ubuntu submit --reviewer canonical-server-packageset-reviewers --target-branch debian/sid
-	Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
-	If it looks ok, please move it to the 'Needs Review' state.
+    $ git ubuntu submit --reviewer canonical-server-packageset-reviewers --target-branch debian/sid
+    Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
+    If it looks ok, please move it to the 'Needs Review' state.
 
 * If this fails, [do it manully](#submit-merge-proposal-manually)
 
 
 ### Push all your tags
 
-	$ git push kstenerud $(git tag |grep 1802914 | xargs)
-	To ssh://git.launchpad.net/~kstenerud/ubuntu/+source/at
-	 * [new tag]         lp1802914/deconstruct/3.1.20-3.1ubuntu2 -> lp1802914/deconstruct/3.1.20-3.1ubuntu2
-	 * [new tag]         lp1802914/logical/3.1.20-3.1ubuntu2 -> lp1802914/logical/3.1.20-3.1ubuntu2
-	 * [new tag]         lp1802914/new/debian -> lp1802914/new/debian
-	 * [new tag]         lp1802914/old/debian -> lp1802914/old/debian
-	 * [new tag]         lp1802914/old/ubuntu -> lp1802914/old/ubuntu
-	 * [new tag]         lp1802914/reconstruct/3.1.20-3.1ubuntu2 -> lp1802914/reconstruct/3.1.20-3.1ubuntu2
+    $ git push kstenerud $(git tag |grep 1802914 | xargs)
+    To ssh://git.launchpad.net/~kstenerud/ubuntu/+source/at
+     * [new tag]         lp1802914/deconstruct/3.1.20-3.1ubuntu2 -> lp1802914/deconstruct/3.1.20-3.1ubuntu2
+     * [new tag]         lp1802914/logical/3.1.20-3.1ubuntu2 -> lp1802914/logical/3.1.20-3.1ubuntu2
+     * [new tag]         lp1802914/new/debian -> lp1802914/new/debian
+     * [new tag]         lp1802914/old/debian -> lp1802914/old/debian
+     * [new tag]         lp1802914/old/ubuntu -> lp1802914/old/ubuntu
+     * [new tag]         lp1802914/reconstruct/3.1.20-3.1ubuntu2 -> lp1802914/reconstruct/3.1.20-3.1ubuntu2
 
 
 ### Create PPA
@@ -386,7 +394,7 @@ Call it `disco-at-merge-1802914`
 
 #### Upload files
 
-	dput ppa:kstenerud/disco-at-merge-1802914 ../at_3.1.23-1ubuntu1~ppa1_source.changes
+    dput ppa:kstenerud/disco-at-merge-1802914 ../at_3.1.23-1ubuntu1~ppa1_source.changes
 
 
 #### Check the results after a bit
@@ -398,32 +406,58 @@ https://launchpad.net/~kstenerud/+archive/ubuntu/disco-at-merge-1802914
 
 Test the following:
 
-	1. Upgrading from the previous version
-	2. Installing the latest where nothing was installed before
-	3. Run some test commands to make sure it runs
-	4. Run package tests (if any)
+    1. Package Tests
+    2. Upgrading from the previous version
+    3. Installing the latest where nothing was installed before
+    4. Other smoke tests
 
-In our case, there are no package tests, and at comes preinstalled, so:
 
-	lxc launch ubuntu:cosmic tester
-	lxc exec tester bash
-	echo "echo xyz >test.txt" |at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+#### Package Tests
 
-	add-apt-repository -y ppa:kstenerud/disco-at-merge-1802914
+[Run package tests (if any)](PackageTests.md)
+
+
+#### Test upgrading from the previous version
+
+Example:
+
+Note: Disco is not yet available at the time of writing, so we use cosmic.
+
+    lxc launch ubuntu:cosmic tester && lxc exec tester bash
+    apt update && apt dist-upgrade -y && apt install at
+
+The test:
+
+    echo "echo xyz >test.txt" |at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+
+Upgrade:
+
+    add-apt-repository -y ppa:kstenerud/disco-at-merge-1802914
 
 Note: Disco is not yet available at the time of writing, so we must modify the source list entry:
 
-	vi /etc/apt/sources.list.d/kstenerud-ubuntu-disco-at-merge-1802914-cosmic.list
-	* change cosmic to disco
+    vi /etc/apt/sources.list.d/kstenerud-ubuntu-disco-at-merge-1802914-cosmic.list
+    * change cosmic to disco
 
-Then continue with the test:
+    apt update && apt dist-upgrade -y
 
-	apt update
-	apt dist-upgrade -y
-	echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+Test the upgraded version:
 
-Try running regression tests:
-https://git.launchpad.net/qa-regression-testing
+    echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+
+
+#### Test installing the latest from scratch:
+
+    lxc launch ubuntu:cosmic tester && lxc exec tester bash
+    add-apt-repository -y ppa:kstenerud/disco-at-merge-1802914
+    apt update && apt dist-upgrade -y && apt install at
+    echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+
+
+#### Other smoke tests:
+
+ * Try running various basic commands.
+ * Try running regression tests: https://git.launchpad.net/qa-regression-testing
 
 
 ### Update the merge proposal
@@ -433,15 +467,15 @@ https://git.launchpad.net/qa-regression-testing
 
 Example:
 
-	PPA: ppa:kstenerud/disco-at-merge-1802914
+    PPA: https://launchpad.net/~kstenerud/+archive/ubuntu/disco-at-merge-1802914
 
-	Basic test:
+    Basic test:
 
-	echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+    echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
 
-	Package tests:
+    Package tests:
 
-	This package contains no tests.
+    This package contains no tests.
 
 
 #### Open the review
@@ -492,27 +526,27 @@ Use the version you intend to merge from debian (for example `3.1.23-1`), and th
 per: https://www.debian.org/releases/
 "debian/sid" always matches to debian unstable.
 
-you can find the last import tag using `git log | grep "tag: pkg/import" | head -1`:
+you can find the last import tag using `git log | grep "tag: pkg/import" | grep -v ubuntu | head -1`:
 
     ...
     commit 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404 (tag: pkg/import/3.1.20-3.1)
 
 So, we create the following tags:
 
-	git tag lp1802914/old/ubuntu pkg/ubuntu/disco-devel
-	git tag lp1802914/old/debian 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404
-	git tag lp1802914/new/debian pkg/debian/sid
+    git tag lp1802914/old/ubuntu pkg/ubuntu/disco-devel
+    git tag lp1802914/old/debian 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404
+    git tag lp1802914/new/debian pkg/debian/sid
 
 
 #### Start a rebase
 
-git rebase -i lp1802914/old/debian
+    git rebase -i lp1802914/old/debian
 
 #### Clear any history prior to, and including the last debian version
 
 If the package hasn't been updated since the git repository structure has changed, it will grab all changes throughout time rather than since the last debian version. Simply delete the older lines from the interactive rebase
 
-In this case, up to, and including 3.1.20-3.1
+In this case, up to, and including import of 3.1.20-3.1
 
 #### Create reconstruct tag
 
@@ -534,27 +568,27 @@ Next step: [Rebase onto new debian](#rebase-onto-new-debian)
 
 Merge changelogs of old ubuntu and new debian:
 
-	git show lp1802914/new/debian:debian/changelog >/tmp/debnew.txt
-	git show lp1802914/old/ubuntu:debian/changelog >/tmp/ubuntuold.txt
-	merge-changelog /tmp/debnew.txt /tmp/ubuntuold.txt >debian/changelog 
-	git commit -m "Merge changelogs" debian/changelog
+    git show lp1802914/new/debian:debian/changelog >/tmp/debnew.txt
+    git show lp1802914/old/ubuntu:debian/changelog >/tmp/ubuntuold.txt
+    merge-changelog /tmp/debnew.txt /tmp/ubuntuold.txt >debian/changelog 
+    git commit -m "Merge changelogs" debian/changelog
 
 Create new changelog entry for the merge:
 
-	dch -i
+    dch -i
 
 Which creates for example:
 
-	at (3.1.23-1ubuntu1) disco; urgency=medium
+    at (3.1.23-1ubuntu1) disco; urgency=medium
 
-	  * Merge with Debian unstable (LP: #1802914). Remaining changes:
-	    - Suggest an MTA rather than Recommending one.
+      * Merge with Debian unstable (LP: #1802914). Remaining changes:
+        - Suggest an MTA rather than Recommending one.
 
-	 -- Karl Stenerud <karl.stenerud@canonical.com>  Mon, 12 Nov 2018 18:11:53 +0100
+     -- Karl Stenerud <karl.stenerud@canonical.com>  Mon, 12 Nov 2018 18:11:53 +0100
 
 Commit the changelog:
 
-	git commit -m "changelog: Merge of 3.1.23-1" debian/changelog
+    git commit -m "changelog: Merge of 3.1.23-1" debian/changelog
 
 Update maintainer:
 
@@ -566,17 +600,17 @@ Next step: [Get Orig Tarball](#get-orig-tarball)
 
 ### Get orig tarball manually
 
-	git checkout -b pkg/importer/debian/pristine-tar
-	pristine-tar checkout at_3.1.23.orig.tar.gz
-	git checkout merge-3.1.23-1-disco
+    git checkout -b pkg/importer/debian/pristine-tar
+    pristine-tar checkout at_3.1.23.orig.tar.gz
+    git checkout merge-3.1.23-1-disco
 
 #### If git checkout also fails:
 
-	git checkout merge-3.1.23-1-disco
-	cd /tmp
-	pull-debian-source at
-	mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
-	cd -
+    git checkout merge-3.1.23-1-disco
+    cd /tmp
+    pull-debian-source at
+    mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
+    cd -
 
 Next step: [Check the source for errors](#check-the-source-for-errors)
 
