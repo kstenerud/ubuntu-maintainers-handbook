@@ -108,3 +108,13 @@ If
 
 
 
+Other Pages
+-----------
+
+https://launchpad.net/ubuntu/xenial/+queue?queue_state=1
+https://people.canonical.com/~ubuntu-archive/pending-sru.html
+http://reqorts.qa.ubuntu.com/reports/rls-mgr/rls-bb-tracking-bug-tasks.html#ubuntu-server
+https://people.canonical.com/~ubuntu-archive/transitions/html/php7.3.html
+https://wiki.ubuntu.com/UbuntuDevelopment/Merging/GitWorkflow
+http://autopkgtest.ubuntu.com/running
+https://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses_by_team.html#ubuntu-server

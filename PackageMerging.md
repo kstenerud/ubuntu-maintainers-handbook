@@ -1,20 +1,48 @@
 Merging
 =======
 
-Note: This is still WIP. Excuse the mess.
+Merging is the process of taking all Ubuntu changes made on top of one Debian version of a package, and re-doing them on top of a new Debian version of the package.
 
-Merging takes a new version of a package from Debian and merges in any Ubuntu changes to make a new Ubuntu version.
-
-https://wiki.ubuntu.com/UbuntuDevelopment/Merging/GitWorkflow
+There is a more detailed workflow [here](https://wiki.ubuntu.com/UbuntuDevelopment/Merging/GitWorkflow). This guide is intended to cover the majority of use cases.
 
 
-Preliminary Steps
------------------
+Overview
+--------
 
-### Discover the current version
+The basic idea behind a merge is to take the Ubuntu changes that have been applied to a Debian package, and replay those changes (rebase) on top of a newer version of the Debian package:
 
-rmadison [package]
-rmadison -u debian [package]
+    --- something 1.2 ----------------------------- something 1.3
+         \                                           \
+          -- Ubuntu changes a, b, c -- 1.2ubuntu1     -- Ubuntu changes a, b, c -- 1.3ubuntu1
+
+At a more detailed level, there are other subtasks to be done, such as:
+
+ * Splitting out large "omnibus" style commits into smaller logical units, one commit per logical unit.
+ * Harmonizing `debian/changelog` commits into two commits: a changelog merge and a reconstruction.
+
+With this process, we keep the Ubuntu version of a package cleanly applied to the end of the latest Debian version, and make it easy to drop changes as they become redundant.
+
+
+Process Steps
+-------------
+
+ * [Decide on a merge candidate](#decide-on-a-merge-candidate)
+ * [Perform the merge](#perform-the-merge)
+   * [Deconstruct the Ubuntu commits into logical units](#deconstruct-commits)
+   * Replay (rebase) the Ubuntu commits onto the new Debian version
+   * Verify and test the result
+ * Push and review
+ * Upload
+
+
+ 
+Decide on a Merge Candidate
+---------------------------
+
+First, you'll need to check that a newer version is even available from Debian. For this, we can use the `rmadison` tool:
+
+    rmadison [package]
+    rmadison -u debian [package]
 
 Example:
 
@@ -34,7 +62,7 @@ Example:
     at         | 3.1.23-1        | unstable           | source, amd64, arm64, armel, armhf, hurd-i386, i386, kfreebsd-amd64, kfreebsd-i386, mips, mips64el, mipsel, ppc64el, s390x
     at         | 3.1.23-1        | unstable-debug     | source
 
-You'll be merging from debian unstable, which in this case is 3.1.23-1.
+You'll be merging from debian unstable, which in this example is `3.1.23-1`.
 
 
 ### Check existing bug entries
@@ -45,14 +73,18 @@ https://bugs.launchpad.net/ubuntu/+source/[package]
 
 https://tracker.debian.org/pkg/[package]
 
+If there are bugs you'd like to fix, make a new SRU style commit at the end of the merge process and put them together in the same merge proposal.
+
+
+
+Perform the Merge
+-----------------
 
 ### Make a bug report for the merge
 
-Search for an existing merge request bug entry in launchpad, and if you don't find one:
+Search for an existing merge request bug entry in launchpad, and if you don't find one, go to the package's launchpad page (https://bugs.launchpad.net/ubuntu/+source/some-package) and create a new bug report, requesting a merge.
 
-Go to https://bugs.launchpad.net/ubuntu/+source/[package] and create a new bug report, requesting a merge.
-
-For example:
+Example:
 
     URL: https://bugs.launchpad.net/ubuntu/+source/at/+filebug
     Summary: "Please merge 3.1.23-1 into disco"
@@ -65,16 +97,14 @@ For example:
 
     git ubuntu clone [package]
 
-For example:
+Example:
 
     git ubuntu clone at
 
 
+### Start a git ubuntu merge
 
-Merge Process
--------------
-
-### Start a merge
+From within the git source tree:
 
     git ubuntu merge start ubuntu/devel --bug [bug number]
 
@@ -82,14 +112,11 @@ For example:
 
     git ubuntu merge start ubuntu/devel --bug 1802914
 
-* If this fails, [do it manully](#start-a-merge-manually)
-
-
-### Generate the merge branch (if you didn't do so manually before)
-
-Use the version you intend to merge from debian (for example `3.1.23-1`), and the ubuntu version it's going into (for example `disco`).
+Next, make a new branch. Use the debian package version you're merging onto (for example `3.1.23-1`), and the ubuntu version it's going into (for example `disco`).
 
     git checkout -b merge-3.1.23-1-disco
+
+If `git ubuntu merge start` fails, [do it manully](#start-a-merge-manually)
 
 
 ### Deconstruct commits
@@ -268,6 +295,22 @@ Continue with the rebase:
 
     git add debian/control
 
+#### Empty commits
+
+If a commit becomes empty, it's because the change has already been applied upstream:
+
+    The previous cherry-pick is now empty, possibly due to conflict resolution.
+
+In such a case, the commit can be dropped.
+
+    git rebase --abort
+    git rebase -i lp1802914/old/debian
+
+Keep a copy of the unneeded commit's commit message, then delete it in the rebase. Now delete the logical tag:
+
+    git tag -d lp1811400/logical/1%2.11.0-1ubuntu2
+
+Then [remake the logical tag](#create-logical-tag)
 
 #### Check that the patches still apply cleanly:
 
@@ -321,7 +364,7 @@ If you dropped any changes (due to upstream fixes), you must note them in the ch
 
       * Dropped Changes:
         - Foo: change to bar
-          [now in Debian]
+          [Fixed in 1.2.3-4]
 
 #### Commit the changelog fix:
 
@@ -398,16 +441,21 @@ Changes should be from the last ubuntu version
     lintian --pedantic --display-info --verbose --info --profile ubuntu ../at_3.1.23-1ubuntu1.dsc
 
 
-### Submit merge proposal
+### Push to your personal repository
 
-NOTE: Git branch with % in name doesn't work. Use something like _
+The easiest way is to run it like this:
 
-    $ git ubuntu submit --reviewer canonical-server-packageset-reviewers --target-branch debian/sid
-    Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
-    If it looks ok, please move it to the 'Needs Review' state.
+    git push your-lp-username
 
-* If this fails, [do it manully](#submit-merge-proposal-manually)
+You'll get an error message and a suggestion for how to set upstream. For example:
 
+    $ git push kstenerud
+    fatal: The current branch merge-1%2.11.0-3-disco has no upstream branch.
+    To push the current branch and set the remote as upstream, use
+
+        git push --set-upstream kstenerud merge-1%2.11.0-3-disco
+
+Run the suggested command to push to your repository.
 
 ### Push all your tags
 
@@ -438,6 +486,12 @@ Be sure to enable all architectures to check that it builds (click on `Change de
 #### Check the results after a bit
 
 https://launchpad.net/~kstenerud/+archive/ubuntu/disco-at-merge-1802914
+
+TODO: Wait for
+https://launchpad.net/~kstenerud/+archive/ubuntu/disco-amavisd-new-merge2-1811400/+packages
+
+- to not be pending
+
 
 
 ### Test the new build
@@ -496,6 +550,17 @@ Test the upgraded version:
 
  * Try running various basic commands.
  * Try running regression tests: https://git.launchpad.net/qa-regression-testing
+
+
+### Submit merge proposal
+
+NOTE: Git branch with % in name doesn't work. Use something like _
+
+    $ git ubuntu submit --reviewer canonical-server-packageset-reviewers --target-branch debian/sid
+    Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
+    If it looks ok, please move it to the 'Needs Review' state.
+
+* If this fails, [do it manully](#submit-merge-proposal-manually)
 
 
 ### Update the merge proposal
@@ -660,3 +725,11 @@ Next step: [Check the source for errors](#check-the-source-for-errors)
 Then, create a MP manually in launchpad, and save the URL.
 
 Next step: [Push all your tags](#push-all-your-tags)
+
+
+
+
+-------------------
+
+Other Notes:
+
