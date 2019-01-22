@@ -188,7 +188,7 @@ Example (nspr):
 
 Any time you see `changelog` and any other file(s) changing in a single commit, it's guaranteed that you'll need to deconstruct it; `changelog` should only ever change in it own commit. You should still look over commits to make sure, but this is a dead giveaway.
 
-If there are no commits to deconstruct, simply [add the deconstruct tag](#finish-deconstructing) and move on.
+If there are no commits to deconstruct, simply [add the deconstruct tag](#tag-deconstructed) and move on.
 
 #### Identify logical changes
 
@@ -312,6 +312,8 @@ At the end of the squash and clean phase, the only delta you should see from the
      2 files changed, 1 insertion(+), 764 deletions(-)
 
 Only changelog and control were changed, which is what we want.
+
+#### Create logical tag
 
     git ubuntu tag --logical --bug 1802914
 
