@@ -190,7 +190,7 @@ Any time you see `changelog` and any other file(s) changing in a single commit, 
 
 Another giveaway would be a commit named `Import patches-unapplied version 1.2.3ubuntu4 to ubuntu/cosmic-proposed`, where it's applying from an ubuntu source rather than a debian one (in this case `ubuntu4`).
 
-If there are no commits to deconstruct, simply [add the deconstruct tag](#tag-deconstructed) and move on.
+If there are no commits to deconstruct, simply [add the deconstruct tag](#tag-deconstructed) and [move on](#prepare-the-logical-view).
 
 #### Identify logical changes
 
@@ -355,6 +355,7 @@ Upstream removed `fortune-mod`, and deleted the entire line since it was no long
 Continue with the rebase:
 
     git add debian/control
+    git rebase --continue
 
 #### Empty commits
 
