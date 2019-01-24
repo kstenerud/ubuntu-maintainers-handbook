@@ -188,6 +188,8 @@ Example (nspr):
 
 Any time you see `changelog` and any other file(s) changing in a single commit, it's guaranteed that you'll need to deconstruct it; `changelog` should only ever change in it own commit. You should still look over commits to make sure, but this is a dead giveaway.
 
+Another giveaway would be a commit named `Import patches-unapplied version 1.2.3ubuntu4 to ubuntu/cosmic-proposed`, where it's applying from an ubuntu source rather than a debian one (in this case `ubuntu4`).
+
 If there are no commits to deconstruct, simply [add the deconstruct tag](#tag-deconstructed) and move on.
 
 #### Identify logical changes
@@ -725,6 +727,8 @@ Next step: [Deconstruct Commits](#deconstruct-commits)
 
 
 ### Create logical tag manually
+
+Use the version number of the last ubuntu change. So if there are `3.1.20-3.1ubuntu1` and `3.1.20-3.1ubuntu2`, use `3.1.20-3.1ubuntu2`.
 
     git tag -a -m "Logical delta of 3.1.20-3.1ubuntu2" lp1802914/logical/3.1.20-3.1ubuntu2
 
