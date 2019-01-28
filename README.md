@@ -17,4 +17,6 @@ Sections
  * Package Maintenance
    - [Package Fixing & SRUs](PackageFixing.md)
    - [Package Merging](PackageMerging.md)
- * [Reviewing Merge Proposals](Reviewing.md)
+ * Reviewing
+   - [Reviewing Merge Proposals](MergeProposalReview.md)
+   - [Bug Triage](BugTriage.md)

@@ -583,7 +583,7 @@ Example:
 Note: Disco is not yet available at the time of writing, so we use cosmic.
 
     lxc launch ubuntu:cosmic tester && lxc exec tester bash
-    apt update && apt dist-upgrade -y && apt install at
+    apt update && apt dist-upgrade -y && apt install -y at
 
 The test:
 
