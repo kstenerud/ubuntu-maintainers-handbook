@@ -35,7 +35,7 @@ From within the package repository:
     apt dist-upgrade -y &&
     apt install -y ubuntu-dev-tools &&
     cd /root/build &&
-    pull-debian-source -d $(grep "Source: " package/debian/control | sed "s/Source: \(.*\)/\1/g") $(grep "urgency=" package/debian/changelog |grep -v ubuntu|head -1|sed "s/.*(\(.*\)).*/\1/g") &&
+    pull-debian-source -d $(grep "Source: " package/debian/control | sed "s/Source: \(.*\)/\1/g") $(grep "unstable; urgency=" package/debian/changelog |grep -v ubuntu|head -1|sed "s/.*(\(.*\)).*/\1/g") &&
     cd /root/build/package &&
     apt build-dep -y ./ &&
     dpkg-buildpackage -S' &&

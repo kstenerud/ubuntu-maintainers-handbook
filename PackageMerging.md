@@ -5,6 +5,8 @@ Merging is the process of taking all Ubuntu changes made on top of one Debian ve
 
 There is a more detailed workflow [here](https://wiki.ubuntu.com/UbuntuDevelopment/Merging/GitWorkflow). This guide is intended to cover the majority of use cases.
 
+You can get a list of packages that have been changed in Debian, but not merged into Ubuntu, here: http://reqorts.qa.ubuntu.com/reports/ubuntu-server/merges.html
+
 
 
 Overview
@@ -546,7 +548,7 @@ https://launchpad.net/~kstenerud/+activate-ppa
 
 Give it a name that identifies the ubuntu version, package name, and bug number, such as `disco-somepackage-merge-1802914`
 
-Be sure to enable all architectures to check that it builds (click on `Change details` in the top right corner of the newly created PPA page).
+**IMPORTANT:** Be sure to enable all architectures to check that it builds (click on `Change details` in the top right corner of the newly created PPA page).
 
 #### Upload files
 
@@ -582,7 +584,7 @@ Example:
 
 Note: Disco is not yet available at the time of writing, so we use cosmic.
 
-    lxc launch ubuntu:cosmic tester && lxc exec tester bash
+    lxc launch ubuntu-daily:cosmic tester && lxc exec tester bash
     apt update && apt dist-upgrade -y && apt install -y at
 
 The test:
@@ -607,7 +609,7 @@ Test the upgraded version:
 
 ### Test installing the latest from scratch
 
-    lxc launch ubuntu:cosmic tester && lxc exec tester bash
+    lxc launch ubuntu-daily:cosmic tester && lxc exec tester bash
     add-apt-repository -y ppa:kstenerud/disco-at-merge-1802914
     apt update && apt dist-upgrade -y && apt install at
     echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
