@@ -226,7 +226,7 @@ All changes to Ubuntu packages follow a similar process:
  5. Open a merge proposal and get reviews.
  6. Upload, or get a sponsor for your changes.
  7. Track migration of your package through the build system.
- 8. Verify that the package works as intended, and han't introduced regressions.
+ 8. Verify that the package works as intended, and hasn't introduced regressions.
 
 
 
@@ -283,7 +283,7 @@ This will attempt to clone the `hello` Ubuntu source code repository into a subd
      * [new tag]         upstream/debian/2.2.gz         -> pkg/upstream/debian/2.2.gz
      * [new tag]         upstream/debian/2.4.gz         -> pkg/upstream/debian/2.4.gz
 
-The branches you'll be interested in are `ubuntu/somerelease-devel`. `ubuntu/somerelease` is the package set as it was on release day. the `-devel` branch is the release + all changes to date. There is also a special `ubuntu-devel` branch which is the most up to date branch.
+The branches you'll be interested in are `ubuntu/somerelease-devel`. `ubuntu/somerelease` is the package set as it was on release day. The `-devel` branch is that release plus all changes to date. There is also a special `ubuntu-devel` branch which is the most up to date branch.
 
 You'll be using the `-devel` branches for your changes.
 
