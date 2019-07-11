@@ -1,7 +1,10 @@
 High Level Concepts
 ===================
 
-An Ubuntu installation is made up of packages, which get installed on the target machine. The `apt` command handles fetching and installing of packages.
+An Ubuntu installation is made up of packages copied and unpacked onto the target machine.
+
+ The `apt` command handles fetching and installing of packages.
+
 
 
 
