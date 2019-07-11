@@ -38,6 +38,21 @@ Users and groups begin with a tilde: https://launchpad.net/~ubuntu-server
 
 You can quickly access Launchpad pages using the shortcut URL pad.lv, or using `!upkg some-package` in duckduckgo.
 
+Alternatively, if using Firefox you can add a shortcut bookmark.  In Firefox, create a 'Shortcuts' folder under 'Other Bookmarks', and inside it add a 'New Bookmark', with these fields:
+
+  Name:     Launchpad Bugs
+  Location: https://bugs.launchpad.net/ubuntu/+bug/%s
+  Tags:     
+  Keyword:  lpb
+
+Add another one for Debian bugs:
+
+  Name:     Debian Bugs
+  Location: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=%s
+  Tags:     
+  Keyword:  debb
+
+If you expect to work with other upstream bug trackers frequently, add shortcuts for them too.
 
 
 Suite (Package) Model
