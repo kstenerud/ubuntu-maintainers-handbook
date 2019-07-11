@@ -235,7 +235,11 @@ All changes to Ubuntu packages follow a similar process:
 Source Code Repositories
 ------------------------
 
-All changes to packages are done through their source code repositories. This used to be done through bazaar, but is now done through git. The preferred method is to use `git-ubuntu`, which you can install using apt.
+All changes to packages are done through their source code repositories. This used to be done through bazaar, but is now done through git. The preferred method is to use `git-ubuntu`, which you can install using snap:
+
+    sudo snap install --edge --classic git-ubuntu
+
+(Note:  --edge requests installation of the current development version of git-ubuntu, which is the best tested.)
 
 
 ### Cloning a Repository
