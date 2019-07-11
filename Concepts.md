@@ -328,9 +328,7 @@ Click on a repository, and you'll see a list of branches at the bottom:
     Name                                Last Modified   Last Commit
     bionic-hello-fix-segfault-1234567   2018-12-10      changelog 
 
-Click on the branch to get to its merge status:
-
-You'll either have a merge status like so:
+Click on the branch to get to its merge status will either provide a link to `Propose for merging`, or if it's already been proposed will show the merge status, like so:
 
      Approved for merging into ubuntu/+source/hello:ubuntu/bionic-devel
 
@@ -340,10 +338,6 @@ You'll either have a merge status like so:
         3 files modified
 
 Clicking the merge link (`Approved` in this case) brings you to the actual merge proposal.
-
-Or you can start a merge proposal by clicking `Propose for merging`.
-
-
 
 
 See Also
