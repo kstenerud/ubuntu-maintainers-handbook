@@ -114,9 +114,11 @@ Example /etc/apt/sources.list:
 
     ## Major bug fix updates produced after the final release of the distribution.
     deb http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
-    deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
+    # deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
 
 When apt encounters multiple versions of a package, it uses an internal scoring system to decide which version should be installed.
+
+Notice that some lines start with 'deb', while others 'deb-src'.  The 'deb' lines provide binary packages, while the 'deb-src' provide source packages.  You'll usually notice the 'deb-src' lines are commented out with '#' to disable them; this makes updates run a bit faster for the vast majority of people who don't need access to the sources.  You're one of the select few who do need access, so uncomment the 'deb-src' lines appropriate you what you'll be working on.
 
 
 ### Partial Suites
