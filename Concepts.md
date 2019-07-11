@@ -283,7 +283,7 @@ This will attempt to clone the `hello` Ubuntu source code repository into a subd
      * [new tag]         upstream/debian/2.2.gz         -> pkg/upstream/debian/2.2.gz
      * [new tag]         upstream/debian/2.4.gz         -> pkg/upstream/debian/2.4.gz
 
-The branches you'll be interested in are `ubuntu/somerelease-devel`. `ubuntu/somerelease` is the package set as it was on release day. The `-devel` branch is that release plus all changes to date. There is also a special `ubuntu-devel` branch which is the most up to date branch.
+The branches you'll be interested in are `ubuntu/somerelease-devel`. `ubuntu/somerelease` is the package set as it was on release day. The `-devel` branch is that release plus all changes to date. The special `ubuntu-devel` branch points to the (unreleased) leading edge of development for the package in Ubuntu.
 
 You'll be using the `-devel` branches for your changes.
 
