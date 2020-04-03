@@ -1,15 +1,19 @@
 High Level Concepts
 ===================
 
-An Ubuntu installation is made up of packages copied and unpacked onto the target machine.
+An Ubuntu installation is made up of packages copied and unpacked onto the target machine.  The Ubuntu project is the group of people who care for these packages, including both Canonical employees and the wider community.
 
- The `apt` command handles fetching and installing of packages.
+Ubuntu's collection of packages is derived from the collection maintained by the community driven Debian project.  An important part of a Ubuntu packager's role is to collaborate with Debian by keeping the Ubuntu copies of packages up to date, and by sharing improvements made in Ubuntu back up to Debian.
 
+Ubuntu and Debian have distinct differences in infrastructure, procedures, and release schedules.
 
+An overriding principle in Ubuntu is that processes are meant to make common cases easy to handle, but there will be exceptional situations.  For these cases, a request for an exception is filed with the appropriate review team, and if granted will permit the deviation.
 
 
 Launchpad, The Project Repository
 ---------------------------------
+
+One of the most major differences between Ubuntu and Debian is its infrastructure, which is built around a Github-like project repository named Launchpad.
 
 Launchpad and Github operate on similar principles. Each has users/groups and projects. But while Github puts users at the top level, Launchpad puts projects at the top level.
 
