@@ -204,6 +204,53 @@ Where apt has the concept of suites, Launchpad has the concept of series and poc
 Launchpad will automatically map from series and pocket to suite when generating binary packages.
 
 
+### Source Packages
+
+Let's next examine the files involved in a specific release.  From above, let's look at the 2.7-2 release:
+
+    ├── hello_2.7.orig.tar.gz
+    ├── hello_2.7-2.debian.tar.gz
+    ├── hello_2.7-2.dsc
+
+The first file, `hello_2.7.orig.tar.gz`, or the "orig tarball" as it's termed, corresponds to the upstream project's official source code for their 2.7 release.  Often, this will literally be a copy of the upstream project's released archive tarball, renamed to suit Debian's file naming policy.  Other times there are more structured processes provided by Debian for managing the orig tarball, such as "pristine-tar".
+
+The next file, `hello_2.7-2.debian.tar.gz` is sometimes referred to as the "Debian delta".  It contains all of the packaging changes needed to transform the orig tarball into the appropriate .deb file(s).  The "-2" in its filename indicates it is the second update to the Debian delta for 2.7.  This "dash number" is updated when new packaging changes are uploaded.
+
+Before we can work on these files, we need to unpack them into a working tree, with the debian changes applied.  A variety of tools exist to do this, including `dget <url>.dsc`, `apt-get source <pkg>` and similar.  A low level way to do this is with the dpkg-source command:
+
+    $ dpkg-source -x hello_2.10-2ubuntu2.dsc 
+    dpkg-source: info: extracting hello in hello-2.10
+    dpkg-source: info: unpacking hello_2.10.orig.tar.gz
+    dpkg-source: info: unpacking hello_2.10-2ubuntu2.debian.tar.xz
+
+Looking into the hello-2.10/ directory, you'll notice there has been a "debian/" directory added.  Debian's policy is to contain all of its additions to the orig tarball into a debian/ directory within the unpacked tree.  Let's look at the contents of the debian/ directory:
+
+    $ find hello-2.10/debian/
+    hello-2.10/debian/
+    hello-2.10/debian/control
+    hello-2.10/debian/copyright
+    hello-2.10/debian/changelog
+    hello-2.10/debian/source
+    hello-2.10/debian/source/format
+    hello-2.10/debian/tests
+    hello-2.10/debian/tests/control
+    hello-2.10/debian/rules-old
+    hello-2.10/debian/watch
+    hello-2.10/debian/rules
+              
+Some packages also have a patches/ directory, with .diff or .patch files that will be applied to the packaging prior to building it.  The control file contains metadata about the source and binary packages.  The rules file contains build directives.  The changelog file lists the sequence of changes made to the package, with the most recent at the top.  Here's one recent change from hello's changelog:
+
+    hello (2.10-2ubuntu1) eoan; urgency=low
+
+      * Merge from Debian unstable.  Remaining changes:
+        - Run the upstream tests as an autopkg test as well.
+      * Dropped changes, included in Debian:
+        - Bump the standards version.
+
+     -- Steve Langasek <steve.langasek@ubuntu.com>  Wed, 22 May 2019 16:36:23 -0700
+
+We'll be creating our own changelog entry later and will discuss the various elements at that point.  But for now note how the first line contains the package name ('hello'), version number ('2.10-2ubuntu1'), and the Ubuntu release codename ('eoan').
+
 
 The Build Process
 -----------------
