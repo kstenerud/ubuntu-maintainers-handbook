@@ -140,3 +140,15 @@ To make sure we properly squash this bug, we follow this procedure:
  * The bug is squashed, and everyone gets the update!
 
 Thanks for your help!
+
+
+Web Browser Tools
+-----------------
+
+Firefox can be extended with a script to paste in standard response text such as those listed above.  This script, called 'stock-replies', is part of the "Launchpad Greasemonkey Scripts" package:
+
+  https://launchpad.net/launchpad-gm-scripts
+
+A discourse post about the tool and how to install and use it can be found here:
+
+  https://discourse.ubuntu.com/t/stock-replies-script/14103
