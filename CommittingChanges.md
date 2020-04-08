@@ -12,7 +12,8 @@ The Commit Message
 
 Structure your git commit message in changelog format to make later steps easier:
 
-      * changed/or/added/files: [how it was fixed], [thanks to original author] (LP #12345678)
+      * changed/or/added/files: [how it was fixed], [thanks to original author]
+        (LP: #12345678)
 
 Use "Thanks to" when you are not the author of the code being submitted.
 
@@ -21,12 +22,26 @@ Maximum column width is 79.
 Example:
 
 ``` 
-      * debian/patches/my-changes.diff: Rerouted the inertial dampeners
+      * debian/patches/my-changes.diff: Reroute the inertial dampeners
         through the auxiliary power relay. Thanks to Miles O'Brien
         <miles.obrien@ds9.fed>. (LP: #19999999)
 ```
 
 This style of commit message makes integration with the other tools you'll be using easier because it's already in changelog format. The `(LP: #12345678)` at the end will auto-close that bug once the package is published to updates.
+
+For brevity, you'll often see well-known directories abbreviated to their initial letter, such as `d/p/my-changes.diff` for the previous example.  A change affecting multiple files can list them as comma-separated paths, as shown in the next example.  Sub-bullets '-' and '+' can be used to help organize the information.
+
+Here is a more complex example:
+
+``` 
+      * Recalibrate the long range sensors to detect quasiparticle anomalies.
+        - d/p/important.patch: Reroute the inertial dampeners
+          through the auxiliary power relay. Thanks to Miles O'Brien
+          <miles.obrien@ds9.fed>. (LP: #19999999)
+        - d/p/control, d/p/rules: Adjust long range sensor power levels
+          + Increase power input draw from auxiliary power relay.
+          + Set scan range to subatomic frequencies.
+```
 
 
 
@@ -65,7 +80,7 @@ This modifies `debian/changelog` like so:
 
     mypackage (3.3.0-1ubuntu1) UNRELEASED; urgency=medium
     
-      * debian/patches/my-changes.diff: Rerouted the inertial dampeners
+      * debian/patches/my-changes.diff: Reroute the inertial dampeners
         through the auxiliary power relay. Thanks to Miles O'Brien
         <miles.obrien@ds9.fed>. (LP: #19999999)
     
