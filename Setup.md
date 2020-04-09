@@ -288,6 +288,8 @@ More Info: https://wiki.ubuntu.com/SimpleSbuild
 
 ### Software: LXD
 
+LXD is a powerful container system similar in concept to Dropbox and other container software.
+
 Install and setup LXD using the standard installation directions.
 
 Create some helper aliases for common LXD tasks:
