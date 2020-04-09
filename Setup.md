@@ -128,6 +128,8 @@ And push to the keyserver:
 
     $ gpg --keyserver keyserver.ubuntu.com --send-keys 7C177302572849D84A5048349E9C224744EF2A5A
 
+Make sure to note the key strength of your gpg key.  In this case its rsa4096, but if you have an older key it may be a weaker 2048-bit or 1024-bit key.  If so, create a new 4096-bit one and deprecate the old one in Launchpad, github, etc.
+
 
 ### Software: Git
 
