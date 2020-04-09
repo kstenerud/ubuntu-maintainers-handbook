@@ -187,6 +187,8 @@ This configures quilt for use with Debian packages, with default settings that c
 
 ### Software: DPut
 
+dput is used to upload a software package to the Ubuntu repository, or to a personal package archive (PPA).
+
 A working `.dput.cf`:
 
     [DEFAULT]
@@ -200,6 +202,8 @@ A working `.dput.cf`:
     fqdn            = ppa.launchpad.net
     method          = ftp
     incoming        = ~%(ppa)s/ubuntu
+
+This configures dput for safety, such that if you accidentally forget to specify a destination, it'll default to doing nothing.
 
 
 ### Software: SBuild
