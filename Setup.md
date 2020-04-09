@@ -71,6 +71,13 @@ Your user should be a member of the following groups:
  * sbuild
  * sudo
 
+    $ groups my_user
+    my_user : my_user root adm cdrom sudo dip plugdev lpadmin
+
+    $ sudo groupadd lxc
+    $ sudo groupadd sbuild
+    $ sudo groupadd libvirt
+
 
 ### Profile
 
