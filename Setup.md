@@ -167,6 +167,8 @@ You may also want to add the following to your .gitconfig:
 
 ### Software: Quilt
 
+Quilt is a CLI used to manage patch stacks.
+
 A working `.quiltrc`:
 
     d=. ; while [ ! -d $d/debian -a `readlink -e $d` != / ]; do d=$d/..; done
@@ -179,6 +181,8 @@ A working `.quiltrc`:
         QUILT_COLORS="diff_hdr=1;32:diff_add=1;34:diff_rem=1;31:diff_hunk=1;33:diff_ctx=35:diff_cctx=33"
         if ! [ -d $d/debian/patches ]; then mkdir $d/debian/patches; fi
     fi
+
+This configures quilt for use with Debian packages, with default settings that conform to standard Debian practices.
 
 
 ### Software: DPut
