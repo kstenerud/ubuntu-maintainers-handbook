@@ -1,14 +1,14 @@
 Opening a Merge Proposal
 ========================
 
-When you want to push changes to a package, the first step is to open a merge proposal (MP).
+When you want to push changes to a package, the first step is to open a merge proposal (MP).  The merge proposal is where you discuss the reasoning for the proposed change, and where reviewers have the opportunity to comment on it.
 
-The merge proposal is where you discuss the reasoning for the proposed change, and where reviewers have the opportunity to comment on it.
+Once the MP is approved, if you have upload rights you can then upload the package via 'dput'.  If you do not have upload rights, you'll work with a "sponsor" that will do the upload for you.
 
 
 ### Prepare a Description
 
-The description is free-form, but should contain everything you did. You should also append the dep8 results.
+The description is free-form, but should contain everything you did. Let the reviewer know if you'll need sponsorship.  You should also append the dep8 results.
 
 Example SRU merge proposal:
 
@@ -17,6 +17,8 @@ Example SRU merge proposal:
           * debian/patches/fix-postconf-segfault.diff: Fix a postconf segfault
             when map file cannot be read. Thanks to Viktor Dukhovni <postfix-
             users@dukhovni.org>. (LP: #1753470)
+
+    Please tag & sponsor.
 
     PPA: ppa:kstenerud/postfix-postconf-segfault-1753470
 
@@ -125,3 +127,4 @@ Once your MP has been reviewed, request sponsorship, pointing to the git commit 
     Please sponsor this MP. Git commit: 566d8c9eff6a13c25c2ef5f5d9e176f49c52a3b4
 
 The sponsor will tag the upload and dput it to where it belongs.
+

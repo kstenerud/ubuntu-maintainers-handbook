@@ -18,7 +18,7 @@ These repos determine which failing tests are to be ignored. Example:
 WIP:
 ---
 
-pull-debian-source <pakage>
+pull-debian-source <package>
 
 salsa.debian.org
 
@@ -63,10 +63,6 @@ subdirs contain info for specific releases (so, SRUs)
 
 
 -----------------------
-Bug template before sponsor
-
-Upload, or get sponsor (tag & sponsor)
-Say on mp, please tag & sponsor
 
 Non-sru:
 
