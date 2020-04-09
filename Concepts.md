@@ -10,6 +10,18 @@ Ubuntu and Debian have distinct differences in infrastructure, procedures, and r
 An overriding principle in Ubuntu is that processes are meant to make common cases easy to handle, but there will be exceptional situations.  For these cases, a request for an exception is filed with the appropriate review team, and if granted will permit the deviation.
 
 
+Ubuntu Release Cadence
+----------------------
+
+Ubuntu follows a strict time-based release cycle.  Every six months a new Ubuntu version is released and its set of packages declared "stable".  Simultaneously, a new version begins development; it is given its own codename but also referred to as the "current development release", or "devel".
+
+The development process follows a defined schedule, with periods of active development followed by various freezes where the type of packaging activity changes to focus more on stabilization and preparations for release.
+
+After a Ubuntu version is released, the software packages are altered only due to pressing needs such as to fix defects or to update critically important components.  These post-release updates to the stable versions of Ubuntu are referred to as "Stable Release Updates", or "SRU's".  SRU work is a primary activity of Ubuntu packagers, and will be discussed through this document.
+
+In addition to the regular Ubuntu releases, every 2 years (i.e. every 4th release) a release is declared to be a Long Term Support (LTS) release.  The LTS releases are special in that they have much longer than usual support periods.
+
+
 Launchpad, The Project Repository
 ---------------------------------
 
@@ -128,7 +140,6 @@ Notice that some lines start with 'deb', while others 'deb-src'.  The 'deb' line
 ### Partial Suites
 
 Some suites are known as "partial suites". They contain only a subset of the total packages required to install Ubuntu, but contain packages that supercede those in a different suite if overlayed on top of it. `backports`, `proposed`, `security`, `updates` are partial suites.
-
 
 
 Source (Launchpad) Model
