@@ -252,3 +252,19 @@ Configure GnuPG for sbuild:
     sbuild-update --keygen
 
 More Info: https://wiki.ubuntu.com/SimpleSbuild
+
+
+### Software: LXD
+
+Install and setup LXD using the standard installation directions.
+
+Create some helper aliases for common LXD tasks:
+
+    lxc alias add ls 'list -c ns4,user.comment:comment'
+
+    lxc alias add login 'exec @ARGS@ --mode interactive -- bash -xac $@my_user - exec /bin/login -p -f '
+
+(The trailing space after the -f is important).  Replace 'my_user' with 'ubuntu' or whatever username you use in your containers.
+
+
+More Info:  https://help.ubuntu.com/lts/serverguide/lxd.html
