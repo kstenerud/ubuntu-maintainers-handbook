@@ -148,6 +148,21 @@ You may also want to add the following to your .gitconfig:
 
     [log]
         decorate = short
+    [commit]
+        verbose = true
+    [merge]
+        summary = true
+        stat = true
+    [core]
+        whitespace = trailing-space,space-before-tab
+
+    [diff "ruby"]
+        funcname = "^ *\\(\\(def\\) .*\\)"
+    [diff "image"]
+        textconv = identify
+
+    [url "git+ssh://my_lp_username@git.launchpad.net/"]
+        insteadof = lp:
 
 
 ### Software: Quilt
