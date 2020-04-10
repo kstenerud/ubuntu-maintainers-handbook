@@ -230,6 +230,35 @@ You should also mention the salsa link in the fixed up bug report, and possibly 
 Since we can't push new versions of packages to previous releases, you'd need to backport the fix by copying what Debian did into a new commit on xenial.
 
 
+### Was it fixed upstream?
+
+For bugs that aren't already fixed in Ubuntu or Debian, sometimes the original developers of the software have already found and fixed the issue, or at least are aware of it and may have a proposed solution or workaround available.
+
+From the unpacked package directory, a quick way to see if there's a newer upstream release is via `uscan`:
+
+    $ cd dovecot-gu/
+    $ uscan --safe
+    uscan: Newest version of dovecot on remote site is 2.3.10, local version is 2.3.7.2
+    uscan:    => Newer package available from
+      https://dovecot.org/releases/2.3/dovecot-2.3.10.tar.gz
+
+This only works if the package has a debian/watches file.  If it doesn't, look in the package's README or other documentation, and do the research online manually.
+
+Searching the upstream bug tracker, or generally googling on error messages or symptoms can sometimes turn up a patch or bug report of relevance.
+
+
+### Forwarding issues upstream
+
+If there are no existing fixes for an issue, you can either develop one yourself, or communicate the problem to Debian or the upstream developers.
+
+Each upstream project has its own conventions and expectations for how they can be communicated with.  Check the source tree and development section of the upstream's website for policies, or study other recent bug reports and patch contributions for best practices to follow.
+
+In general though, it is a good idea to make sure you are able to reliably reproduce the issue yourself.  Document the steps you follow in a way that non-Ubuntu users could follow.  If there is a workload or test case, try to simplify it down to the minimal set of commands to reproduce the problem.
+
+When filing the bug report or pull request upstream, do identify yourself as a Ubuntu developer and your role in forwarding an issue reported against the distribution.
+
+
+
 
 Apply the Fix
 -------------
