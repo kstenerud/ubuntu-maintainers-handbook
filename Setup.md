@@ -71,6 +71,13 @@ Your user should be a member of the following groups:
  * sbuild
  * sudo
 
+    $ groups my_user
+    my_user : my_user root adm cdrom sudo dip plugdev lpadmin
+
+    $ sudo groupadd lxc
+    $ sudo groupadd sbuild
+    $ sudo groupadd libvirt
+
 
 ### Profile
 
@@ -121,6 +128,8 @@ And push to the keyserver:
 
     $ gpg --keyserver keyserver.ubuntu.com --send-keys 7C177302572849D84A5048349E9C224744EF2A5A
 
+Make sure to note the key strength of your gpg key.  In this case its rsa4096, but if you have an older key it may be a weaker 2048-bit or 1024-bit key.  If so, create a new 4096-bit one and deprecate the old one in Launchpad, github, etc.
+
 
 ### Software: Git
 
@@ -139,9 +148,26 @@ You may also want to add the following to your .gitconfig:
 
     [log]
         decorate = short
+    [commit]
+        verbose = true
+    [merge]
+        summary = true
+        stat = true
+    [core]
+        whitespace = trailing-space,space-before-tab
+
+    [diff "ruby"]
+        funcname = "^ *\\(\\(def\\) .*\\)"
+    [diff "image"]
+        textconv = identify
+
+    [url "git+ssh://my_lp_username@git.launchpad.net/"]
+        insteadof = lp:
 
 
 ### Software: Quilt
+
+Quilt is a CLI used to manage patch stacks.
 
 A working `.quiltrc`:
 
@@ -156,8 +182,12 @@ A working `.quiltrc`:
         if ! [ -d $d/debian/patches ]; then mkdir $d/debian/patches; fi
     fi
 
+This configures quilt for use with Debian packages, with default settings that conform to standard Debian practices.
+
 
 ### Software: DPut
+
+dput is used to upload a software package to the Ubuntu repository, or to a personal package archive (PPA).
 
 A working `.dput.cf`:
 
@@ -172,6 +202,8 @@ A working `.dput.cf`:
     fqdn            = ppa.launchpad.net
     method          = ftp
     incoming        = ~%(ppa)s/ubuntu
+
+This configures dput for safety, such that if you accidentally forget to specify a destination, it'll default to doing nothing.
 
 
 ### Software: SBuild
@@ -252,3 +284,21 @@ Configure GnuPG for sbuild:
     sbuild-update --keygen
 
 More Info: https://wiki.ubuntu.com/SimpleSbuild
+
+
+### Software: LXD
+
+LXD is a powerful container system similar in concept to Dropbox and other container software.
+
+Install and setup LXD using the standard installation directions.
+
+Create some helper aliases for common LXD tasks:
+
+    lxc alias add ls 'list -c ns4,user.comment:comment'
+
+    lxc alias add login 'exec @ARGS@ --mode interactive -- bash -xac $@my_user - exec /bin/login -p -f '
+
+(The trailing space after the -f is important).  Replace 'my_user' with 'ubuntu' or whatever username you use in your containers.
+
+
+More Info:  https://help.ubuntu.com/lts/serverguide/lxd.html

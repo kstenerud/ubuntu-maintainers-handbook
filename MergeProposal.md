@@ -1,14 +1,14 @@
 Opening a Merge Proposal
 ========================
 
-When you want to push changes to a package, the first step is to open a merge proposal (MP).
+When you want to push changes to a package, the first step is to open a merge proposal (MP).  The merge proposal is where you discuss the reasoning for the proposed change, and where reviewers have the opportunity to comment on it.
 
-The merge proposal is where you discuss the reasoning for the proposed change, and where reviewers have the opportunity to comment on it.
+Once the MP is approved, if you have upload rights you can then upload the package via 'dput'.  If you do not have upload rights, you'll work with a "sponsor" that will do the upload for you.
 
 
 ### Prepare a Description
 
-The description is free-form, but should contain everything you did. You should also append the dep8 results.
+The description is free-form, but should contain everything you did. Let the reviewer know if you'll need sponsorship.  You should also append the dep8 results.
 
 Example SRU merge proposal:
 
@@ -17,6 +17,8 @@ Example SRU merge proposal:
           * debian/patches/fix-postconf-segfault.diff: Fix a postconf segfault
             when map file cannot be read. Thanks to Viktor Dukhovni <postfix-
             users@dukhovni.org>. (LP: #1753470)
+
+    Please tag & sponsor.
 
     PPA: ppa:kstenerud/postfix-postconf-segfault-1753470
 
@@ -118,8 +120,11 @@ It only lists core, so the second reviewer is `canonical-server-core-reviewers`.
 
 ### Get Sponsorship
 
+Before asking your sponsor to upload, it is wise to verify that your proposed upload does build, does fix the issue and does not regress anything. If you have reason to believe that issues may manifest differently on different architectures, then it is wise to test these as well. The reason to test before sponsorship and upload is that the sponsorship process takes time (and for an SRU, the additional SRU process), so if a problem is detected later it will take longer to go through the sponsorship and SRU review processes again to resolve it. For SRUs, note that the final testing is performed during SRU verification later, so the testing recommended at the stage of preparing an SRU is just some very basic smoke testing to find likely problems. Thorough testing can be performed later to avoid duplicate effort.
+
 Once your MP has been reviewed, request sponsorship, pointing to the git commit at the head:
 
     Please sponsor this MP. Git commit: 566d8c9eff6a13c25c2ef5f5d9e176f49c52a3b4
 
 The sponsor will tag the upload and dput it to where it belongs.
+

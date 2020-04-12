@@ -12,11 +12,11 @@ Building Source Packages
 
 This is by far the easiest method:
 
-    git ubuntu build-source -v --sign
+    git ubuntu build --source -v --sign
 
 Git ubuntu will automatically try to detect which Ubuntu release the build needs, based on the package's changelog file, but you can always specify an image directly, like this:
 
-    git ubuntu build-source -v --sign --lxd-image ubuntu-daily:bionic
+    git ubuntu build --source -v --sign --lxd-image ubuntu-daily:bionic
 
 This will download the LXD image if needed, start a container, build the packages, copy them to `../` and shut down.
 
@@ -62,7 +62,7 @@ From within the package repository:
 
     $ git ubuntu build -v
 
-Other flags are similar to `git ubuntu build-source`.
+Other flags are similar to `git ubuntu build --source`.
 
 
 ### As a PPA in Launchpad
@@ -100,13 +100,3 @@ It is also helpful to enable all architectures to ensure no build regressions we
 When it finishes, you should be able to see it e.g. https://launchpad.net/~kstenerud/+archive/ubuntu/bionic-postfix-postconf-segfault-1753470/+packages
 
 Note: You must wait for the package to build server-side before you can use the PPA to install packages. This might take time depending on how busy things are!
-
-
-
-
-karl, fwiw 'build-source' in git-ubuntu is expected to go away i think
-and be replaced by just 'build -uS -uC' (as with debuild)
-You5:10 PM
-ok
-Scott Moser5:10 PM
-https://bugs.launchpad.net/usd-importer/+bug/1799466
