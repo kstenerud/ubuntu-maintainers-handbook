@@ -376,13 +376,39 @@ See [Merge Proposals](MergeProposal.md)
 Update the Bug Report
 ---------------------
 
+For regular bug fixes and merges, adding a comment about your progress is typically all you'll need.  You might provide some links to your PPA if you'd like to get people to test your fix, or if you want to provide the fix to the userbase swiftly.
+
+### SRU Paperwork
+
+For stable release updates (SRUs), on the other hand, you need to add a bit more detail.
+
 Go back to the bug report (in my case, https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470).
 
-Modify the bug description (yellow pencil icon) and update it to conform with https://wiki.ubuntu.com/StableReleaseUpdates#SRU_Bug_Template
+Modify the bug description (yellow pencil icon) and update it to conform with https://wiki.ubuntu.com/StableReleaseUpdates#SRU_Bug_Template  These are normally the [Impact], [Test Case] and [Regression Potential] sections.  It is good practice to make the Test Case section itemized with explicit steps, "paint by numbers" style.  It is also best practice to include both a [Development Fix] and [Stable Fix]; the former explains the situation with the fix in the current development release, while the latter explains your strategy for addressing (or skipping) it in LTS and other stable releases.
 
 Note: Keep the original description as-is, in a section called `[Original Description]` at the bottom.
 
 Note: You'll see your branch and merge proposal in the `Related branches` because of the (LP: #xxxx) in the changelog entry.
+
+
+SRU Review Process
+------------------
+
+There is a distinction between sponsorship and the SRU process. They are possibly a little confused in the SRU wiki page (especially section 6 “Fixing several bugs in one upload).
+
+Consider the process from the point of view of your sponsor and the SRU team. On review, they will start from the diff and expect to see:
+
+  * The diff fully explained by the changelog entry. This means that if there is something in the diff that is not explained by the changelog, then there is a problem.
+  * A bug for everything mentioned in the changelog entry. Reviewers are pragmatic: there is no strict rule such as "every bullet point must refer to a bug"”, but more that logically everything mentioned corresponds to a bug, so that a reviewer can go to a bug to find more information on any part of the changelog. For an SRU, even added functionality must refer to a bug. If some part of a changelog entry does not obviously refer to a bug, then there is a problem.
+  * Every issue mentioned in an SRU changelog must have a bug task filed against the package.  The same bug # can be mentioned in different SRUs, since a bug may have multiple bug tasks. The Ubuntu Bug Control Team, or other members of the server team can assist if you need help creating bug tasks.
+  * The issue should be resolved for the Ubuntu development release.  This is tracked by having a bug task set to Fix Released for the devel series. The goal is to avoid regression from a user’s perspective when they upgrade to the newer Ubuntu release. If the status is not Fix Released but you still want to proceed with the SRU, explain what is going on in a [Development Fix] section.
+  * Every LP bug # mentioned in an SRU changelog must have "SRU paperwork" filled out as described in the previous section.
+
+After you or your sponsor have uploaded your package:
+  * Set the bug task status to "In Progress"
+  * The upload will appear in the "unapproved queue", for example https://launchpad.net/ubuntu/focal/+queue?queue_state=1.  It may take a week or two before its processed.
+  * If you find a problem while its still unapproved, ask in the Freenode #ubuntu-release channel for the package to be rejected from the queue.  This is a trivial task for archive admins.  If rejected at this stage then the same version number can be re-used in a subsequent upload.
+  * The SRU team will review incoming SRU uploads from the unapproved queue and expect to see the review items completed correctly as above. They will either accept or reject (with a reason) from the unapproved queue. If they reject, then you will need to handle the rejection reason and then start again from the beginning. If they accept, then the bug task will change to Fix Committed, the package will enter the -proposed pocket and then the package binaries will be built.
 
 
 When the Bugfix is Accepted
@@ -439,39 +465,8 @@ Note: This page is generated every few minutes, and doesn't update realtime.
 
 ### SRU Verification
 
-It's best to have the package independently verified (preferably by the person who reported the bug), but if it sits idle too long (2 days or so), you can verify it yourself.
+It's best to have the package independently verified (preferably by the person who reported the bug), but if it sits idle too long (2 days or so), you can verify it yourself.  Follow the instructions provided by the SRU team, which usually means changing the verification-needed tag into verification-done.
 
-https://people.canonical.com/~ubuntu-archive/pending-sru.html shows what SRUs are pending, and what their status is.
+https://people.canonical.com/~ubuntu-archive/pending-sru.html shows what SRUs are pending, and what their status is.  Note that this includes dep8 test results; if these have failed then it is unlikely the SRU team will release the update, so it's wise to followup if this happens.
 
-
-### SDFSFSDFSFD
-
-Once uploaded, move card to "external dependencies"
-add label for who is the external party
-- For changes to already released ubuntu, use sru-team-action
-Check the queue for your package. e.g.: https://launchpad.net/ubuntu/xenial/+queue
-Add a comment to the card, mentioning that you've checked where the package is, and what it's waiting for.
-
-when it's been accepted into -proposed:
-
-check https://people.canonical.com/~ubuntu-archive/pending-sru.html
-Your package should be green. If not, find out why.
-
-https://launchpad.net/ubuntu/xenial/+queue
-
-
-### Running qa regression tests
-
-Go to https://launchpad.net/qa-regression-testing
-
-Click Code
-
-Get git repo location.
-
-Spin up a vm or container
-
-clone repo
-
-    git clone https://git.launchpad.net/qa-regression-testing
-
-Go into scripts and run: sudo ./install-packages test-foo.py
+Once all of the SRU's bugs have reached verification-done and a 7-day waiting period has elapsed, the SRU team will move the source and binary packages into the -updates pocket and mark the bug task(s) as Fix Released.
