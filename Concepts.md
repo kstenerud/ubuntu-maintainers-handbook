@@ -1,12 +1,31 @@
 High Level Concepts
 ===================
 
-An Ubuntu installation is made up of packages, which get installed on the target machine. The `apt` command handles fetching and installing of packages.
+An Ubuntu installation is made up of packages copied and unpacked onto the target machine.  The Ubuntu project is the group of people who care for these packages, including both Canonical employees and the wider community.
 
+Ubuntu's collection of packages is derived from the collection maintained by the community driven Debian project.  An important part of a Ubuntu packager's role is to collaborate with Debian by keeping the Ubuntu copies of packages up to date, and by sharing improvements made in Ubuntu back up to Debian.
+
+Ubuntu and Debian have distinct differences in infrastructure, procedures, and release schedules.
+
+An overriding principle in Ubuntu is that processes are meant to make common cases easy to handle, but there will be exceptional situations.  For these cases, a request for an exception is filed with the appropriate review team, and if granted will permit the deviation.
+
+
+Ubuntu Release Cadence
+----------------------
+
+Ubuntu follows a strict time-based release cycle.  Every six months a new Ubuntu version is released and its set of packages declared "stable".  Simultaneously, a new version begins development; it is given its own codename but also referred to as the "current development release", or "devel".
+
+The development process follows a defined schedule, with periods of active development followed by various freezes where the type of packaging activity changes to focus more on stabilization and preparations for release.
+
+After a Ubuntu version is released, the software packages are altered only due to pressing needs such as to fix defects or to update critically important components.  These post-release updates to the stable versions of Ubuntu are referred to as "Stable Release Updates", or "SRU's".  SRU work is a primary activity of Ubuntu packagers, and will be discussed through this document.
+
+In addition to the regular Ubuntu releases, every 2 years (i.e. every 4th release) a release is declared to be a Long Term Support (LTS) release.  The LTS releases are special in that they have much longer than usual support periods.
 
 
 Launchpad, The Project Repository
 ---------------------------------
+
+One of the most major differences between Ubuntu and Debian is its infrastructure, which is built around a Github-like project repository named Launchpad.
 
 Launchpad and Github operate on similar principles. Each has users/groups and projects. But while Github puts users at the top level, Launchpad puts projects at the top level.
 
@@ -111,15 +130,16 @@ Example /etc/apt/sources.list:
 
     ## Major bug fix updates produced after the final release of the distribution.
     deb http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
-    deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
+    # deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
 
 When apt encounters multiple versions of a package, it uses an internal scoring system to decide which version should be installed.
+
+Notice that some lines start with 'deb', while others 'deb-src'.  The 'deb' lines provide binary packages, while the 'deb-src' provide source packages.  You'll usually notice the 'deb-src' lines are commented out with '#' to disable them; this makes updates run a bit faster for the vast majority of people who don't need access to the sources.  You're one of the select few who do need access, so uncomment the 'deb-src' lines appropriate you what you'll be working on.
 
 
 ### Partial Suites
 
 Some suites are known as "partial suites". They contain only a subset of the total packages required to install Ubuntu, but contain packages that supercede those in a different suite if overlayed on top of it. `backports`, `proposed`, `security`, `updates` are partial suites.
-
 
 
 Source (Launchpad) Model
@@ -195,6 +215,53 @@ Where apt has the concept of suites, Launchpad has the concept of series and poc
 Launchpad will automatically map from series and pocket to suite when generating binary packages.
 
 
+### Source Packages
+
+Let's next examine the files involved in a specific release.  From above, let's look at the 2.7-2 release:
+
+    ├── hello_2.7.orig.tar.gz
+    ├── hello_2.7-2.debian.tar.gz
+    ├── hello_2.7-2.dsc
+
+The first file, `hello_2.7.orig.tar.gz`, or the "orig tarball" as it's termed, corresponds to the upstream project's official source code for their 2.7 release.  Often, this will literally be a copy of the upstream project's released archive tarball, renamed to suit Debian's file naming policy.  Other times there are more structured processes provided by Debian for managing the orig tarball, such as "pristine-tar".
+
+The next file, `hello_2.7-2.debian.tar.gz` is sometimes referred to as the "Debian delta".  It contains all of the packaging changes needed to transform the orig tarball into the appropriate .deb file(s).  The "-2" in its filename indicates it is the second update to the Debian delta for 2.7.  This "dash number" is updated when new packaging changes are uploaded.
+
+Before we can work on these files, we need to unpack them into a working tree, with the debian changes applied.  A variety of tools exist to do this, including `dget <url>.dsc`, `apt-get source <pkg>` and similar.  A low level way to do this is with the dpkg-source command:
+
+    $ dpkg-source -x hello_2.10-2ubuntu2.dsc 
+    dpkg-source: info: extracting hello in hello-2.10
+    dpkg-source: info: unpacking hello_2.10.orig.tar.gz
+    dpkg-source: info: unpacking hello_2.10-2ubuntu2.debian.tar.xz
+
+Looking into the hello-2.10/ directory, you'll notice there has been a "debian/" directory added.  Debian's policy is to contain all of its additions to the orig tarball into a debian/ directory within the unpacked tree.  Let's look at the contents of the debian/ directory:
+
+    $ find hello-2.10/debian/
+    hello-2.10/debian/
+    hello-2.10/debian/control
+    hello-2.10/debian/copyright
+    hello-2.10/debian/changelog
+    hello-2.10/debian/source
+    hello-2.10/debian/source/format
+    hello-2.10/debian/tests
+    hello-2.10/debian/tests/control
+    hello-2.10/debian/rules-old
+    hello-2.10/debian/watch
+    hello-2.10/debian/rules
+              
+Some packages also have a patches/ directory, with .diff or .patch files that will be applied to the packaging prior to building it.  The control file contains metadata about the source and binary packages.  The rules file contains build directives.  The changelog file lists the sequence of changes made to the package, with the most recent at the top.  Here's one recent change from hello's changelog:
+
+    hello (2.10-2ubuntu1) eoan; urgency=low
+
+      * Merge from Debian unstable.  Remaining changes:
+        - Run the upstream tests as an autopkg test as well.
+      * Dropped changes, included in Debian:
+        - Bump the standards version.
+
+     -- Steve Langasek <steve.langasek@ubuntu.com>  Wed, 22 May 2019 16:36:23 -0700
+
+We'll be creating our own changelog entry later and will discuss the various elements at that point.  But for now note how the first line contains the package name ('hello'), version number ('2.10-2ubuntu1'), and the Ubuntu release codename ('eoan').
+
 
 The Build Process
 -----------------
@@ -223,14 +290,18 @@ All changes to Ubuntu packages follow a similar process:
  5. Open a merge proposal and get reviews.
  6. Upload, or get a sponsor for your changes.
  7. Track migration of your package through the build system.
- 8. Verify that the package works as intended, and han't introduced regressions.
+ 8. Verify that the package works as intended, and hasn't introduced regressions.
 
 
 
 Source Code Repositories
 ------------------------
 
-All changes to packages are done through their source code repositories. This used to be done through bazaar, but is now done through git. The preferred method is to use `git-ubuntu`, which you can install using apt.
+All changes to packages are done through their source code repositories. This used to be done through bazaar, but is now done through git. The preferred method is to use `git-ubuntu`, which you can install using snap:
+
+    sudo snap install --edge --classic git-ubuntu
+
+(Note:  --edge requests installation of the current development version of git-ubuntu, which is the best tested.)
 
 
 ### Cloning a Repository
@@ -280,7 +351,7 @@ This will attempt to clone the `hello` Ubuntu source code repository into a subd
      * [new tag]         upstream/debian/2.2.gz         -> pkg/upstream/debian/2.2.gz
      * [new tag]         upstream/debian/2.4.gz         -> pkg/upstream/debian/2.4.gz
 
-The branches you'll be interested in are `ubuntu/somerelease-devel`. `ubuntu/somerelease` is the package set as it was on release day. the `-devel` branch is the release + all changes to date. There is also a special `ubuntu-devel` branch which is the most up to date branch.
+The branches you'll be interested in are `ubuntu/somerelease-devel`. `ubuntu/somerelease` is the package set as it was on release day. The `-devel` branch is that release plus all changes to date. The special `ubuntu-devel` branch points to the (unreleased) leading edge of development for the package in Ubuntu.
 
 You'll be using the `-devel` branches for your changes.
 
@@ -325,9 +396,7 @@ Click on a repository, and you'll see a list of branches at the bottom:
     Name                                Last Modified   Last Commit
     bionic-hello-fix-segfault-1234567   2018-12-10      changelog 
 
-Click on the branch to get to its merge status:
-
-You'll either have a merge status like so:
+Click on the branch to get to its merge status will either provide a link to `Propose for merging`, or if it's already been proposed will show the merge status, like so:
 
      Approved for merging into ubuntu/+source/hello:ubuntu/bionic-devel
 
@@ -337,10 +406,6 @@ You'll either have a merge status like so:
         3 files modified
 
 Clicking the merge link (`Approved` in this case) brings you to the actual merge proposal.
-
-Or you can start a merge proposal by clicking `Propose for merging`.
-
-
 
 
 See Also
