@@ -309,6 +309,7 @@ We use git-ubuntu to make changes to packages.
 #### Step 1: Assign the task to yourself
 
 First, go back to https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470
+
 Go to the task (row) that starts with "bionic" and assign the task to yourself and switch the status to "in progress" using the yellow pencil icons. If you don't see yellow pencil icons, you need to get permissions.
 
 
@@ -320,22 +321,23 @@ Find the repository name:
 
 In this case, there is no Source field, so we just use postfix.
 
-    $ git ubuntu clone postfix
+    $ git ubuntu clone postfix postfix-gu
+    $ cd postfix-gu
 
 
 #### Step 3: Make a branch based on the appropriate ubuntu branch
 
 The affected version of postfix is in bionic, so we branch from `bionic-devel`.
-It helps to use a branch name that's descriptive, like `bionic-postconf-segfault-1753470`.
+It helps to use a branch name that's descriptive.
 
-    $ git checkout -b bionic-postconf-segfault-1753470 pkg/ubuntu/bionic-devel
+    $ git checkout pkg/ubuntu/bionic-devel -b postfix-sru-lp1753470-segfault-bionic
 
 
 #### Step 4: Make a patch to fix the issue (maybe)
 
 If the only changes you made are within the debian subdir, you don't need a patchfile, and can skip this step.
 
-If you've made changes to the upstream code (anything outside of the debian directory), you'll need to generate a patch in debian/patches.
+On the other hand, if you've made changes to the upstream code (anything outside of the debian directory), you'll need to generate a patch in debian/patches.
 
 See [Making a Patchfile](DebianPatch)
 
@@ -358,11 +360,14 @@ Test the Package
 
 ### Start a bionic container and enter it:
 
-    $ lxc launch ubuntu-daily:bionic tester
-    Creating tester
-    Starting tester
-    $ lxc exec tester bash
-    root@tester:~# 
+We can name our lxc containers with any scheme we wish, such as 'tester' earlier for a temporary one to test with.  But for bug fixes we'll often need to keep the container around for reference as the bug fix goes through the review, sponsorship, and SRU processes.  So, to keep things consistent let's reuse our git branch name, and just prefix the package name:
+
+    $ lxc launch ubuntu:bionic postfix-sru-lp1753470-segfault-bionic
+    Creating postfix-sru-lp1753470-segfault-bionic
+    Starting postfix-sru-lp1753470-segfault-bionic
+
+    $ lxc exec postfix-sru-lp1753470-segfault-bionic -- bash
+    root@postfix-sru-lp1753470-segfault-bionic:~# 
 
 
 ### Reproduce the Bug
@@ -383,7 +388,7 @@ Record your steps as you go (you'll need them later):
 
 In this case, I'm using the PPA. Alternatively, if you've built locally, you can copy in the .deb file and install it manually.
 
-    $ sudo add-apt-repository -y ppa:kstenerud/postfix-postconf-segfault-1753470
+    $ sudo add-apt-repository -ys ppa:kstenerud/postfix-sru-lp1753470-segfault
     $ sudo apt update
     $ sudo apt upgrade -y
 
@@ -400,8 +405,11 @@ The bug is fixed! Sweet!
 Run the Package Tests
 ---------------------
 
+The DEP8 autopkgtests don't exercise our bug, but are worth running as just-in-case sanity checks and to catch regressions.
+
 See [Running Package Tests](PackageTests.md)
 
+Any change in behavior should be considered priorities to resolve before proceeding.
 
 
 Start a Merge Proposal

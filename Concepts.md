@@ -358,29 +358,30 @@ You'll be using the `-devel` branches for your changes.
 
 ### Creating a branch for your work
 
-Before making changes, create a branch for yourself. It's recommended to give the branch a meaningful name that will remind you of its purpose after not looking at it for a few months. For example:
+Before making changes, create a branch for yourself. It's recommended to give the branch a meaningful name that will remind you of its purpose after not looking at it for a few months.  You'll also potentially have matching PPAs and LXC containers, so having a consistent naming scheme that will work for all of them.
 
-    bionic-hello-fix-segfault-1234567
+For example:
+
+    hello-fix-lp1234567-segfault-bionic
 
 Where:
 
- * `bionic`: The Ubuntu release this change is for.
  * `hello`: The package you are changing.
- * `fix-segfault`: A 1-3 word description of the change.
- * `1234567`: The launchpad bug number that this change addresses.
+ * `fix-lp1234567-segfault`: Job being done including a bug #, merge #, or debian version.
+ * `bionic`: The Ubuntu release this change is for.
 
-Using this format allows you to use the same identifier for git branches and for PPAs, making it easy to match them up.
+Be aware that git, LXD, and PPA each have restrictions on what kinds of punctuation they accept, and LXD has a length limit of <63 chars max.  Dashes are safe in all three, other punctuation is disallowed by one or another.
 
 Create the branch like so:
 
-    git branch bionic-hello-fix-segfault-1234567 pkg/ubuntu/bionic-devel
+    git branch hello-fix-lp1234567-segfault-bionic pkg/ubuntu/bionic-devel
 
 
 ### Pushing Your Changes
 
 Once your changes are ready to push, do so:
 
-    git push mylaunchpadusername bionic-hello-fix-segfault-1234567
+    git push mylaunchpadusername hello-fix-lp1234567-segfault-bionic
 
 Now you'll be able to see it on launchpad. Go to your code section: https://code.launchpad.net/~your-launchpad-username/+git
 
@@ -393,8 +394,8 @@ You'll see a list of repositories:
 
 Click on a repository, and you'll see a list of branches at the bottom:
 
-    Name                                Last Modified   Last Commit
-    bionic-hello-fix-segfault-1234567   2018-12-10      changelog 
+    Name                                  Last Modified   Last Commit
+    hello-fix-lp1234567-segfault-bionic   2018-12-10      changelog 
 
 Click on the branch to get to its merge status will either provide a link to `Propose for merging`, or if it's already been proposed will show the merge status, like so:
 

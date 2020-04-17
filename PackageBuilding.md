@@ -12,11 +12,11 @@ Building Source Packages
 
 This is by far the easiest method:
 
-    git ubuntu build --source -v --sign
+    $ git ubuntu build --source -v --sign
 
 Git ubuntu will automatically try to detect which Ubuntu release the build needs, based on the package's changelog file, but you can always specify an image directly, like this:
 
-    git ubuntu build --source -v --sign --lxd-image ubuntu-daily:bionic
+    $ git ubuntu build --source -v --sign --lxd-image ubuntu-daily:bionic
 
 This will download the LXD image if needed, start a container, build the packages, copy them to `../` and shut down.
 
@@ -27,20 +27,20 @@ This method will directly install any dependencies it needs to build, so it's re
 
 From within the package repository:
 
-    lxc launch ubuntu-daily:bionic builder &&
-    sleep 5 &&
-    lxc exec builder -- mkdir -p /root/build/package &&
-    tar cf - . | lxc exec builder -- tar xf - -C /root/build/package &&
-    lxc exec builder -- sh -c 'apt update &&
-    apt dist-upgrade -y &&
-    apt install -y ubuntu-dev-tools &&
-    cd /root/build &&
-    pull-debian-source -d $(grep "Source: " package/debian/control | sed "s/Source: \(.*\)/\1/g") $(grep "unstable; urgency=" package/debian/changelog |grep -v ubuntu|head -1|sed "s/.*(\(.*\)).*/\1/g") &&
-    cd /root/build/package &&
-    apt build-dep -y ./ &&
-    dpkg-buildpackage -S' &&
-    lxc exec builder -- tar cf - --exclude=package -C /root/build . | tar xf - -C .. &&
-    lxc delete -f builder
+    $ lxc launch ubuntu-daily:bionic builder &&
+      sleep 5 &&
+      lxc exec builder -- mkdir -p /root/build/package &&
+      tar cf - . | lxc exec builder -- tar xf - -C /root/build/package &&
+      lxc exec builder -- sh -c 'apt update &&
+      apt dist-upgrade -y &&
+      apt install -y ubuntu-dev-tools &&
+      cd /root/build &&
+      pull-debian-source -d $(grep "Source: " package/debian/control | sed "s/Source: \(.*\)/\1/g") $(grep "unstable; urgency=" package/debian/changelog |grep -v ubuntu|head -1|sed "s/.*(\(.*\)).*/\1/g") &&
+      cd /root/build/package &&
+      apt build-dep -y ./ &&
+      dpkg-buildpackage -S' &&
+      lxc exec builder -- tar cf - --exclude=package -C /root/build . | tar xf - -C .. &&
+    $ lxc delete -f builder
 
 
 ### Signing the Changes File
@@ -81,12 +81,12 @@ Note: If you're using `git-ubuntu` to build the source package, you must first c
 
 #### Create the PPA archive
 
-Go to your launchpad page (https://launchpad.net/~your-username) and click "Create a new PPA". Give it a name such that you'll remember what it's about in a few months. A useful form is `release-package-issue-launchpad_bug`
+Go to your launchpad page (https://launchpad.net/~your-username) and click "Create a new PPA". Give it a name such that you'll remember what it's about in a few months. A useful form is `package-type-lpbug-description`:
 
 For example:
 
- * **URL:** bionic-postfix-postconf-segfault-1753470
- * **Display name:** bionic-postfix-postconf-segfault-1753470
+ * **URL:** postfix-sru-lp1753470-segfault
+ * **Display name:** postfix-fix-lp1753470-segfault
  * **Description:** (leave it empty)
 
 Now click "Activate".
@@ -95,8 +95,8 @@ It is also helpful to enable all architectures to ensure no build regressions we
 
 #### Upload the source package
 
-    $ dput ppa:kstenerud/bionic-postfix-postconf-segfault-1753470 ../bionic-postfix_3.3.0-1ubuntu0.1~ppa1_source.changes
+    $ dput ppa:kstenerud/postfix-sru-lp1753470-segfault ../bionic-postfix_3.3.0-1ubuntu0.1~ppa1_source.changes
 
-When it finishes, you should be able to see it e.g. https://launchpad.net/~kstenerud/+archive/ubuntu/bionic-postfix-postconf-segfault-1753470/+packages
+When it finishes, you should be able to see it e.g. https://launchpad.net/~kstenerud/+archive/ubuntu/postfix-sru-lp1753470-segfault/+packages
 
 Note: You must wait for the package to build server-side before you can use the PPA to install packages. This might take time depending on how busy things are!

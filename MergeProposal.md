@@ -20,7 +20,7 @@ Example SRU merge proposal:
 
     Please tag & sponsor.
 
-    PPA: ppa:kstenerud/postfix-postconf-segfault-1753470
+    PPA: ppa:kstenerud/postfix-fix-lp1753470-postconf-segfault
 
     Steps to test:
 
@@ -37,7 +37,7 @@ Example SRU merge proposal:
 
     * This should crash.
 
-    # sudo add-apt-repository -y ppa:kstenerud/postfix-postconf-segfault-1753470
+    # sudo add-apt-repository -ys ppa:kstenerud/postfix-fix-lp1753470-postconf-segfault
     # sudo apt upgrade
     /usr/sbin/postconf virtual_alias_map
 

@@ -126,6 +126,6 @@ Pushing Your Changes
 
 For example:
 
-    $ git push kstenerud bionic-mypackage-inertial-dampeners-19999999
+    $ git push kstenerud mypackage-fix-lp19999999-inertial-dampeners-bionic
 
 To see the repository in launchpad, go to your code page using this template: https://code.launchpad.net/~your-username/+git
