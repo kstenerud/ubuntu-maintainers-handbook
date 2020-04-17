@@ -1,7 +1,7 @@
 Fixing a Package
 ================
 
-
+In this tutorial we walk through the process of evaluating a bug, finding a fix for it, and then packaging the fix for Ubuntu.  Every bug is unique, of course; this is intended to illustrate the mindset and steps one would follow generally.
 
 Required Reading
 ----------------
@@ -19,6 +19,8 @@ Evaluate the Bug
 Bug Report: https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470
 
 #### Description:
+
+The original bug report was filed with just this description:
 
     Fresh install of 18.04 server. Every 5 minutes postconf segfaults:
 
@@ -42,10 +44,14 @@ Bug Report: https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470
     SourcePackage: postfix
     UpgradeStatus: No upgrade log present (probably fresh install)
 
+Note that the metadata at the end of the description is what gets appended when filing a bug report is automatically triggered, or if the user uses a bug reporting assistant (i.e. Apport).
+
 
 ### Try to reproduce the issue
 
-Looking through the bug report (https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470), there's a repro case:
+Not all bugs can be easily reproduced, and not all reproducible bugs will be obvious how to reproduce them.  In these cases, some bug work will be needed to isolate the problem ourselves or work with bug reporters to narrow the cause enough to identify a fix.
+
+However, in this case we're lucky.  The bug triagers have identified a way to reproduce the issue, in comment #12 (https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470/comments/12):
 
     ubuntu@bionic-postfix:~$ postconf virtual_alias_map
     Segmentation fault (core dumped)
@@ -55,10 +61,14 @@ Looking through the bug report (https://bugs.launchpad.net/ubuntu/+source/postfi
     -rw-r----- 1 root root 169 May 7 14:08 /etc/postfix/valiases.cf
     ubuntu@bionic-postfix:~$
 
+Let's see if we can reproduce the issue as well, using these directions.
+
+Before that, we need to set up an environment for doing the testing.  There's many options for where to do your testing, and different developers have their own preferences.  Here's a couple:
+
 #### Make a container for testing:
 
     $ lxc launch ubuntu-daily:bionic tester
-    $ lxc exec tester bash
+    $ lxc exec tester -- bash
 
 #### Alternatively: Make a VM for testing:
 
