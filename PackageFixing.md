@@ -109,7 +109,11 @@ Note: Keep track of the commands you used to repro the bug. You'll need them lat
 Check if it's already been fixed
 --------------------------------
 
-Check if the bug has already been fixed in another ubuntu version:
+Often we can save time by leveraging someone else's work, so it's always worth doing some research upfront.  Fixes for bugs can be found in newer versions of Ubuntu, Debian, or upstream, and sometimes in external forums or bug trackers.
+
+### Was it fixed in a newer Ubuntu?
+
+Easiest thing to review the package's status in Ubuntu:
 
     $ rmadison postfix
      postfix | 2.9.1-4           | precise         | source, amd64, armel, armhf, i386, powerpc
@@ -136,16 +140,17 @@ Find the repository name:
 
     $ apt-cache show postfix | grep Source:
 
-In this case, there is no Source field, so we just use postfix.
+In this case, there is no Source field, so we just use "postfix".
 
-    $ git ubuntu clone postfix
+    $ git ubuntu clone postfix postfix-gu
 
-This will create a new git clone of the postfix repo, with a remote of "pkg". The current branch will be ubuntu-devel, and the various versions for each distribution version will be under `pkg/ubuntu/version`.
+This will create a new git clone of the postfix repo named "postfix-gu", with a remote of "pkg". The current branch will be ubuntu-devel, and the various versions for each distribution version will be under `pkg/ubuntu/version`.
 
 Notes:
 
  * Due to https://launchpad.net/bugs/1761821, you may get: `fatal: could not read Username for 'https://git.launchpad.net': terminal prompts disabled.` It's safe to ignore this.
  * First time will add a gitubuntu entry to .gitignore
+ * Sometimes it can also be helpful to checkout the git repositories for the package maintained by Debian and/or upstream.  These would be checked out to "postfix-debian" and "postfix" respectively.
 
 #### View the Commit Log
 
@@ -213,38 +218,54 @@ d4cb45 sure looks like a fix for this issue!
 Here we see the patch and the change to debian/patches/series to include the patch. This is the fix we need!
 
 
-#### Was it fixed in Debian?
+### Was it fixed in Debian?
 
-Sometimes the fix may have been updated in Debian instead of Ubuntu. In this case, you'd see a Debian commit in the history where a fix was applied.
+Sometimes the fix may have been updated in Debian instead of Ubuntu.  There are many ways to locate fixes from Debian.  Debian maintains its own git repository for many (but not all) of its packages, so having a clone of this can be handy.
 
-For example, let's assume for argument's sake that we had a problem with sshd in xenial, where it would fail to check config files before reloading (https://bugs.launchpad.net/ubuntu/+source/openssh/+bug/1771340). A search of the git log in a later Ubuntu (artful in this case) would reveal this:
+For example, let's assume for argument's sake that we had a problem with sshd in xenial, where it would fail to check config files before reloading (https://bugs.launchpad.net/ubuntu/+source/openssh/+bug/1771340).  From Debian's openssh source package page (https://packages.debian.org/source/stretch/openssh), we find the git repository (https://salsa.debian.org/ssh-team/openssh), and can check it out:
 
-    commit 7f06034b1c4ba72dac028ed7879c89b6ee073293 (tag: pkg/import/1%7.5p1-6)
-    Author: Colin Watson <cjwatson@debian.org>
-    Date:   Wed Aug 23 01:41:06 2017 +0100
+    $ git clone https://salsa.debian.org/ssh-team/openssh.git openssh-debian
+    $ cd openssh-debian
+    $ git branch -av | cat
+    * master                               296562ba1 releasing package openssh version 1:8.2p1-4
+      remotes/origin/HEAD                  -> origin/master
+      remotes/origin/buster                6d9ca74c4 releasing package openssh version 1:7.9p1-10+deb10u2
+      remotes/origin/etch                  851625c74 releasing version 1:4.3p2-9etch1
+      remotes/origin/experimental          09a03c340 Update contact information for Natalie Amery
+      remotes/origin/jessie                9da94db38 Merge branch 'jessie' into 'jessie'
+      remotes/origin/master                296562ba1 releasing package openssh version 1:8.2p1-4
+      remotes/origin/pristine-tar          5fdaf4d7d pristine-tar data for openssh_8.2p1.orig.tar.gz
+      remotes/origin/sarge                 f297a6e07 debconf-updatepo
+      remotes/origin/squeeze               faa0b9a59 releasing package openssh version 1:5.5p1-6+squeeze5
+      remotes/origin/stretch               0ef21e4e2 Merge branch 'fix-923486-stretch' into 'stretch'
+      remotes/origin/ubuntu/saucy          f8daff632 releasing package openssh version 1:6.2p2-6ubuntu0.5
+      remotes/origin/ubuntu/trusty         f6ffa5954 releasing package openssh version 1:6.6p1-2ubuntu2
+      remotes/origin/ubuntu/xenial         bd9cfb441 releasing package openssh version 1:7.2p2-4ubuntu1
+      remotes/origin/upstream              f0de78bd4 Import openssh_8.2p1.orig.tar.gz
+      remotes/origin/upstream-experimental 102062f82 Import openssh_8.0p1.orig.tar.gz
+      remotes/origin/upstream-jessie       487bdb3a5 Import openssh_6.7p1.orig.tar.gz
+      remotes/origin/upstream-stretch      971a76537 Import openssh_7.4p1.orig.tar.gz
+      remotes/origin/wheezy                e345e2a5f releasing package openssh 1:6.0p1-4+deb7u3
+      remotes/origin/wheezy-backports      1d95da812 Remove now-unnecessary backports-specific version changes.
 
-        Import patches-unapplied version 1:7.5p1-6 to debian/sid
-        
-        Imported using git-ubuntu import.
-        
-        Changelog parent: ff8921c5d749b778bdedef3a73fe9fbf7145be0a
-        
-        New changelog entries:
-          [ Colin Watson ]
-          * Test configuration before starting or reloading sshd under systemd
-            (closes: #865770).
-          * Create /run/sshd under systemd using RuntimeDirectory rather than
-            tmpfiles.d (thanks, Dmitry Smirnov; closes: #864190).
-          [ Dimitri John Ledkov ]
-          * Drop upstart system and user jobs (closes: #872851).
-          [ Chris Lamb ]
-          * Quote IP address in suggested "ssh-keygen -f" calls (closes: #872643).
+That's a lot of branches, but the ones of most interest will be master and sometimes experimental.  Master is already checked out, so lets peruse its commit history.  Doing this, we find:
 
-Our issue would be the same as Debian bug #865770. In such a case, you'd go to salsa.debian.org to search for the commit message, which would bring you to https://salsa.debian.org/ssh-team/openssh/commit/d4181e15b03171d1363cd9d7a50b209697a80b01
+    commit d4181e15b03171d1363cd9d7a50b209697a80b01
+    Author:     Colin Watson <cjwatson@debian.org>
+    AuthorDate: Mon Jun 26 10:18:26 2017 +0100
+    Commit:     Colin Watson <cjwatson@debian.org>
+    CommitDate: Mon Jun 26 10:18:26 2017 +0100
 
-You should also mention the salsa link in the fixed up bug report, and possibly include it in your fix commit message.
+        Test configuration before starting or reloading sshd under systemd (closes: #865770).
 
-Since we can't push new versions of packages to previous releases, you'd need to backport the fix by copying what Debian did into a new commit on xenial.
+Our issue would be the same as Debian bug #865770.
+
+It's also possible to search for commits via Debian's web frontend for git, https://salsa.debian.org.  Doing so in this case would bring you to https://salsa.debian.org/ssh-team/openssh/commit/d4181e15b03171d1363cd9d7a50b209697a80b01
+
+Either way, you should also mention the salsa link in the fixed up bug report, and possibly include it in your fix commit message.
+
+Since we can't push new versions of packages to previous Ubuntu releases, you'd need to backport the fix by copying what Debian did into a new commit on xenial.
+
 
 
 ### Was it fixed upstream?
