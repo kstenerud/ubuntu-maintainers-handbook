@@ -121,6 +121,13 @@ Check if the bug has already been fixed in another ubuntu version:
      postfix | 3.3.0-1           | bionic          | source, amd64, arm64, armhf, i386, ppc64el, s390x
      postfix | 3.3.0-1ubuntu1    | cosmic          | source, amd64, arm64, armhf, i386, ppc64el, s390x
 
+Debian can also be worth checking:
+
+    $ rmadison -u debian postfix
+    postfix    | 3.3.0-1          | testing        | source, amd64, arm64, armel, armhf, i386, mips64el, mipsel, ppc64el, s390x
+    postfix    | 3.3.0-1          | unstable       | source, amd64, arm64, armel, armhf, i386, mips64el, mipsel, ppc64el, s390x
+    ...
+
 We see that 3.3.0-1ubuntu1 exists under cosmic, so postfix has been modified there. Let's see what was changed.
 
 #### Clone the Package
