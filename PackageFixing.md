@@ -287,7 +287,7 @@ Searching the upstream bug tracker, or generally googling on error messages or s
 
 ### Forwarding issues upstream
 
-If there are no existing fixes for an issue, you can either develop one yourself, or communicate the problem to Debian or the upstream developers.
+If there are no existing fixes for an issue, you can either develop one yourself, or communicate the problem to Debian or the upstream developers.  Sometimes clues can be found "in the wild" via random forum posts or bug trackers, but be aware these can span the full range from high quality to dangerous so treat them only as ideas and don't accept anything blindly.
 
 Each upstream project has its own conventions and expectations for how they can be communicated with.  Check the source tree and development section of the upstream's website for policies, or study other recent bug reports and patch contributions for best practices to follow.
 
