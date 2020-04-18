@@ -118,12 +118,13 @@ Example:
 
 ### Clone the package repository
 
-    git ubuntu clone [package]
+    git ubuntu clone <package> [<package>-gu]
 
 Example:
 
-    git ubuntu clone at
+    git ubuntu clone at at-gu
 
+It's a good idea to append some git ubuntu specific label (like -gu) to distinguish it from clones of Debian or upstream git repositories (which tend to want to clone as the same name).
 
 
 The Merge Process
