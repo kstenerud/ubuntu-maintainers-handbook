@@ -87,7 +87,7 @@ For example, suppose the current version in bionic is `3.3.0-1` and the current 
 
 Optionally, you can use `git-ubuntu.reconstruct-changelog [base branch]` to construct a changelog entry:
 
-    git-ubuntu.reconstruct-changelog pkg/ubuntu/bionic-devel
+    $ git-ubuntu.reconstruct-changelog pkg/ubuntu/bionic-devel
 
 This modifies `debian/changelog` like so:
 

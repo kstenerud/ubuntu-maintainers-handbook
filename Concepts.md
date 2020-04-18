@@ -321,7 +321,7 @@ All changes to packages are done through their source code repositories. This us
 
 ### Cloning a Repository
 
-    git ubuntu clone hello
+    $ git ubuntu clone hello
 
 This will attempt to clone the `hello` Ubuntu source code repository into a subdirectory `hello`. There will be many branches and tags set up, for example:
 
@@ -389,14 +389,14 @@ Be aware that git, LXD, and PPA each have restrictions on what kinds of punctuat
 
 Create the branch like so:
 
-    git branch hello-fix-lp1234567-segfault-bionic pkg/ubuntu/bionic-devel
+    $ git branch hello-fix-lp1234567-segfault-bionic pkg/ubuntu/bionic-devel
 
 
 ### Pushing Your Changes
 
 Once your changes are ready to push, do so:
 
-    git push mylaunchpadusername hello-fix-lp1234567-segfault-bionic
+    $ git push mylaunchpadusername hello-fix-lp1234567-segfault-bionic
 
 Now you'll be able to see it on launchpad. Go to your code section: https://code.launchpad.net/~your-launchpad-username/+git
 
