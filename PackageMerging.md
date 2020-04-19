@@ -480,25 +480,6 @@ Ubuntu doesn't know about the new tarball yet, so we must create it.
 * If this fails, [do it manully](#get-orig-tarball-manually)
 
 
-### Check the source for errors
-
-    $ git ubuntu lint --target-branch debian/sid --lint-namespace lp1803296
-
-This may spit out errors such as:
-
-    E: More than one changelog diff hunk detected
-
-You decide which are important to fix. In this case, it's acceptable because we want to include multiple changelog entries.
-
-Note: This may fail due to empty directories referenced by the git repository:
-
-    E: Expected pkg/import/4.91-6ubuntu2 (f450aa28b9b600ed0b8bad7d527a0f13d2e63097) is not the same tree as lp1803296/reconstruct/4.91-6ubuntu2 (16052af5787ea45416e3f162e305255aa1fb5026)
-
-In such a case, verify that the two refs are indeed identical, and if so, skip this step.
-
-    $ git diff f450aa28b9b600ed0b8bad7d527a0f13d2e63097 16052af5787ea45416e3f162e305255aa1fb5026
-
-
 ### Build source package
 
     $ dpkg-buildpackage -S -nc -d -sa -v3.1.20-3.1ubuntu2
