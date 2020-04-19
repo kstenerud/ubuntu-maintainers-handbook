@@ -37,7 +37,7 @@ Process Steps
    - [Clone the package repository](#clone-the-package-repository)
  * [The Merge Process](#the-merge-process)
    - [Start a Git Ubuntu Merge](#start-a-git-ubuntu-merge)
-   - [Deconstruct Commits](#deconstruct-commits)
+   - [Split Commits](#split-commits)
    - [Split out Logical Commits](#split-out-logical-commits)
    - [Prepare the Logical View](#prepare-the-logical-view)
    - [Rebase onto New Debian](#rebase-onto-new-debian)
@@ -162,7 +162,7 @@ Use the debian package version you're merging onto (for example `3.1.23-1`), and
 
     $ git checkout -b merge-lp1802914-disco
 
-### Deconstruct Commits
+### Split Commits
 
 In this phase, you split out old-style commits that lumped multiple changes together.
 
@@ -170,7 +170,7 @@ In this phase, you split out old-style commits that lumped multiple changes toge
 
     $ git log --oneline
 
-    2af0cb7 (HEAD -> merge-3.1.20-6-disco, tag: lp1802914/reconstruct/3.1.20-3.1ubuntu2, tag: lp1802914/deconstruct/3.1.20-3.1ubuntu2) import patches-unapplied version 3.1.20-3.1ubuntu2 to ubuntu/disco-proposed
+    2af0cb7 (HEAD -> merge-3.1.20-6-disco, tag: lp1802914/reconstruct/3.1.20-3.1ubuntu2, tag: lp1802914/split/3.1.20-3.1ubuntu2) import patches-unapplied version 3.1.20-3.1ubuntu2 to ubuntu/disco-proposed
     2a71755 (tag: pkg/import/3.1.20-5) Import patches-unapplied version 3.1.20-5 to debian/sid
     9c3cf29 (tag: pkg/import/3.1.20-3.1) Import patches-unapplied version 3.1.20-3.1 to debian/sid
     ...
@@ -196,11 +196,11 @@ Here's another typical example, for the nspr package:
     rules                                       |    5 
     5 files changed, 520 insertions(+), 1 deletion(-)
 
-Any time you see `changelog` and any other file(s) changing in a single commit, it's guaranteed that you'll need to deconstruct it; `changelog` should only ever change in it own commit. You should still look over commits to make sure, but this is a dead giveaway.
+Any time you see `changelog` and any other file(s) changing in a single commit, it's guaranteed that you'll need to split it; `changelog` should only ever change in it own commit. You should still look over commits to make sure, but this is a dead giveaway.
 
 Another giveaway would be a commit named `Import patches-unapplied version 1.2.3ubuntu4 to ubuntu/cosmic-proposed`, where it's applying from an ubuntu source rather than a debian one (in this case `ubuntu4`).
 
-If there are no commits to deconstruct, simply [add the deconstruct tag](#tag-deconstructed) and [move on](#prepare-the-logical-view).
+If there are no commits to split, simply [add the split tag](#tag-split) and [move on](#prepare-the-logical-view).
 
 #### Identify logical changes
 
@@ -241,7 +241,7 @@ In this case, we have the following file changes to separate into logical units:
 Start a rebase at old/debian, and then reset to HEAD^ to bring back the changes as uncommitted changes.
 
  1. Start a rebase: `git rebase -i lp1803562/old/debian`
- 2. Change the commit(s) you're going to deconstruct from `pick` to `edit`.
+ 2. Change the commit(s) you're going to split from `pick` to `edit`.
  3. git reset to get your changes back: `git reset HEAD^`
 
 Next, add the commits:
@@ -288,11 +288,11 @@ Finally, complete the rebase:
     $ git rebase --continue
 
 
-#### Tag Deconstructed
+#### Tag Split
 
-Note: Do this even if there were no commits to deconstruct.
+Note: Do this even if there were no commits to split.
 
-    $ git ubuntu tag --deconstruct --bug 1803562
+    $ git ubuntu tag --split --bug 1803562
 
 
 ### Prepare the Logical View
@@ -318,9 +318,9 @@ To squash a commit, move its line underneath the one you want it to become part 
 
 #### Check the result
 
-At the end of the squash and clean phase, the only delta you should see from the deconstruct tag is:
+At the end of the squash and clean phase, the only delta you should see from the split tag is:
 
-    $ git diff lp1803562/deconstruct/2%4.18-1ubuntu1 |diffstat
+    $ git diff lp1803562/split/2%4.18-1ubuntu1 |diffstat
      changelog |  762 --------------------------------------------------------------
      control   |    3 
      2 files changed, 1 insertion(+), 764 deletions(-)
@@ -540,7 +540,7 @@ Run the suggested command to push to your repository.
 
     $ git push kstenerud $(git tag |grep 1802914 | xargs)
     To ssh://git.launchpad.net/~kstenerud/ubuntu/+source/at
-     * [new tag]         lp1802914/deconstruct/3.1.20-3.1ubuntu2 -> lp1802914/deconstruct/3.1.20-3.1ubuntu2
+     * [new tag]         lp1802914/split/3.1.20-3.1ubuntu2 -> lp1802914/split/3.1.20-3.1ubuntu2
      * [new tag]         lp1802914/logical/3.1.20-3.1ubuntu2 -> lp1802914/logical/3.1.20-3.1ubuntu2
      * [new tag]         lp1802914/new/debian -> lp1802914/new/debian
      * [new tag]         lp1802914/old/debian -> lp1802914/old/debian
@@ -736,7 +736,7 @@ In this case, up to, and including import of 3.1.20-3.1
 
     $ git ubuntu tag --reconstruct --bug 1802914
 
-Next step: [Deconstruct Commits](#deconstruct-commits)
+Next step: [Split Commits](#split-commits)
 
 
 ### Create logical tag manually
