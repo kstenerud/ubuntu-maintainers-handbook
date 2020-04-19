@@ -154,7 +154,7 @@ The tags themselves will be namespaced to the current bug in the format `lp12345
  * `lp1802914/old/debian`
  * `lp1802914/new/debian`
 
-If `git ubuntu merge start` fails, [do it manully](#start-a-merge-manually)
+If `git ubuntu merge start` fails, [do it manually](#start-a-merge-manually)
 
 #### Make a merge branch
 
