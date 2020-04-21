@@ -373,7 +373,7 @@ You'll be using the `-devel` branches for your changes.
 
 ### Creating a branch for your work
 
-Before making changes, create a branch for yourself. It's recommended to give the branch a meaningful name that will remind you of its purpose after not looking at it for a few months.  You'll also potentially have matching PPAs and LXC containers, so having a consistent naming scheme that will work for all of them.
+Before making changes, create a branch for yourself. It's recommended to give the branch a meaningful name that will remind you of its purpose after not looking at it for a few months.  You'll also potentially have matching PPAs and LXC containers, so having a consistent naming scheme helps.
 
 For example:
 
