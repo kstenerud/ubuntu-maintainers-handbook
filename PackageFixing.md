@@ -51,7 +51,7 @@ Note that the metadata at the end of the description is what gets appended when 
 
 Not all bugs can be easily reproduced, and not all reproducible bugs will be obvious how to reproduce them.  In these cases, some bug work will be needed to isolate the problem ourselves or work with bug reporters to narrow the cause enough to identify a fix.
 
-However, in this case we're lucky.  The bug triagers have identified a way to reproduce the issue, in comment #12 (https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470/comments/12):
+However, in this case we're lucky.  The bug triagers have identified a way to reproduce the issue, in [comment #12](https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470/comments/12):
 
     ubuntu@bionic-postfix:~$ postconf virtual_alias_map
     Segmentation fault (core dumped)
