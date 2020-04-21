@@ -41,9 +41,9 @@ handled in different ways:
   - Freeze exception request (FFe, UI-FFe, et al) 
   - Package promotion/demotion ("Seed management/changes")
 
-  These will generally either filed by or assigned to a team member; if
-  not, investigate further.  Generally, for properly owned tickets 'No
-  action is required' by the triager, unless something unusually
+  These will generally either be filed by or assigned to a team member;
+  if not, investigate further.  Generally, for properly owned tickets
+  'No action is required' by the triager, unless something unusually
   weird is going on in which case 'Raise with the Team'.
 
 * SRU Regression Bugs.  Problems that look like the result of an SRU
@@ -51,9 +51,13 @@ handled in different ways:
   bugs, 'Add to Server-Next Queue' and 'Raise with the Team'.  If
   possible, verify rolling back to the prior version of the package
   fixes the issue, and re-installing the update brings the issue back.
-  Be aware that bugs are sometimes described as regressions simply
-  because they're new to the user, not due to being actually introduced
-  from an SRU update.
+  In this case, also tag the bug 'regression-update'.  Be aware that
+  bugs are sometimes described as regressions simply because they're new
+  to the user, not due to being actually introduced from an SRU update.
+  For example, the user could have had a bad config file already, but
+  the SRU triggers a restart of the service an that's when the user
+  notices the problem and files a bug, thinking it was the update that
+  introduced it.
 
 * Severe Bugs.  Urgently important issues such as ones with potential
   for widespread breakage, should immediately 'Add to Server-Next
@@ -101,7 +105,8 @@ handled in different ways:
 * Reproducible Bug.  If there seems to be enough information to
   reproduce the bug, try to do so in an lxc container, and then itemize
   the steps to follow, and how to identify that the bug has indeed
-  occurred.  If it all looks good, 'Add to Server-Next Queue'.
+  occurred.  If it all looks good, subscribe the server team, or if the
+  issue looks urgent and/or important 'Add to Server-Next Queue'.
 
 * Already Fixed in Development.  An issue that can be reproduced in a
   supported Ubuntu release, but not in the current development version
@@ -141,7 +146,13 @@ In Launchpad, adding a tag 'server-next' puts the issue onto the server
 team's main work list.
 
 Since this is a main source of work for the team, only add issues that
-are important and that can (and should) be fixed soon.
+are important and that can (and should) be fixed soon.  The issues
+should have enough information to be worked on, and it's either a major
+use case for Ubuntu server users or work on it will likely stimulate
+more community contributions.
+
+The specific policy for classifying server-next bugs is described in the
+wiki (https://wiki.ubuntu.com/ServerTeam).
 
 
 
