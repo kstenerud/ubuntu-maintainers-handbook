@@ -204,7 +204,7 @@ If there are no commits to split, simply [add the split tag](#tag-split) and [mo
 
 #### Identify logical changes
 
-The next step is to separate the changes into logical units.  For the at package, this is trivial: just put the changelog change in one commit, and the control change in the other.
+The next step is to separate the changes into logical units.  For the *at* package, this is trivial: just put the changelog change in one commit, and the control change in the other.
 
 The second example, for nspr, is more instructive.  Here we have 5 files changed, that need split out:
 
