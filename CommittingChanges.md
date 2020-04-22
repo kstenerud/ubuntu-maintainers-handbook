@@ -87,7 +87,7 @@ For example, suppose the current version in bionic is `3.3.0-1` and the current 
 
 Optionally, you can use `git-ubuntu.reconstruct-changelog [base branch]` to construct a changelog entry:
 
-    git-ubuntu.reconstruct-changelog pkg/ubuntu/bionic-devel
+    $ git-ubuntu.reconstruct-changelog pkg/ubuntu/bionic-devel
 
 This modifies `debian/changelog` like so:
 
@@ -126,6 +126,6 @@ Pushing Your Changes
 
 For example:
 
-    $ git push kstenerud bionic-mypackage-inertial-dampeners-19999999
+    $ git push kstenerud mypackage-fix-lp19999999-inertial-dampeners-bionic
 
 To see the repository in launchpad, go to your code page using this template: https://code.launchpad.net/~your-username/+git

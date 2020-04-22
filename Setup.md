@@ -54,7 +54,7 @@ Caching packages
 
 Package downloading can be a bottleneck, so it helps to set up a local cache:
 
-    echo 'Acquire::http::Proxy "http://127.0.0.1:3142";' | sudo tee /etc/apt/apt.conf.d/01acng
+    $ echo 'Acquire::http::Proxy "http://127.0.0.1:3142";' | sudo tee /etc/apt/apt.conf.d/01acng
 
 
 Configuration
@@ -83,16 +83,16 @@ Your user should be a member of the following groups:
 
 Your `.profile` should include entries for `DEBFULLNAME` and `DEBEMAIL`:
 
-    export DEBFULLNAME="Your Full Name"
-    export DEBEMAIL=your@email.com
+    $ export DEBFULLNAME="Your Full Name"
+    $ export DEBEMAIL=your@email.com
 
 A fix for "clear-sign failed: Inappropriate ioctl for device":
 
-    export GPG_TTY=$(tty)
+    $ export GPG_TTY=$(tty)
 
 If you're operating from a GUI, this can be useful:
 
-    eval `dbus-launch --sh-syntax`
+    $ eval `dbus-launch --sh-syntax`
 
 
 ### Software: GnuPG
@@ -212,17 +212,17 @@ Assuming user `my_user`. Replace with your username where appropriate.
 
 Make mount points:
 
-    mkdir -p ~/schroot/build
-    mkdir -p ~/schroot/logs
+    $ mkdir -p ~/schroot/build
+    $ mkdir -p ~/schroot/logs
 
 Set up scratch dir (replace `my_user` user with your own):
 
-    mkdir -p ~/schroot/scratch
-    echo "/home/my_user/schroot/scratch  /scratch          none  rw,bind  0  0" >> /etc/schroot/sbuild/fstab
+    $ mkdir -p ~/schroot/scratch
+    $ echo "/home/my_user/schroot/scratch  /scratch          none  rw,bind  0  0" >> /etc/schroot/sbuild/fstab
 
 Optionally, you can mount your homedir inside the container:
 
-    echo "/home/my_user  /home/my_user          none  rw,bind  0  0" >> /etc/schroot/sbuild/fstab
+    $ echo "/home/my_user  /home/my_user          none  rw,bind  0  0" >> /etc/schroot/sbuild/fstab
 
 
 A template `.sbuildrc`:
@@ -281,7 +281,7 @@ A working `.mk-sbuild.rc`:
 
 Configure GnuPG for sbuild:
 
-    sbuild-update --keygen
+    $ sbuild-update --keygen
 
 More Info: https://wiki.ubuntu.com/SimpleSbuild
 
@@ -294,9 +294,9 @@ Install and setup LXD using the standard installation directions.
 
 Create some helper aliases for common LXD tasks:
 
-    lxc alias add ls 'list -c ns4,user.comment:comment'
+    $ lxc alias add ls 'list -c ns4,user.comment:comment'
 
-    lxc alias add login 'exec @ARGS@ --mode interactive -- bash -xac $@my_user - exec /bin/login -p -f '
+    $ lxc alias add login 'exec @ARGS@ --mode interactive -- bash -xac $@my_user - exec /bin/login -p -f '
 
 (The trailing space after the -f is important).  Replace 'my_user' with 'ubuntu' or whatever username you use in your containers.
 

@@ -37,7 +37,7 @@ Process Steps
    - [Clone the package repository](#clone-the-package-repository)
  * [The Merge Process](#the-merge-process)
    - [Start a Git Ubuntu Merge](#start-a-git-ubuntu-merge)
-   - [Deconstruct Commits](#deconstruct-commits)
+   - [Split Commits](#split-commits)
    - [Split out Logical Commits](#split-out-logical-commits)
    - [Prepare the Logical View](#prepare-the-logical-view)
    - [Rebase onto New Debian](#rebase-onto-new-debian)
@@ -111,19 +111,20 @@ Example:
     Summary: "Please merge 3.1.23-1 into disco"
     Description: "tracking bug"
 
-    result: https://bugs.launchpad.net/ubuntu/+source/at/+bug/1803562
+    result: https://bugs.launchpad.net/ubuntu/+source/at/+bug/1802914
 
 **Save the bug report number, because you'll be using it throughout the merge process.**
 
 
 ### Clone the package repository
 
-    git ubuntu clone [package]
+    git ubuntu clone <package> [<package>-gu]
 
 Example:
 
-    git ubuntu clone at
+    $ git ubuntu clone at at-gu
 
+It's a good idea to append some git ubuntu specific label (like -gu) to distinguish it from clones of Debian or upstream git repositories (which tend to want to clone as the same name).
 
 
 The Merge Process
@@ -137,7 +138,7 @@ From within the git source tree:
 
 For example:
 
-    git ubuntu merge start ubuntu/devel --bug 1803562
+    $ git ubuntu merge start ubuntu/devel --bug 1802914
 
 This will generate the following tags for you:
 
@@ -149,54 +150,63 @@ This will generate the following tags for you:
 
 The tags themselves will be namespaced to the current bug in the format `lp12345678`. Thus, for example, your tags may look like:
 
- * `lp1803562/old/ubuntu`
- * `lp1803562/old/debian`
- * `lp1803562/new/debian`
+ * `lp1802914/old/ubuntu`
+ * `lp1802914/old/debian`
+ * `lp1802914/new/debian`
 
-If `git ubuntu merge start` fails, [do it manully](#start-a-merge-manually)
+If `git ubuntu merge start` fails, [do it manually](#start-a-merge-manually)
 
 #### Make a merge branch
 
 Use the debian package version you're merging onto (for example `3.1.23-1`), and the ubuntu version it's going into (for example `disco`).
 
-    git checkout -b merge-3.1.23-1-disco
+    $ git checkout -b merge-lp1802914-disco
 
-
-### Deconstruct Commits
+### Split Commits
 
 In this phase, you split out old-style commits that lumped multiple changes together.
 
 #### Check if there are commits to split
 
-    git log --oneline
+    $ git log --oneline
 
-    d7ebe661 (HEAD -> merge-2%4.19-disco, tag: lp1803562/reconstruct/2%4.18-1ubuntu1, tag: lp1803562/deconstruct/2%4.18-1ubuntu1) Import patches-unapplied version 2:4.18-1ubuntu1 to ubuntu/disco-proposed
-    0f8dd64f (tag: pkg/import/2%4.18, tag: lp1803562/old/debian) Import patches-unapplied version 2:4.18-1 to debian/sid
+    2af0cb7 (HEAD -> merge-3.1.20-6-disco, tag: lp1802914/reconstruct/3.1.20-3.1ubuntu2, tag: lp1802914/split/3.1.20-3.1ubuntu2) import patches-unapplied version 3.1.20-3.1ubuntu2 to ubuntu/disco-proposed
+    2a71755 (tag: pkg/import/3.1.20-5) Import patches-unapplied version 3.1.20-5 to debian/sid
+    9c3cf29 (tag: pkg/import/3.1.20-3.1) Import patches-unapplied version 3.1.20-3.1 to debian/sid
     ...
 
 Get all commit hashes since old/debian, and:
 
     git show [hash] | diffstat
 
-Example (nspr):
+Example:
+
+    $ git show 2af0cb7 | diffstat
+    changelog |    6 ++++++
+    control   |    4 ++--
+    2 files changed, 8 insertions(+), 2 deletions(-)
+
+Here's another typical example, for the nspr package:
 
     $ git show d7ebe661 | diffstat
-     changelog                                   |  501 ++++++++++++++++++++++++++++
-     control                                     |    3 
-     patches/fix_test_errcodes_for_runpath.patch |   11 
-     patches/series                              |    1 
-     rules                                       |    5 
-     5 files changed, 520 insertions(+), 1 deletion(-)
+    changelog                                   |  501 ++++++++++++++++++++++++++++
+    control                                     |    3 
+    patches/fix_test_errcodes_for_runpath.patch |   11 
+    patches/series                              |    1 
+    rules                                       |    5 
+    5 files changed, 520 insertions(+), 1 deletion(-)
 
-Any time you see `changelog` and any other file(s) changing in a single commit, it's guaranteed that you'll need to deconstruct it; `changelog` should only ever change in it own commit. You should still look over commits to make sure, but this is a dead giveaway.
+Any time you see `changelog` and any other file(s) changing in a single commit, it's guaranteed that you'll need to split it; `changelog` should only ever change in it own commit. You should still look over commits to make sure, but this is a dead giveaway.
 
 Another giveaway would be a commit named `Import patches-unapplied version 1.2.3ubuntu4 to ubuntu/cosmic-proposed`, where it's applying from an ubuntu source rather than a debian one (in this case `ubuntu4`).
 
-If there are no commits to deconstruct, simply [add the deconstruct tag](#tag-deconstructed) and [move on](#prepare-the-logical-view).
+If there are no commits to split, simply [add the split tag](#tag-split) and [move on](#prepare-the-logical-view).
 
 #### Identify logical changes
 
-In our example, 5 files have changed. We'd like to separate the changes into logical units, where:
+The next step is to separate the changes into logical units.  For the *at* package, this is trivial: just put the changelog change in one commit, and the control change in the other.
+
+The second example, for nspr, is more instructive.  Here we have 5 files changed, that need split out:
 
  * All changelog changes go to one commit called `changelog`.
  * Update maintainer (in debian/control) goes to one commit called `update maintainers`.
@@ -215,7 +225,7 @@ There are two logical changes, which we'll need to separate. Look at the changes
 
 Example:
 
-    git show d7ebe661 -- debian/rules
+    $ git show d7ebe661 -- debian/rules
 
 In this case, we have the following file changes to separate into logical units:
 
@@ -231,7 +241,7 @@ In this case, we have the following file changes to separate into logical units:
 Start a rebase at old/debian, and then reset to HEAD^ to bring back the changes as uncommitted changes.
 
  1. Start a rebase: `git rebase -i lp1803562/old/debian`
- 2. Change the commit(s) you're going to deconstruct from `pick` to `edit`.
+ 2. Change the commit(s) you're going to split from `pick` to `edit`.
  3. git reset to get your changes back: `git reset HEAD^`
 
 Next, add the commits:
@@ -240,8 +250,8 @@ Next, add the commits:
 
 Logical Unit:
 
-    git add debian/patches/*
-    git commit
+    $ git add debian/patches/*
+    $ git commit
 
 Commit Message:
 
@@ -252,8 +262,8 @@ Commit Message:
 
 Logical Unit:
 
-    git add debian/rules
-    git commit
+    $ git add debian/rules
+    $ git commit
 
 Commit Message:
 
@@ -263,26 +273,26 @@ Commit Message:
 
 Maintainers:
 
-    git commit -m "update maintainers" debian/control
+    $ git commit -m "update maintainers" debian/control
 
 ------------------------------------------------------------------------------
 
 Changelog:
 
-    git commit -m changelog debian/changelog
+    $ git commit -m changelog debian/changelog
 
 ------------------------------------------------------------------------------
 
 Finally, complete the rebase:
 
-    git rebase --continue
+    $ git rebase --continue
 
 
-#### Tag Deconstructed
+#### Tag Split
 
-Note: Do this even if there were no commits to deconstruct.
+Note: Do this even if there were no commits to split.
 
-    git ubuntu tag --deconstruct --bug 1803562
+    $ git ubuntu tag --split --bug 1803562
 
 
 ### Prepare the Logical View
@@ -291,7 +301,7 @@ In this phase, we make a clean, "logical" view of the history. This history is c
 
 Start a rebase from old/debian:
 
-    git rebase -i lp1802914/old/debian
+    $ git rebase -i lp1803562/old/debian
 
 Now we do some cleaning:
 
@@ -308,9 +318,9 @@ To squash a commit, move its line underneath the one you want it to become part 
 
 #### Check the result
 
-At the end of the squash and clean phase, the only delta you should see from the deconstruct tag is:
+At the end of the squash and clean phase, the only delta you should see from the split tag is:
 
-    $ git diff lp1803296/deconstruct/1%2.3.2.1-1ubuntu3 |diffstat
+    $ git diff lp1803562/split/2%4.18-1ubuntu1 |diffstat
      changelog |  762 --------------------------------------------------------------
      control   |    3 
      2 files changed, 1 insertion(+), 764 deletions(-)
@@ -319,14 +329,14 @@ Only changelog and control were changed, which is what we want.
 
 #### Create logical tag
 
-    git ubuntu tag --logical --bug 1802914
+    $ git ubuntu tag --logical --bug 1803562
 
 This may fail with an error like: `ERROR:HEAD is not a defined object in this git repository.`, in which case [do it manully](#create-logical-tag-manually)
 
 
 ### Rebase onto New Debian
 
-    git rebase -i --onto lp1803296/new/debian lp1803296/old/debian
+    $ git rebase -i --onto lp1803562/new/debian lp1803562/old/debian
 
 #### Conflicts
 
@@ -356,8 +366,8 @@ Upstream removed `fortune-mod`, and deleted the entire line since it was no long
 
 Continue with the rebase:
 
-    git add debian/control
-    git rebase --continue
+    $ git add debian/control
+    $ git rebase --continue
 
 #### Empty commits
 
@@ -367,18 +377,18 @@ If a commit becomes empty, it's because the change has already been applied upst
 
 In such a case, the commit can be dropped.
 
-    git rebase --abort
-    git rebase -i lp1803296/old/debian
+    $ git rebase --abort
+    $ git rebase -i lp1803296/old/debian
 
 Keep a copy of the unneeded commit's commit message, then delete it in the rebase. Now delete the logical tag:
 
-    git tag -d lp1803296/logical/1%2.11.0-1ubuntu2
+    $ git tag -d lp1803296/logical/1%2.11.0-1ubuntu2
 
 Then [remake the logical tag](#create-logical-tag)
 
 #### Check that the patches still apply cleanly:
 
-    quilt push -a --fuzz=0
+    $ quilt push -a --fuzz=0
 
 ##### If quilt fails:
 
@@ -396,7 +406,7 @@ For example:
 
 If this patch fails because the changes in `ssh-ignore-disconnected.patch` are already applied upstream, you must remove this patch.
 
-    git log --oneline
+    $ git log --oneline
 
     1aed93f (HEAD -> ubuntu/devel)   * d/p/ssh-ignore-disconnected.patch: [sshd] ignore disconnected from user     USER (LP: 1644057)
     7d9d752 - Drop libsys-cpu-perl and libsys-meminfo-perl from Recommends to   Suggests as they are in universe.
@@ -408,12 +418,12 @@ Removing `1aed93f` will remove the patch.
 
 #### Unapply patches before continuing
 
-    quilt pop -a
+    $ quilt pop -a
 
 
 ### Finish the Merge
 
-    git ubuntu merge finish ubuntu/devel --bug 1803296
+    $ git ubuntu merge finish ubuntu/devel --bug 1803296
 
 * If this fails, [do it manully](#finish-the-merge-manually)
 
@@ -432,13 +442,13 @@ If you dropped any changes (due to upstream fixes), you must note them in the ch
 
 #### Commit the changelog fix:
 
-    git commit debian/changelog -m changelog
+    $ git commit debian/changelog -m changelog
 
 #### Rebase and squash changelog
 
 Now you must rebase and squash the changelog changes into the "reconstruct-changelog" commit. Do a rebase with the new/debian tag:
 
-    git rebase -i lp1810928/new/debian
+    $ git rebase -i lp1810928/new/debian
 
 Change the order from:
 
@@ -465,33 +475,14 @@ Upload a PPA
 
 Ubuntu doesn't know about the new tarball yet, so we must create it.
 
-    git ubuntu export-orig
+    $ git ubuntu export-orig
 
 * If this fails, [do it manully](#get-orig-tarball-manually)
 
 
-### Check the source for errors
-
-    git ubuntu lint --target-branch debian/sid --lint-namespace lp1803296
-
-This may spit out errors such as:
-
-    E: More than one changelog diff hunk detected
-
-You decide which are important to fix. In this case, it's acceptable because we want to include multiple changelog entries.
-
-Note: This may fail due to empty directories referenced by the git repository:
-
-    E: Expected pkg/import/4.91-6ubuntu2 (f450aa28b9b600ed0b8bad7d527a0f13d2e63097) is not the same tree as lp1803296/reconstruct/4.91-6ubuntu2 (16052af5787ea45416e3f162e305255aa1fb5026)
-
-In such a case, verify that the two refs are indeed identical, and if so, skip this step.
-
-    git diff f450aa28b9b600ed0b8bad7d527a0f13d2e63097 16052af5787ea45416e3f162e305255aa1fb5026
-
-
 ### Build source package
 
-    dpkg-buildpackage -S -nc -d -sa -v3.1.20-3.1ubuntu2
+    $ dpkg-buildpackage -S -nc -d -sa -v3.1.20-3.1ubuntu2
 
 The switches are:
 
@@ -505,7 +496,7 @@ Changes should be from the last ubuntu version
 
 #### Check the built package for errors
 
-    lintian --pedantic --display-info --verbose --info --profile ubuntu ../at_3.1.23-1ubuntu1.dsc
+    $ lintian --pedantic --display-info --verbose --info --profile ubuntu ../at_3.1.23-1ubuntu1.dsc
 
 
 ### Push to your launchpad repository
@@ -519,23 +510,23 @@ The easiest way is to run it like this:
 You'll get an error message and a suggestion for how to set upstream. For example:
 
     $ git push kstenerud
-    fatal: The current branch merge-1%2.11.0-3-disco has no upstream branch.
+    fatal: The current branch merge-lp1802914-disco has no upstream branch.
     To push the current branch and set the remote as upstream, use
 
-        git push --set-upstream kstenerud merge-1%2.11.0-3-disco
+        git push --set-upstream kstenerud merge-lp1802914-disco
 
 Run the suggested command to push to your repository.
 
 #### Push your lp tags
 
-    $ git push kstenerud $(git tag |grep 1803296 | xargs)
+    $ git push kstenerud $(git tag |grep 1802914 | xargs)
     To ssh://git.launchpad.net/~kstenerud/ubuntu/+source/at
-     * [new tag]         lp1803296/deconstruct/3.1.20-3.1ubuntu2 -> lp1803296/deconstruct/3.1.20-3.1ubuntu2
-     * [new tag]         lp1803296/logical/3.1.20-3.1ubuntu2 -> lp1803296/logical/3.1.20-3.1ubuntu2
-     * [new tag]         lp1803296/new/debian -> lp1803296/new/debian
-     * [new tag]         lp1803296/old/debian -> lp1803296/old/debian
-     * [new tag]         lp1803296/old/ubuntu -> lp1803296/old/ubuntu
-     * [new tag]         lp1803296/reconstruct/3.1.20-3.1ubuntu2 -> lp1803296/reconstruct/3.1.20-3.1ubuntu2
+     * [new tag]         lp1802914/split/3.1.20-3.1ubuntu2 -> lp1802914/split/3.1.20-3.1ubuntu2
+     * [new tag]         lp1802914/logical/3.1.20-3.1ubuntu2 -> lp1802914/logical/3.1.20-3.1ubuntu2
+     * [new tag]         lp1802914/new/debian -> lp1802914/new/debian
+     * [new tag]         lp1802914/old/debian -> lp1802914/old/debian
+     * [new tag]         lp1802914/old/ubuntu -> lp1802914/old/ubuntu
+     * [new tag]         lp1802914/reconstruct/3.1.20-3.1ubuntu2 -> lp1802914/reconstruct/3.1.20-3.1ubuntu2
 
 
 ### Create a PPA
@@ -546,19 +537,19 @@ You'll need to have a PPA for reviewers to test.
 
 https://launchpad.net/~kstenerud/+activate-ppa
 
-Give it a name that identifies the ubuntu version, package name, and bug number, such as `disco-somepackage-merge-1802914`
+Give it a name that identifies the ubuntu version, package name, and bug number, such as `at-merge-lp1802914`
 
 **IMPORTANT:** Be sure to enable all architectures to check that it builds (click on `Change details` in the top right corner of the newly created PPA page).
 
 #### Upload files
 
-    dput ppa:kstenerud/disco-somepackage-merge-1802914 ../somepackage_3.1.23-1ubuntu1_source.changes
+    $ dput ppa:kstenerud/at-merge-lp1802914 ../at_3.1.23-1ubuntu1_source.changes
 
 #### Wait for packages to be ready
 
-Check the PPA page to see when packages are finished building: https://launchpad.net/~kstenerud/+archive/ubuntu/disco-somepackage-merge-1802914
+Check the PPA page to see when packages are finished building: https://launchpad.net/~kstenerud/+archive/ubuntu/at-merge-lp1802914
 
-Also, look at the package contents to make sure they have actually been published: https://launchpad.net/~kstenerud/+archive/ubuntu/disco-somepackage-merge-1802914/+packages
+Also, look at the package contents to make sure they have actually been published: https://launchpad.net/~kstenerud/+archive/ubuntu/at-merge-lp1802914/+packages
 
 
 
@@ -584,8 +575,8 @@ Example:
 
 Note: Disco is not yet available at the time of writing, so we use cosmic.
 
-    lxc launch ubuntu-daily:cosmic tester && lxc exec tester bash
-    apt update && apt dist-upgrade -y && apt install -y at
+    $ lxc launch ubuntu-daily:cosmic tester && lxc exec tester bash
+    $ apt update && apt dist-upgrade -y && apt install -y at
 
 The test:
 
@@ -593,26 +584,26 @@ The test:
 
 Upgrade:
 
-    add-apt-repository -y ppa:kstenerud/disco-at-merge-1802914
+    $ add-apt-repository -y ppa:kstenerud/at-merge-lp1802914
 
 Note: Disco is not yet available at the time of writing, so we must modify the source list entry:
 
-    vi /etc/apt/sources.list.d/kstenerud-ubuntu-disco-at-merge-1802914-cosmic.list
+    $ vi /etc/apt/sources.list.d/kstenerud-ubuntu-at-merge-lp1802914-cosmic.list
     * change cosmic to disco
 
-    apt update && apt dist-upgrade -y
+    $ apt update && apt dist-upgrade -y
 
 Test the upgraded version:
 
-    echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+    $ echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
 
 
 ### Test installing the latest from scratch
 
-    lxc launch ubuntu-daily:cosmic tester && lxc exec tester bash
-    add-apt-repository -y ppa:kstenerud/disco-at-merge-1802914
-    apt update && apt dist-upgrade -y && apt install at
-    echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+    $ lxc launch ubuntu-daily:cosmic tester && lxc exec tester bash
+    $ add-apt-repository -y ppa:kstenerud/at-merge-lp1802914
+    $ apt update && apt dist-upgrade -y && apt install at
+    $ echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
 
 
 ### Other smoke tests
@@ -631,7 +622,7 @@ NOTE: Git branch with % in name doesn't work. Use something like _
     Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
     If it looks ok, please move it to the 'Needs Review' state.
 
-* If this fails, [do it manully](#submit-merge-proposal-manually)
+* If this fails, [do it manually](#submit-merge-proposal-manually)
 
 
 ### Update the merge proposal
@@ -641,11 +632,11 @@ NOTE: Git branch with % in name doesn't work. Use something like _
 
 Example:
 
-    PPA: https://launchpad.net/~kstenerud/+archive/ubuntu/disco-at-merge-1802914
+    PPA: https://launchpad.net/~kstenerud/+archive/ubuntu/at-merge-lp1802914
 
     Basic test:
 
-    echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
+    $ echo "echo abc >test.txt" | at now + 1 minute && sleep 1m && cat test.txt && rm test.txt
 
     Package tests:
 
@@ -684,9 +675,9 @@ Manual Steps
 
 #### Generate the merge branch
 
-Use the version you intend to merge from debian (for example `3.1.23-1`), and the ubuntu version it's going into (for example `disco`).
+Create a branch to do the merge work in:
 
-    git checkout -b merge-3.1.23-1-disco
+    $ git checkout -b merge-lp1802914-disco
 
 
 #### Create tags
@@ -700,21 +691,21 @@ Use the version you intend to merge from debian (for example `3.1.23-1`), and th
 per: https://www.debian.org/releases/
 "debian/sid" always matches to debian unstable.
 
-you can find the last import tag using `git log | grep "tag: pkg/import" | grep -v ubuntu | head -1`:
+You can find the last import tag using `git log | grep "tag: pkg/import" | grep -v ubuntu | head -1`:
 
     ...
     commit 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404 (tag: pkg/import/3.1.20-3.1)
 
 So, we create the following tags:
 
-    git tag lp1802914/old/ubuntu pkg/ubuntu/disco-devel
-    git tag lp1802914/old/debian 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404
-    git tag lp1802914/new/debian pkg/debian/sid
+    $ git tag lp1802914/old/ubuntu pkg/ubuntu/disco-devel
+    $ git tag lp1802914/old/debian 9c3cf29c05c3fddd7359e71c978ff9a9a76e4404
+    $ git tag lp1802914/new/debian pkg/debian/sid
 
 
 #### Start a rebase
 
-    git rebase -i lp1802914/old/debian
+    $ git rebase -i lp1802914/old/debian
 
 #### Clear any history prior to, and including the last debian version
 
@@ -724,16 +715,16 @@ In this case, up to, and including import of 3.1.20-3.1
 
 #### Create reconstruct tag
 
-    git ubuntu tag --reconstruct --bug 1802914
+    $ git ubuntu tag --reconstruct --bug 1802914
 
-Next step: [Deconstruct Commits](#deconstruct-commits)
+Next step: [Split Commits](#split-commits)
 
 
 ### Create logical tag manually
 
 Use the version number of the last ubuntu change. So if there are `3.1.20-3.1ubuntu1` and `3.1.20-3.1ubuntu2`, use `3.1.20-3.1ubuntu2`.
 
-    git tag -a -m "Logical delta of 3.1.20-3.1ubuntu2" lp1802914/logical/3.1.20-3.1ubuntu2
+    $ git tag -a -m "Logical delta of 3.1.20-3.1ubuntu2" lp1802914/logical/3.1.20-3.1ubuntu2
 
 Note: Certain characters aren't allowed in git. For example, `:` should be replaced with `%`.
 
@@ -744,14 +735,14 @@ Next step: [Rebase onto new debian](#rebase-onto-new-debian)
 
 Merge changelogs of old ubuntu and new debian:
 
-    git show lp1802914/new/debian:debian/changelog >/tmp/debnew.txt
-    git show lp1802914/old/ubuntu:debian/changelog >/tmp/ubuntuold.txt
-    merge-changelog /tmp/debnew.txt /tmp/ubuntuold.txt >debian/changelog 
-    git commit -m "Merge changelogs" debian/changelog
+    $ git show lp1802914/new/debian:debian/changelog >/tmp/debnew.txt
+    $ git show lp1802914/old/ubuntu:debian/changelog >/tmp/ubuntuold.txt
+    $ merge-changelog /tmp/debnew.txt /tmp/ubuntuold.txt >debian/changelog 
+    $ git commit -m "Merge changelogs" debian/changelog
 
 Create new changelog entry for the merge:
 
-    dch -i
+    $ dch -i
 
 Which creates for example:
 
@@ -764,36 +755,36 @@ Which creates for example:
 
 Commit the changelog:
 
-    git commit -m "changelog: Merge of 3.1.23-1" debian/changelog
+    $ git commit -m "changelog: Merge of 3.1.23-1" debian/changelog
 
 Update maintainer:
 
-    update-maintainer
-    git commit -m "Update maintainer" debian/control
+    $ update-maintainer
+    $ git commit -m "Update maintainer" debian/control
 
 Next step: [Fix the Changelog](#fix-the-changelog)
 
 
 ### Get orig tarball manually
 
-    git checkout -b pkg/importer/debian/pristine-tar
-    pristine-tar checkout at_3.1.23.orig.tar.gz
-    git checkout merge-3.1.23-1-disco
+    $ git checkout -b pkg/importer/debian/pristine-tar
+    $ pristine-tar checkout at_3.1.23.orig.tar.gz
+    $ git checkout merge-3.1.23-1-disco
 
 #### If git checkout also fails:
 
-    git checkout merge-3.1.23-1-disco
-    cd /tmp
-    pull-debian-source at
-    mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
-    cd -
+    $ git checkout merge-lp1802914-disco
+    $ cd /tmp
+    $ pull-debian-source at
+    $ mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
+    $ cd -
 
 Next step: [Check the source for errors](#check-the-source-for-errors)
 
 
 ### Submit merge proposal manually
 
-    git push kstenerud merge-3.1.23-1-disco
+    $ git push kstenerud merge-lp1802914-disco
 
 Then, create a MP manually in launchpad, and save the URL.
 
