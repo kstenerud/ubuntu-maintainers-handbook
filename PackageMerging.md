@@ -158,9 +158,11 @@ If `git ubuntu merge start` fails, [do it manually](#start-a-merge-manually)
 
 #### Make a merge branch
 
-Use the debian package version you're merging onto (for example `3.1.23-1`), and the ubuntu version it's going into (for example `disco`).
+Use the merge tracking bug and the ubuntu version it's going into (for example `disco`).
 
     $ git checkout -b merge-lp1802914-disco
+    
+If there's no merge bug than the Debian package version you're merging onto can be used (for example `merge-3.1.23-1-disco`)
 
 ### Split Commits
 
