@@ -105,6 +105,8 @@ You'll have to manually fix up anything that reconstruct-changelog got wrong:
  * Name and email may be wrong if you don't have `DEBFULLNAME` and `DEBEMAIL` set in your env.
  * `UNRELEASED`: Change this to the release this change is for (example, `bionic`).
 
+Note: Use either git-ubuntu.reconstruct-changelog or dch!
+
 
 ### Reconstructing the Changelog with DCH
 
