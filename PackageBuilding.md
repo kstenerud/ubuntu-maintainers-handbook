@@ -3,6 +3,8 @@ Package Building
 
 There are multiple ways to build a package, each with advantages and disadvantages. Which one you choose will depend on your circumstances.
 
+Note: git-ubuntu no longer supports the build argument (neither for source nor for binary builds).
+
 
 Downloading the orig tarball (optional)
 ---------------------------------------
@@ -13,22 +15,8 @@ If you intend to use more manual methods like `sbuild` or `dpkg-buildpackage` di
 
 It will try to use the `pristine-tar` branch to generate the tarball (and will likely fail), and then it will fallback to downloading the tarball directly from Launchpad.  When it finishes, you should be able to see a link to the orig tarball at `../`.
 
-
 Building Source Packages
 ------------------------
-
-### Using git-ubuntu
-
-This is by far the easiest method:
-
-    $ git ubuntu build --source -v --sign
-
-Git ubuntu will automatically try to detect which Ubuntu release the build needs, based on the package's changelog file, but you can always specify an image directly, like this:
-
-    $ git ubuntu build --source -v --sign --lxd-image ubuntu-daily:bionic
-
-This will download the LXD image if needed, start a container, build the packages, copy them to `../` and shut down.
-
 
 ### Using dpkg-buildpackage
 
@@ -67,16 +55,6 @@ In order for a source package to be accepted by Launchpad, it must be signed. Yo
 Building Binary Packages
 ------------------------
 
-### Using git-ubuntu
-
-This is by far the easiest method, and will build on your local machine.
-
-From within the package repository:
-
-    $ git ubuntu build -v
-
-Other flags are similar to `git ubuntu build --source`.
-
 ### Using sbuild
 
 Assuming you have configured `sbuild` properly, you can use it to build the binary package:
@@ -100,7 +78,10 @@ For the PPA, we need to change the version in the changelog that's lower than th
     -postfix (3.3.0-1ubuntu0.1) bionic; urgency=medium
     +postfix (3.3.0-1ubuntu0.1~ppa1) bionic; urgency=medium
 
-Note: If you're using `git-ubuntu` to build the source package, you must first create a commit with the changed version string using a dummy commit message like "ppa1", but **do not git push this commit!**
+Note: The command below can be used to modify the version for PPA usage:
+sed -i "s/\($(grep "urgency=" debian/changelog|head -1|sed "s/.*(\(.*\)).*/\1/g")\)/\1~ppa1/g" debian/changelog 
+
+Note: If a PPA is used to build the package and the version string was changed like above, once needs to rerun dpkg-buildpackage -S -d.
 
 #### Create the PPA archive
 
@@ -123,3 +104,4 @@ It is also helpful to enable all architectures to ensure no build regressions we
 When it finishes, you should be able to see it e.g. https://launchpad.net/~kstenerud/+archive/ubuntu/postfix-sru-lp1753470-segfault/+packages
 
 Note: You must wait for the package to build server-side before you can use the PPA to install packages. This might take time depending on how busy things are!
+Launchpad also sends status updates notification mails, so monitor your inbox.
