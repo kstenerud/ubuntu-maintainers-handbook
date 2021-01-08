@@ -105,13 +105,19 @@ You'll have to manually fix up anything that reconstruct-changelog got wrong:
  * Name and email may be wrong if you don't have `DEBFULLNAME` and `DEBEMAIL` set in your env.
  * `UNRELEASED`: Change this to the release this change is for (example, `bionic`).
 
-Note: Use either git-ubuntu.reconstruct-changelog or dch!
+Note: In case a package was as of today just synched over from Debian to Ubuntu and never really touched,
+      but is now modified for the very first time (e.g. to include a patch for a SRU)
+      and is with that becoming Ubuntu specific from now on,
+      the "update-maintainer" script needs to be called after the changelog entry was created.
+      This will update the 'Maintainer' entries in the debian/control file.
+      Hence in such a case not only the debian/changelog needs to be committed, but also the modified debian/control. 
 
 
 ### Reconstructing the Changelog with DCH
 
 Simply run `dch` from inside of the repository and follow instructions.
 
+Note: Use either git-ubuntu.reconstruct-changelog or dch!
 
 
 Committing the Changelog
