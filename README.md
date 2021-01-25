@@ -1,7 +1,7 @@
 Ubuntu Maintainer's Handbook
 ============================
 
-This handbook explains how to do the common tasks of an Ubuntu package maintainer.  In particular, it explains how the git-ubuntu toolsuite is used for working with Ubuntu packages.
+This handbook explains how to do the common tasks of an Ubuntu package maintainer.  In particular, it explains how the git-ubuntu tool-suite is used for working with Ubuntu packages.
 
 Note that this isn't a policy document; the official policies will be linked to where possible and should be referenced for the officially correct ways to do things.  Instead, this is intended to serve as a tutorial style introduction to help new Ubuntu packagers get up to speed.
 

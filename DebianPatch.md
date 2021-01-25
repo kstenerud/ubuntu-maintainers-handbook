@@ -59,7 +59,7 @@ The patch file must have a DEP3 header (http://dep.debian.net/deps/dep3). The ba
     ---
     This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 
-**Description**: While this can be multiline, all subsequent lines after the first must be indented by a whitespace character, and empty lines must start with whitespace and a period ` .`.
+**Description**: While this can be multi-line, all subsequent lines after the first must be indented by a whitespace character, and empty lines must start with whitespace and a period ` .`.
     
 **Author**: Refers to code authorship, not patch authorship. Use the name of whoever wrote the original code in the patch.
 

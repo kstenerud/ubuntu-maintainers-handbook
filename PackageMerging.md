@@ -148,7 +148,7 @@ This will generate the following tags for you:
 | old/debian | last import tag prior to old/ubuntu without ubuntu suffix in version |
 | new/debian | debian/sid                                                           |
 
-The tags themselves will be namespaced to the current bug in the format `lp12345678`. Thus, for example, your tags may look like:
+The tags themselves will be name-spaced to the current bug in the format `lp12345678`. Thus, for example, your tags may look like:
 
  * `lp1802914/old/ubuntu`
  * `lp1802914/old/debian`
@@ -212,7 +212,7 @@ The second example, for nspr, is more instructive.  Here we have 5 files changed
 
  * All changelog changes go to one commit called `changelog`.
  * Update maintainer (in debian/control) goes to one commit called `update maintainers`.
- * All other logically separatable commits go into individual commits.
+ * All other logically separable commits go into individual commits.
 
 Look in `debian/changelog`:
 
@@ -333,7 +333,7 @@ Only changelog and control were changed, which is what we want.
 
     $ git ubuntu tag --logical --bug 1803562
 
-This may fail with an error like: `ERROR:HEAD is not a defined object in this git repository.`, in which case [do it manully](#create-logical-tag-manually)
+This may fail with an error like: `ERROR:HEAD is not a defined object in this git repository.`, in which case [do it manually](#create-logical-tag-manually)
 
 
 ### Rebase onto New Debian
@@ -415,7 +415,7 @@ If this patch fails because the changes in `ssh-ignore-disconnected.patch` are a
 
 Removing `1aed93f` will remove the patch.
 
- * Save the commit message from `1aed93f` for later inclusing in the `Dropped Changes` section of the new changelog entry.
+ * Save the commit message from `1aed93f` for later including in the `Dropped Changes` section of the new changelog entry.
  * `git rebase -i 7d9d752` and delete commit `1aed93f`.
 
 #### Unapply patches before continuing
@@ -427,7 +427,7 @@ Removing `1aed93f` will remove the patch.
 
     $ git ubuntu merge finish ubuntu/devel --bug 1803296
 
-* If this fails, [do it manully](#finish-the-merge-manually)
+* If this fails, [do it manually](#finish-the-merge-manually)
 
 
 ### Fix the Changelog
@@ -479,7 +479,7 @@ Ubuntu doesn't know about the new tarball yet, so we must create it.
 
     $ git ubuntu export-orig
 
-* If this fails, [do it manully](#get-orig-tarball-manually)
+* If this fails, [do it manually](#get-orig-tarball-manually)
 
 
 ### Build source package
@@ -622,7 +622,7 @@ NOTE: Git branch with % in name doesn't work. Use something like _
 
     $ git ubuntu submit --reviewer canonical-server-packageset-reviewers --target-branch debian/sid
     Your merge proposal is now available at: https://code.launchpad.net/~kstenerud/ubuntu/+source/at/+git/at/+merge/358655
-    If it looks ok, please move it to the 'Needs Review' state.
+    If it looks OK, please move it to the 'Needs Review' state.
 
 * If this fails, [do it manually](#submit-merge-proposal-manually)
 

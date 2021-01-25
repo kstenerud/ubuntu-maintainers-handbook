@@ -17,7 +17,7 @@ getting appropriate attention it needs.
 All newly reported issues will need a triager's review.  A review involves
 analyzing a bug to determine if the bug is valid and if sufficient
 information was provided, and then marking it 'Triaged'.  Otherwise,
-it's set to a more appropriate state with a commment explaining why, and
+it's set to a more appropriate state with a comment explaining why, and
 what next actions are, if any.
 
 Older issues generally require no triager action if they're progressing
@@ -38,7 +38,7 @@ handled in different ways:
   - Merge requests
   - Stable release updates (SRU)
   - Main Inclusion Requests (MIR)
-  - Freeze exception request (FFe, UI-FFe, et al) 
+  - Freeze exception request (FFe, UI-FFe, et al.) 
   - Package promotion/demotion ("Seed management/changes")
 
   These will generally either be filed by or assigned to a team member;

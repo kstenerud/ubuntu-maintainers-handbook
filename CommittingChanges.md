@@ -34,7 +34,7 @@ For brevity, you'll often see well-known directories abbreviated to their initia
 Here is a more complex example:
 
 ```
-      * Recalibrate the long range sensors to detect quasiparticle anomalies.
+      * Re-calibrate the long range sensors to detect quasi-particle anomalies.
         - d/p/important.patch: Reroute the inertial dampeners
           through the auxiliary power relay. Thanks to Miles O'Brien
           <miles.obrien@ds9.fed>. (LP: #19999999)
@@ -51,13 +51,13 @@ For the changelog entry, often you can reuse or even cut and paste text from the
 
 Some guidelines for writing an effective changelog entry:
 
-  * For each thing you change, briefly explain *why* as well as *what*.  Remember that *what* can always be determined by a future reader by digging into the diff, but *why* may be unknowable except from your message.  This can assist decisionmaking about if your change is still relevant in new merges, or if it is important enough to backport to other Ubuntu releases
+  * For each thing you change, briefly explain *why* as well as *what*.  Remember that *what* can always be determined by a future reader by digging into the diff, but *why* may be unknowable except from your message.  This can assist decision-making about if your change is still relevant in new merges, or if it is important enough to backport to other Ubuntu releases
   * Use nested bullet points indented by two spaces with hanging indentation on wrapped lines. Bullet characters are *, - and + for levels 1, 2 and 3.
-  * The contents of bullet points are free-form English text, so use normal grammar, punctuation, spaces, full stop at the end, etc. Exception: for technical specifics like filenames, matching technical case exactly, or otherwise breaking grammar rules to avoid ambiguity is appropriate. Brevity in grammar is fine, but not at the cost of losing information. If in doubt, more verbose is better, although if you wish you can always summarise entries and put longer explanations in the relevant bugs.
+  * The contents of bullet points are free-form English text, so use normal grammar, punctuation, spaces, full stop at the end, etc. Exception: for technical specifics like filenames, matching technical case exactly, or otherwise breaking grammar rules to avoid ambiguity is appropriate. Brevity in grammar is fine, but not at the cost of losing information. If in doubt, more verbose is better, although if you wish you can always summarize entries and put longer explanations in the relevant bugs.
   * Use exactly "LP: #NNNNNNN" or "(LP: #NNNNNNN)" to reference bugs that are being fixed by the upload. The version using brackets is useful to neatly fit the bug references into standard English sentences. Bug references must be whitespace-perfect as they are picked up by regular expressions in the tooling to ultimately auto-close the bugs.
   * If you want to mention a bug but that wasn’t fixed by this change you can break the automation that would auto-close it with removing the colon  "(LP #NNNNNNN)".
-  * For Debian the same is “Closes: #NNNNNN” and again automation can be “avoided2 by breaking the regular expression like "Closes #NNNNNN".  If a Ubuntu contribution also fixes a related Debian bug it is good practise to tag the closing of the Debian bug as well. That way if they pick our change it automatically closes their bug as well then.
-  * For standard (non-merge) uploads, one bullet point per logical thing changed is appropriate. Use sub-items for more detail or if this otherwise helps with clarity. If the set of changes is large, consider categorising the entries with top level bullet points.
+  * For Debian the same is “Closes: #NNNNNN” and again automation can be “avoided2 by breaking the regular expression like "Closes #NNNNNN".  If a Ubuntu contribution also fixes a related Debian bug it is good practice to tag the closing of the Debian bug as well. That way if they pick our change it automatically closes their bug as well then.
+  * For standard (non-merge) uploads, one bullet point per logical thing changed is appropriate. Use sub-items for more detail or if this otherwise helps with clarity. If the set of changes is large, consider categorizing the entries with top level bullet points.
   * For merge uploads, the convention is:
     - One top level bullet point to introduce the merge with sub-items documenting each logical item that was present in the previous Ubuntu delta which is still present in the new Ubuntu delta.
     - If items have been dropped from the previous Ubuntu delta, then one top level bullet point with sub-items describing what was dropped.
@@ -105,7 +105,7 @@ You'll have to manually fix up anything that reconstruct-changelog got wrong:
  * Name and email may be wrong if you don't have `DEBFULLNAME` and `DEBEMAIL` set in your env.
  * `UNRELEASED`: Change this to the release this change is for (example, `bionic`).
 
-Note: In case a package was as of today just synched over from Debian to Ubuntu and never really touched,
+Note: In case a package was as of today just synced over from Debian to Ubuntu and never really touched,
       but is now modified for the very first time (e.g. to include a patch for a SRU)
       and is with that becoming Ubuntu specific from now on,
       the "update-maintainer" script needs to be called after the changelog entry was created.

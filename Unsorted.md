@@ -10,9 +10,9 @@ These repos determine which failing tests are to be ignored. Example:
 
 09:45 <@cpaelzer> so it is only masked on those arches
 09:45 <@cpaelzer> 1.38 is the current version
-09:46 <@cpaelzer> you'd wait for the rertried tests to show up
-09:46 <@cpaelzer> if they still fail you'd satrt to investigate case by case
-09:46 <@cpaelzer> and then either open an MP to maske the tests on the linked repo
+09:46 <@cpaelzer> you'd wait for the retried tests to show up
+09:46 <@cpaelzer> if they still fail you'd start to investigate case by case
+09:46 <@cpaelzer> and then either open an MP to mask the tests on the linked repo
 09:46 <@cpaelzer> or you'd open a bug/discussion for some package change (if you want to fix a test for example)
 
 WIP:
@@ -85,7 +85,7 @@ When tests succeeded, built fine:
 3 things needed:
 -- not installable: depends on something not existing, for example
 -- dependency: Dependent package has not gone into release yet.
--- all pkg tests are ok
+-- all pkg tests are OK
 
 SRU path:
 - builds, tests
