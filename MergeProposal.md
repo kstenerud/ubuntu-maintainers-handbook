@@ -76,7 +76,7 @@ You'll get a merge proposal page like https://code.launchpad.net/~kstenerud/ubun
 There are three options for the second reviewer, depending on what type of package it is:
 
  * canonical-server-motu-reviewers (for universe packages)
- * canonical-server-packageset-reviewers (for server packags)
+ * canonical-server-packageset-reviewers (for server packages)
  * canonical-server-core-reviewers (for core/main packages)
 
 You can see what kind of package it is with `apt-cache policy`. For example:
@@ -114,7 +114,7 @@ It only lists core, so the second reviewer is `canonical-server-core-reviewers`.
 
 #### Add the Second Reviewer
 
- * Click "Requst another review" in the reviewer section.
+ * Click "Request another review" in the reviewer section.
  * Type in `canonical-server-core-reviewers`
 
 

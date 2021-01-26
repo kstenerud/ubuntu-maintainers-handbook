@@ -102,7 +102,7 @@ The user's password in this tester VM will be "ubuntu"
 
 Now we have confirmed the bug.
 
-Note: Keep track of the commands you used to repro the bug. You'll need them later.
+Note: Keep track of the commands you used to reproduce the bug. You'll need them later.
 
 
 
@@ -149,7 +149,7 @@ This will create a new git clone of the postfix repo named "postfix-gu", with a 
 Notes:
 
  * Due to https://launchpad.net/bugs/1761821, you may get: `fatal: could not read Username for 'https://git.launchpad.net': terminal prompts disabled.` It's safe to ignore this.
- * First time will add a gitubuntu entry to .gitignore
+ * First time will add a git-ubuntu entry to .gitignore
  * Sometimes it can also be helpful to checkout the git repositories for the package maintained by Debian and/or upstream.  These would be checked out to "postfix-debian" and "postfix" respectively.
 
 #### View the Commit Log
@@ -260,7 +260,7 @@ That's a lot of branches, but the ones of most interest will be master and somet
 
 Our issue would be the same as Debian bug #865770.
 
-It's also possible to search for commits via Debian's web frontend for git, https://salsa.debian.org.  Doing so in this case would bring you to https://salsa.debian.org/ssh-team/openssh/commit/d4181e15b03171d1363cd9d7a50b209697a80b01
+It's also possible to search for commits via Debian's web front-end for git, https://salsa.debian.org.  Doing so in this case would bring you to https://salsa.debian.org/ssh-team/openssh/commit/d4181e15b03171d1363cd9d7a50b209697a80b01
 
 Either way, you should also mention the salsa link in the fixed up bug report, and possibly include it in your fix commit message.
 
@@ -313,7 +313,7 @@ First, go back to https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470
 Go to the task (row) that starts with "bionic" and assign the task to yourself and switch the status to "in progress" using the yellow pencil icons. If you don't see yellow pencil icons, you need to get permissions.
 
 
-#### Step 2: Clone the package (if you haven't aleady)
+#### Step 2: Clone the package (if you haven't already)
 
 Find the repository name:
 
@@ -434,7 +434,7 @@ Modify the bug description (yellow pencil icon) and update it to conform with ht
 
 Note: Keep the original description as-is, in a section called `[Original Description]` at the bottom.
 
-Note: You'll see your branch and merge proposal in the `Related branches` because of the (LP: #xxxx) in the changelog entry.
+Note: You'll see your branch and merge proposal in the `Related branches` because of the (LP: #NNNNNN) in the changelog entry.
 
 
 SRU Review Process
@@ -506,7 +506,7 @@ General page: http://people.canonical.com/~ubuntu-archive/proposed-migration/upd
 
 Eventually, the package with your fixes will appear there (search for postfix in this case). It will show the dep8 tests for postfix and anything that depends on it. Any tests that fail will show in red.
 
-Note: This page is generated every few minutes, and doesn't update realtime.
+Note: This page is generated every few minutes, and doesn't update real-time.
 
 
 ### SRU Verification

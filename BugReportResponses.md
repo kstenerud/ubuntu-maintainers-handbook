@@ -6,7 +6,7 @@ A common way people engage with Ubuntu is through the bug reporting system. A po
 
 ### General Considerations
 
-The first thing to remember is that the people reporting bugs are taking time out of their schedule to help make Ubuntu better. That's a commendable act in and of itelf, regardless of how well they've done it.
+The first thing to remember is that the people reporting bugs are taking time out of their schedule to help make Ubuntu better. That's a commendable act in and of itself, regardless of how well they've done it.
 
 Be respectful and empathetic in your responses. Bugs cause aggravation and stress, and the bug reporter is probably in a less-than-stellar mood. Take a gentle, tactful, dignified approach, disarm their frustrations, and try not to take things personally. Mostly, aggravated people want their aggravations to be acknowledged and understood.
 
@@ -15,7 +15,7 @@ Be respectful and empathetic in your responses. Bugs cause aggravation and stres
 
  * Avoid "blame" words. For example, "You didn't do X" infers blame. "Could you try doing X?" contains a request instead, and puts people at ease. **Make them deputies to the solution rather than the source of the problem.**
  * Keep things short and simple. Too much information confuses and intimidates people, and makes them less likely to engage.
- * Be concise, but also assume that they don't have the same knowledge you do. Point them to easily digestable information that will help them do what's needed. Your job is to make it easy for them to do what you want.
+ * Be concise, but also assume that they don't have the same knowledge you do. Point them to easily digestible information that will help them do what's needed. Your job is to make it easy for them to do what you want.
  * Pull calls-to-action out from the rest of the text. Rather than an action in the middle of a paragraph, start a separate paragraph with just the instructions: "Please do X and add the results as a comment." Calls to action should ideally be at the end of your response.
  * Put instructions in bullet points. This makes it easy for the person to check the list and make sure everything got done.
  * Your response should be empowering, meaning that it gives them a positive path of action for solving their problem. Let them decide for themselves if it merits the effort.
@@ -93,7 +93,7 @@ I'm marking this "Invalid" because it doesn't appear to be a bug, but if I'm wro
 
 Thank you for taking the time to report bugs and help make Ubuntu better.
 
-This bug has been fixed in the current Ubuntu development release, which is why I'm marking it "Fix Relased" (the bug status follows what's in the development release).
+This bug has been fixed in the current Ubuntu development release, which is why I'm marking it "Fix Released" (the bug status follows what's in the development release).
 
 In order for the fix to be backported to earlier Ubuntu releases, it must qualify as a high-impact bug: https://wiki.ubuntu.com/StableReleaseUpdates#When
 

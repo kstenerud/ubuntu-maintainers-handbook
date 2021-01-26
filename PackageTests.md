@@ -3,7 +3,7 @@ Running Package Tests
 
 Packages will have their own tests under `debian/tests`. We need to run those to ensure there are no regressions.
 
-We use autopkgtest to run the tests in a vm or container.
+We use autopkgtest to run the tests in a VM or container.
 
 
 Preparing a Testing Image

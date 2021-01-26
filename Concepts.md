@@ -131,7 +131,7 @@ Software from this repository is entirely unsupported by the Ubuntu team. Softwa
 
 #### Multiverse
 
-Software from this repository is entirely unsupported by the Ubuntu team, and may not be under a free licence. Software in multiverse will not receive any review or updates from the Ubuntu security team.
+Software from this repository is entirely unsupported by the Ubuntu team, and may not be under a free license. Software in multiverse will not receive any review or updates from the Ubuntu security team.
 
 
 ### Apt
@@ -154,7 +154,7 @@ Notice that some lines start with 'deb', while others 'deb-src'.  The 'deb' line
 
 ### Partial Suites
 
-Some suites are known as "partial suites". They contain only a subset of the total packages required to install Ubuntu, but contain packages that supercede those in a different suite if overlayed on top of it. `backports`, `proposed`, `security`, `updates` are partial suites.
+Some suites are known as "partial suites". They contain only a subset of the total packages required to install Ubuntu, but contain packages that supersede those in a different suite if overlaid on top of it. `backports`, `proposed`, `security`, `updates` are partial suites.
 
 
 Source (Launchpad) Model
