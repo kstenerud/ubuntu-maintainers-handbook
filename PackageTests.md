@@ -23,18 +23,18 @@ Important restrictions:
 
 #### Building a VM Image
 
-Create an image like this (replacing bionic with your release of choice):
+Create an image like this (replacing focal with your release of choice):
 
-    $ autopkgtest-buildvm-ubuntu-cloud -r bionic -v --cloud-image-url http://cloud-images.ubuntu.com/daily/server
+    $ autopkgtest-buildvm-ubuntu-cloud -r focal -v --cloud-image-url http://cloud-images.ubuntu.com/daily/server
 
 Note: Use `-m` to specify a closer mirror or `-p` to use a local proxy if it's slow.
 
-Copy the resulting image (autopkgtest-bionic-amd64.img) to a common directory like `/var/lib/adt-images`
+Copy the resulting image (autopkgtest-focal-amd64.img) to a common directory like `/var/lib/adt-images`
 
 
 #### Building a Container Image
 
-    $ autopkgtest-build-lxd ubuntu-daily:bionic/amd64
+    $ autopkgtest-build-lxd ubuntu-daily:focal/amd64
 
 You should see an autopkgtest image now when you run `lxc image list`.
 
@@ -46,7 +46,7 @@ You should see an autopkgtest image now when you run `lxc image list`.
 
 Make sure you're one directory up from your package directory and run:
 
-    $ autopkgtest -U -s -o dep8-mypackage mypackage/ -- qemu /var/lib/adt-images/autopkgtest-bionic-amd64.img
+    $ autopkgtest -U -s -o dep8-mypackage mypackage/ -- qemu /var/lib/adt-images/autopkgtest-focal-amd64.img
 
 Where:
 
@@ -60,7 +60,7 @@ Everything after the `--` tells it how to run the tests. `qemu` is shorthand for
 
 #### In a VM, Using the PPA
 
-    $ autopkgtest -U -s -o dep8-mypackage-ppa --setup-commands="sudo add-apt-repository -y -u -s ppa:mylaunchpaduser/bionic-mypackage-fixed-something-1234567" -B mypackage -- qemu /var/lib/adt-images/autopkgtest-bionic-amd64.img
+    $ autopkgtest -U -s -o dep8-mypackage-ppa --setup-commands="sudo add-apt-repository -y -u -s ppa:mylaunchpaduser/focal-mypackage-fixed-something-1234567" -B mypackage -- qemu /var/lib/adt-images/autopkgtest-focal-amd64.img
 
 Where (in setup-commands):
 
@@ -76,7 +76,7 @@ Note: In this case, the package name **doesn't** have a trailing slash because w
 
 The command only differs after the `--` part. For example:
 
-    $ autopkgtest -U -s -o dep8-mypackage-ppa --setup-commands="sudo add-apt-repository -y -u -s ppa:mylaunchpaduser/bionic-mypackage-fixed-something-1234567" -B mypackage -- lxd autopkgtest/ubuntu/bionic/amd64
+    $ autopkgtest -U -s -o dep8-mypackage-ppa --setup-commands="sudo add-apt-repository -y -u -s ppa:mylaunchpaduser/focal-mypackage-fixed-something-1234567" -B mypackage -- lxd autopkgtest/ubuntu/focal/amd64
 
 
 ### Save the Results
@@ -84,7 +84,7 @@ The command only differs after the `--` part. For example:
 You'll see the tests run:
 
     autopkgtest [11:47:12]: version 5.3.1
-    autopkgtest [11:47:12]: host karl-tp; command line: /usr/bin/autopkgtest -U -s -o dep8-postfix-ppa '--setup-commands=sudo add-apt-repository -y -u -s ppa:kstenerud/postfix-postconf-segfault-1753470' -B postfix -- lxd autopkgtest/ubuntu/bionic/amd64
+    autopkgtest [11:47:12]: host karl-tp; command line: /usr/bin/autopkgtest -U -s -o dep8-postfix-ppa '--setup-commands=sudo add-apt-repository -y -u -s ppa:kstenerud/postfix-postconf-segfault-1753470' -B postfix -- lxd autopkgtest/ubuntu/focal/amd64
     autopkgtest [11:47:31]: @@@@@@@@@@@@@@@@@@@@ test bed setup
 
     ...

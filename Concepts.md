@@ -140,16 +140,26 @@ Apt uses `sources.list` and `sources.list.d` to tell it which suites to use.
 
 Example /etc/apt/sources.list:
 
-    deb http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe
-    deb-src http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe
+    deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe
+    deb-src http://archive.ubuntu.com/ubuntu/ focal main restricted universe
 
     ## Major bug fix updates produced after the final release of the distribution.
-    deb http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
-    # deb-src http://de.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe
+    deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe
+    # deb-src http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe
+
+    ## Important security fixes.
+    deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe
+    # deb-src http://security.ubuntu.com/ubuntu/ focal-security main restricted universe
 
 When apt encounters multiple versions of a package, it uses an internal scoring system to decide which version should be installed.
 
 Notice that some lines start with 'deb', while others 'deb-src'.  The 'deb' lines provide binary packages, while the 'deb-src' provide source packages.  You'll usually notice the 'deb-src' lines are commented out with '#' to disable them; this makes updates run a bit faster for the vast majority of people who don't need access to the sources.  You're one of the select few who do need access, so uncomment the 'deb-src' lines appropriate you what you'll be working on.
+
+Depending on your geographical area, you may find it beneficial to pull from one of Canonical's mirrors.  To do this, replace the hostname portion of each line above with the corresponding mirror hostname.  For example, in Germany you might use:
+
+    deb http://de.archive.ubuntu.com/ubuntu/ focal main restricted universe
+    deb-src http://de.archive.ubuntu.com/ubuntu/ focal main restricted universe
+    # etc.
 
 
 ### Partial Suites
