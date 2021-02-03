@@ -128,3 +128,7 @@ From here, `git status` should show the following:
         debian/patches/my-changes.patch
 
 `.pc` is the control directory for quilt patches. Remove it manually before committing.
+
+
+Please note that at this stage only the patch itself (here: debian/patches/my-changes.patch) is committed.
+The updated changelog (and maybe an updated control file, in case update-maintainer needs to be run) will be committed later (all separately). This simplifies a later rebase.
