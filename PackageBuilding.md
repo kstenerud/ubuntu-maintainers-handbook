@@ -20,11 +20,11 @@ Building Source Packages
 
 ### Using dpkg-buildpackage
 
-This method will directly install any dependencies it needs to build, so it's recommended to create an LXD container to do the build. Replace `bionic` with the container image you wish to use.
+This method will directly install any dependencies it needs to build, so it's recommended to create an LXD container to do the build. Replace `focal` with the container image you wish to use.
 
 From within the package repository:
 
-    $ lxc launch ubuntu-daily:bionic builder &&
+    $ lxc launch ubuntu-daily:focal builder &&
       sleep 5 &&
       lxc exec builder -- mkdir -p /root/build/package &&
       tar cf - . | lxc exec builder -- tar xf - -C /root/build/package &&

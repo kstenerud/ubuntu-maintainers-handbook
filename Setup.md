@@ -245,7 +245,7 @@ Template:
     $maintainer_name='Your Full Name <your@email.com>';
 
     # Default distribution to build.
-    $distribution = "bionic";
+    $distribution = "focal";
     # Build arch-all by default.
     $build_arch_all = 1;
 
