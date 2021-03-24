@@ -78,6 +78,28 @@ The command only differs after the `--` part. For example:
 
     $ autopkgtest -U -s -o dep8-mypackage-ppa --setup-commands="sudo add-apt-repository -y -u -s ppa:mylaunchpaduser/focal-mypackage-fixed-something-1234567" -B mypackage -- lxd autopkgtest/ubuntu/focal/amd64
 
+#### In Canonistack
+
+This is by far the closest in terms of "similarity" to the real autopkgtests since they also run in such an environment.
+But it needs some preparation. First of all you must have been *unlocked for* and have set up [Canonistack](https://wiki.canonical.com/InformationInfrastructure/IS/CanoniStack-BOS01) for yourself.
+
+As usual with Canonistack you'd need to source your openstack RC file that sets region, auth and other environment variables.
+Then you'd look for the image you want to boot like:
+
+$ source novarc_bos01
+$ openstack image list | grep -i arm64 | grep hirsute
+| 4d24cfbe-b6a5-4d84-8c50-b9f025d0dd43 | ubuntu/ubuntu-hirsute-daily-arm64-server-20201124-disk1.img    | active |
+| 1cfeacff-f04a-4bce-ab92-9d8fec7e5edb | ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img    | active |
+
+[Finally to run the test on Canonistack](https://wiki.ubuntu.com/ProposedMigration#Reproducing_tests_in_the_cloud) is quite similar to the other invocations. Just replace the autopkgtest-runner with `nova` and adding the `setup-testbed` setup command.
+
+    # General pattern
+    $ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail <mypackage>.dsc -- ssh -s nova -- --flavor m1.small --image <image> --keyname <yourkeyname>
+
+    # One example
+    $ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor m1.small --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+
+You can use usual openstack terms, like other flavors to size the VM that is used or other images to run the same test on different releases or architectures.
 
 ### Save the Results
 
