@@ -101,6 +101,22 @@ $ openstack image list | grep -i arm64 | grep hirsute
 
 You can use usual openstack terms, like other flavors to size the VM that is used or other images to run the same test on different releases or architectures.
 
+### Run against -proposed or subsets thereof
+
+Quite often a test fails by running against new packages in the proposed pocket. Then it often will be helpful to check if the test needs other packages from proposed to resolve the issue. That can easily be done via the option `--apt-pocket`.
+
+Commonly a test will run against all packages in release plus the new candidate from proposed, that would look like:
+
+    --apt-pocket=proposed=src:yourpkg
+
+To run against all packages that are in proposed, you'd simply not refer to a package
+
+    --apt-pocket=proposed
+
+And if instead you'd need a given set of packages, but not everything else from proposed you can use a comma separated list
+
+    --apt-pocket=proposed=src:srcpkg1,srcpkg2
+
 ### Save the Results
 
 You'll see the tests run:
