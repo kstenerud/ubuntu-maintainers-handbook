@@ -99,11 +99,15 @@ with `nova` and adding the `setup-testbed` setup command.
   * First of all it selects the ssh virtualization driver `autopkgtest-virt-ssh` to reach out to a remote system
   * Furthermore it selects the setup script `nova` from `/usr/share/autopkgtest/ssh-setup/nova` which happens to know how to deal with openstack
 
+```
     # General pattern
     $ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail <mypackage>.dsc -- ssh -s nova -- --flavor m1.small --image <image> --keyname <yourkeyname>
+```
 
+```
     # One example
     $ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor m1.small --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+```
 
 You can use usual openstack terms, like other flavors to size the VM that is used or other images to run the same test on different releases or architectures.
 
