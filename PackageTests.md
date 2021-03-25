@@ -86,7 +86,7 @@ But it needs some preparation. First of all you must have been *unlocked for* an
 In going through the set up process for Canonistack, you'll have created an openstack RC file that sets region, auth and other environment variables. Go ahead and source this file, if you haven't already.
 Then you'd look for the image you want to boot like:
 
-$ source novarc_bos01
+$ source ~/.canonistack/novarc_bos01
 $ openstack image list | grep -i arm64 | grep hirsute
 | 4d24cfbe-b6a5-4d84-8c50-b9f025d0dd43 | ubuntu/ubuntu-hirsute-daily-arm64-server-20201124-disk1.img    | active |
 | 1cfeacff-f04a-4bce-ab92-9d8fec7e5edb | ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img    | active |
