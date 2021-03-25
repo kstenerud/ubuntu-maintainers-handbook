@@ -78,6 +78,95 @@ The command only differs after the `--` part. For example:
 
     $ autopkgtest -U -s -o dep8-mypackage-ppa --setup-commands="sudo add-apt-repository -y -u -s ppa:mylaunchpaduser/focal-mypackage-fixed-something-1234567" -B mypackage -- lxd autopkgtest/ubuntu/focal/amd64
 
+#### In Canonistack
+
+This is by far the closest in terms of "similarity" to the real autopkgtests since they also run in such an environment.
+But it needs some preparation. First of all you must have been *unlocked for* and have set up [Canonistack](https://wiki.canonical.com/InformationInfrastructure/IS/CanoniStack-BOS01) for yourself.
+
+In going through the set up process for Canonistack, you'll have created an openstack RC file that sets region, auth and other environment variables. Go ahead and source this file, if you haven't already.
+Then you'd look for the image you want to boot like:
+
+$ source ~/.canonistack/novarc_bos01
+$ openstack image list | grep -i arm64 | grep hirsute
+| 4d24cfbe-b6a5-4d84-8c50-b9f025d0dd43 | ubuntu/ubuntu-hirsute-daily-arm64-server-20201124-disk1.img    | active |
+| 1cfeacff-f04a-4bce-ab92-9d8fec7e5edb | ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img    | active |
+
+[Finally to run the test on Canonistack](https://wiki.ubuntu.com/ProposedMigration#Reproducing_tests_in_the_cloud) is quite similar to the other invocations. Just two things change compared to "local" autopkgtest-runner invocations.
+
+ * `--setup-commands setup-testbed` will have autopkgtest execute `/usr/share/autopkgtest/setup-commands/setup-testbed` on the target which converts any system into a system that is ready for autopkgtest to log in
+ * `-- ssh -s nova` achieves two things
+  * First of all it selects the ssh virtualization driver `autopkgtest-virt-ssh` to reach out to a remote system
+  * Furthermore it selects the setup script `nova` from `/usr/share/autopkgtest/ssh-setup/nova` which happens to know how to deal with openstack
+
+```
+    # General pattern
+    $ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail <mypackage>.dsc -- ssh -s nova -- --flavor m1.small --image <image> --keyname <yourkeyname>
+```
+
+```
+    # One example
+    $ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor m1.small --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+```
+
+You can use usual openstack terms, like other flavors to size the VM that is used or other images to run the same test on different releases or architectures.
+
+### Common options you'll need
+
+#### Run against -proposed or subsets thereof
+
+Quite often a test fails by running against new packages in the proposed pocket. Then it often will be helpful to check if the test needs other packages from proposed to resolve the issue. That can easily be done via the option `--apt-pocket`.
+
+Commonly a test will run against all packages in release plus the new candidate from proposed, that would look like:
+
+```
+    --apt-pocket=proposed=src:yourpkg
+```
+
+To run against all packages that are in proposed, you'd simply not refer to a package
+
+```
+    --apt-pocket=proposed
+```
+
+And if instead you'd need a given set of packages, but not everything else from proposed you can use a comma separated list
+
+```
+    --apt-pocket=proposed=src:srcpkg1,srcpkg2
+```
+
+Examples testing various combinarions against octave-parallel:
+
+```
+# normal
+autopkgtest --apt-pocket=proposed --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu ~/work/autopkgtest-hirsute-amd64.img
+# all proposed
+autopkgtest --apt-pocket=proposed --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu ~/work/autopkgtest-hirsute-amd64.img
+# specific subset
+autopkgtest --apt-pocket=proposed=src:octave,octave-parallel,octave-struct --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu ~/work/autopkgtest-hirsute-amd64.img
+```
+
+#### Size the test VM
+
+Quite often one might wonder "hmm, might this work with more CPU/memory"
+At least in the case of qemu and nova that can be controlled.
+
+For `qemu` you can add `--ram-size` and `--cpus`
+
+Example to run the same test in different sizes:
+
+```
+autopkgtest --no-built-binaries --apt-upgrade --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu --ram-size=1536 --cpus 1 ~/work/autopkgtest-hirsute-amd64.img
+autopkgtest --no-built-binaries --apt-upgrade --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu --ram-size=4096 --cpus 4 ~/work/autopkgtest-hirsute-amd64.img
+```
+
+For `nova` one has to use [openstack flavors](https://docs.openstack.org/nova/latest/user/flavors.html). If unsure which ones are defined you can check with `openstack flavor list`. An example passing nova different sizes then would be:
+
+```
+$ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor m1.small --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+$ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor cpu4-ram8-disk20 --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+$ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor cpu8-ram16-disk50 --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+```
+
 
 ### Save the Results
 
