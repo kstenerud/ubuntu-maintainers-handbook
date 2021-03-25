@@ -91,7 +91,13 @@ $ openstack image list | grep -i arm64 | grep hirsute
 | 4d24cfbe-b6a5-4d84-8c50-b9f025d0dd43 | ubuntu/ubuntu-hirsute-daily-arm64-server-20201124-disk1.img    | active |
 | 1cfeacff-f04a-4bce-ab92-9d8fec7e5edb | ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img    | active |
 
-[Finally to run the test on Canonistack](https://wiki.ubuntu.com/ProposedMigration#Reproducing_tests_in_the_cloud) is quite similar to the other invocations. Just replace the autopkgtest-runner with `nova` and adding the `setup-testbed` setup command.
+[Finally to run the test on Canonistack](https://wiki.ubuntu.com/ProposedMigration#Reproducing_tests_in_the_cloud) is quite similar to the other invocations. Just two things change compared to "local" autopkgtest-runner invocations.
+with `nova` and adding the `setup-testbed` setup command.
+
+ * `--setup-commands setup-testbed` will have autopkgtest execute `/usr/share/autopkgtest/setup-commands/setup-testbed` on the target which converts any system into a system that is ready for autopkgtest to log in
+ * `-- ssh -s nova` achieves two things
+  * First of all it selects the ssh virtualization driver `autopkgtest-virt-ssh` to reach out to a remote system
+  * Furthermore it selects the setup script `nova` from `/usr/share/autopkgtest/ssh-setup/nova` which happens to know how to deal with openstack
 
     # General pattern
     $ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail <mypackage>.dsc -- ssh -s nova -- --flavor m1.small --image <image> --keyname <yourkeyname>
