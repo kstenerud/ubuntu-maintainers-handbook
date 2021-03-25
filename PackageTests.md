@@ -145,6 +145,29 @@ autopkgtest --apt-pocket=proposed --shell-fail octave-parallel_4.0.0-2ubuntu1~pp
 autopkgtest --apt-pocket=proposed=src:octave,octave-parallel,octave-struct --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu ~/work/autopkgtest-hirsute-amd64.img
 ```
 
+#### Size the test VM
+
+Quite often one might wonder "hmm, might this work with more CPU/memory"
+At least in the case of qemu and nova that can be controlled.
+
+For `qemu` you can add `--ram-size` and `--cpus`
+
+Example to run the same test in different sizes:
+
+```
+autopkgtest --no-built-binaries --apt-upgrade --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu --ram-size=1536 --cpus 1 ~/work/autopkgtest-hirsute-amd64.img
+autopkgtest --no-built-binaries --apt-upgrade --shell-fail octave-parallel_4.0.0-2ubuntu1~ppa1.dsc -- qemu --ram-size=4096 --cpus 4 ~/work/autopkgtest-hirsute-amd64.img
+```
+
+For `nova` one has to use [openstack flavors](https://docs.openstack.org/nova/latest/user/flavors.html). If unsure which ones are defined you can check with `openstack flavor list`. An example passing nova different sizes then would be:
+
+```
+$ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor m1.small --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+$ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor cpu4-ram8-disk20 --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+$ autopkgtest --no-built-binaries --apt-upgrade --setup-commands setup-testbed --shell-fail systemd_247.3-1ubuntu2.dsc -- ssh -s nova -- --flavor cpu8-ram16-disk50 --image ubuntu/ubuntu-hirsute-daily-arm64-server-20201125-disk1.img --keyname paelzer_canonistack-bos01
+```
+
+
 ### Save the Results
 
 You'll see the tests run:
