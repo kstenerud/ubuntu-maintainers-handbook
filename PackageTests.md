@@ -83,7 +83,7 @@ The command only differs after the `--` part. For example:
 This is by far the closest in terms of "similarity" to the real autopkgtests since they also run in such an environment.
 But it needs some preparation. First of all you must have been *unlocked for* and have set up [Canonistack](https://wiki.canonical.com/InformationInfrastructure/IS/CanoniStack-BOS01) for yourself.
 
-As usual with Canonistack you'd need to source your openstack RC file that sets region, auth and other environment variables.
+In going through the set up process for Canonistack, you'll have created an openstack RC file that sets region, auth and other environment variables. Go ahead and source this file, if you haven't already.
 Then you'd look for the image you want to boot like:
 
 $ source novarc_bos01
