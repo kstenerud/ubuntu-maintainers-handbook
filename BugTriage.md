@@ -156,7 +156,30 @@ wiki (https://wiki.ubuntu.com/ServerTeam).
 
 
 
-Raise Issue with the Team
--------------------------
+Awareness of the Triage
+-----------------------
 
-TODO: I.e. at standup meeting, or on IRC if it's urgent.
+We have several stakeholders we want to keep up-to-date on things that
+we've found on triage. On one hand we want to keep the community generally
+informed as well as raising issues within the team to ensure they are not
+falling through the cracks.
+
+For the community we send a mail to ubuntu-server@lists.ubuntu.com that
+summarizes how many bugs we've triaged and touches on the noteworthy
+cases. This can also be used to CC additional people that (for case
+specific reasons) should be aware of a case.
+An example of that would be if a security fix caused an upgrade-regression
+which would make us CC the uploader and/or ubuntu-security.
+
+Furthermore on cases that need immediate attention or at least awareness
+we might:
+
+ * Bring them up in the daily standup (mostly if they need a discussion/decision that one can't do alone)
+ * Ping a subject matter expert via IRC/Mattermost
+
+In some cases a package maintainer might already be aware and follow a case.
+To avoid endless re-pings on such a case the agreement is that if the maintainer
+is personally subscribed (i.e. with his launchpad user, not just indirectly via
+teams like [Ubuntu storage interest](https://launchpad.net/~ubuntu-storage))
+then we consider the maintainer to be aware and will not do extra
+pings/mentions/CC.
