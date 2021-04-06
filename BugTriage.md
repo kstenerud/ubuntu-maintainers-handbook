@@ -38,7 +38,7 @@ handled in different ways:
   - Merge requests
   - Stable release updates (SRU)
   - Main Inclusion Requests (MIR)
-  - Freeze exception request (FFe, UI-FFe, et al.) 
+  - Freeze exception request (FFe, UI-FFe, et al.)
   - Package promotion/demotion ("Seed management/changes")
 
   These will generally either be filed by or assigned to a team member;
