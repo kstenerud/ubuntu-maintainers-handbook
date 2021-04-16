@@ -183,3 +183,15 @@ is personally subscribed (i.e. with his launchpad user, not just indirectly via
 teams like [Ubuntu storage interest](https://launchpad.net/~ubuntu-storage))
 then we consider the maintainer to be aware and will not do extra
 pings/mentions/CC.
+
+
+Triage Rotation
+---------------
+
+According to load we migth shift things, but generally every day Tue-Fri
+has a team member assigned. Monday is often more work and includes more
+low quality bugs as it includes all of the weekend - therefore Monday is
+a rotation through all eligible bug triagers.
+This is organized in our "Daily Ubuntu Server" board. The regular cards are
+created via the "Repeat" power-up. If one needs to change the templates that
+it copies from search for `is:archived label:origin` to find them.
