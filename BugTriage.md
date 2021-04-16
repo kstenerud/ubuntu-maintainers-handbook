@@ -188,7 +188,7 @@ pings/mentions/CC.
 Triage Rotation
 ---------------
 
-According to load we migth shift things, but generally every day Tue-Fri
+According to load we might shift things, but generally every day Tue-Fri
 has a team member assigned. Monday is often more work and includes more
 low quality bugs as it includes all of the weekend - therefore Monday is
 a rotation through all eligible bug triagers.
