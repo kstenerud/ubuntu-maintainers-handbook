@@ -55,45 +55,8 @@ else:
     migrates from proposed into release
 
 
------------------
-
-http://people.canonical.com/~ubuntu-archive/proposed-migration
-
-subdirs contain info for specific releases (so, SRUs)
-
-
 -----------------------
 
-Non-sru:
-
-  After sponsoring, goes into disco-proposed.
-
-SRU path:
-
-  Goes to unapproved
-  SRU team does review checking for regressions
-  SRU team says yes, goes into xyz-proposed.
-
-In proposed:
-- builds
-- track migration (check if it built successfully)
-- next, autopackagetests: check excuses page for test results. Can take a day to run tests.
-
-When tests succeeded, built fine:
-- In disco, it would migrate from proposed to release
-- special cases: not installable, waiting on dependency
-3 things needed:
--- not installable: depends on something not existing, for example
--- dependency: Dependent package has not gone into release yet.
--- all pkg tests are OK
-
-SRU path:
-- builds, tests
-- SRU team puts template response  in bug "please test and verify"
-- reporter verifies fix, switches tags.
-- if not, fixer can verify:
-- deb http://archive.ubuntu.com/ubuntu/ xenial-proposed restricted main multiverse universe
-If
 
 # Once a week, go to http://people.canonical.com/~ubuntu-archive/pending-sru
 # Look for bugs that are currently SRUs in flight
@@ -113,4 +76,3 @@ http://reqorts.qa.ubuntu.com/reports/rls-mgr/rls-bb-tracking-bug-tasks.html#ubun
 https://people.canonical.com/~ubuntu-archive/transitions/html/php7.3.html
 https://wiki.ubuntu.com/UbuntuDevelopment/Merging/GitWorkflow
 http://autopkgtest.ubuntu.com/running
-https://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses_by_team.html#ubuntu-server
