@@ -382,11 +382,7 @@ In such a case, the commit can be dropped.
     $ git rebase --abort
     $ git rebase -i lp1803296/old/debian
 
-Keep a copy of the unneeded commit's commit message, then delete it in the rebase. Now delete the logical tag:
-
-    $ git tag -d lp1803296/logical/1%2.11.0-1ubuntu2
-
-Then [remake the logical tag](#create-logical-tag)
+Keep a copy of the unneeded commit's commit message, then delete it in the rebase.
 
 #### Check that the patches still apply cleanly:
 
