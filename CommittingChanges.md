@@ -101,7 +101,7 @@ This modifies `debian/changelog` like so:
 
 You'll have to manually fix up anything that reconstruct-changelog got wrong:
 
- * Version is wrong (should be `3.3.0-1ubuntu0.1`).
+ * Version is wrong (should be `3.3.0-1ubuntu1.1`).
  * Name and email may be wrong if you don't have `DEBFULLNAME` and `DEBEMAIL` set in your env.
  * `UNRELEASED`: Change this to the release this change is for (example, `bionic`).
 
