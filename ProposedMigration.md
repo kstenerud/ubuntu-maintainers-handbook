@@ -103,3 +103,111 @@ File a MP against it with a description indicating the lp bug#, rationale for wh
 
 Reviewers should be 'canonical-server', 'ubuntu-release', and any archive admins or foundations team members you've \
 discussed the issue with.
+
+
+Excuse Glossary
+---------------
+
+* Migration status for aaa (x to y):
+
+  This means package "aaa" has a new version y uploaded to -proposed, to
+  replace the existing version x, but the change has not yet been
+  permitted.
+
+
+* Issues preventing migration:"
+
+  This heading marks the start of a list of verdicts decided by
+  britney2 about why the package should not be permitted.  This list
+  ends at the 'Additional info:' heading.
+
+
+* Impossible <deptype>: aaa -> bbb/x/arch
+
+  Package 'aaa' has a dependency on package 'bbb', version x, for
+  architecture 'arch', but it is not possible to satisfy this.
+
+
+* Invalidated by <deptype>
+
+  The package had a dependency that itself was not a valid migration
+  candidate.
+
+
+* Implicit dependency: aaa <bbb>
+
+  An implicit dependency is a pseudo dependency where Breaks/Conflicts
+  creates an inverted dependency.  For example, pkg-b Depends on pkg-a,
+  but pkg-a=2.0-1 breaks pkg-b=1.0-1, so pkg-b=2.0-1 must migrate first
+  (or they must migrate together).  A way to handle this is to re-run
+  pkg-b's autopkgtest (for 2.0-1) and include a trigger for pkg-a=2.0.
+
+  This can also occur if pkg-b has "Depends: pkg-a (<< 2.0)", due to use
+  of some non-stable internal interface.
+
+  It can also occur if pkg-a has a Provides that changes from 1.0-1 to
+  2.0-1, but pkg-b has a Depends on the earlier version.
+
+
+* Implicit dependency: aaa <bbb> (not considered)
+
+  Similar to above, "aaa" and "bbb" are intertwined, but "bbb" is also
+  either invalid or rejected.  For these cases, attention should first
+  go to resolving the issue(s) for "bbb", and then re-running the
+  autopkgtest for it with a trigger included against package "aaa".
+
+
+* Depends: aaa <bbb>
+
+  Package "aaa" is blocked because it depends on "bbb" which has not yet
+  migrated.
+
+
+* Depends: aaa <bbb> (not considered)
+
+  Package "aaa" is blocked because it depends on "bbb", however "bbb" is
+  either invalid or rejected.  If the dependency itself is not valid,
+  this line will be followed by an 'Invalidated by dependency' line.
+
+  There are three reasons why a rejection can occur:  a) it needs
+  approval, b) cannot determine if permanent, or c) permanent rejection.
+
+
+* Has no binaries on any arch (- to x.y.z)
+
+  If the package doesn't have a current version, this error can indicate
+  the package is not (yet) in the archive, or it can mean its binaries
+  were removed previously but not sync-blacklisted and thus reappeared.
+
+  If the package should not be sync'd into the archive, on
+  #ubuntu-release ping "ubuntu-archive" with request to remove the
+  packages' binaries and add them to sync-blacklist.txt
+
+  Otherwise, there are several things worth checking:
+
+  - Stuck in New queue?
+    https://launchpad.net/ubuntu/<codename>/+queue?queue_state=0
+
+  - Stuck in Unapproved queue?
+    https://launchpad.net/ubuntu/<codename>/+queue?queue_state=1
+
+  - Main/Universe component mismatch?
+    If blocked package is in main, but new dependency is in universe,
+    then will need to file a MIR.
+    + https://people.canonical.com/~ubuntu-archive/component-mismatches.txt
+    + https://wiki.ubuntu.com/ArchiveAdministration#Component_Mismatches_and_Changing_Overrides
+    + See: https://wiki.ubuntu.com/MainInclusionProcess
+
+  - Circular Test Dependencies
+    If several related packages are attempting to sync, which depend on
+    each other, they may be blocked simply due to needing the -proposed
+    versions of their dependencies.  In this case, a properly crafted
+    retrigger may be worth attempting.
+
+  - Circular Build Dependencies
+    Similarly, a package may depend on -proposed versions of another
+    package to _build_... and that second package depends directly or
+    indirectly on the -proposed version of the first package.  These are
+    trickier to sort out
+    + See https://wiki.debian.org/CircularBuildDependencies
+    + https://wiki.ubuntu.com/UbuntuArchitecture#Builds
