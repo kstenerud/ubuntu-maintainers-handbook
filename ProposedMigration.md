@@ -41,6 +41,12 @@ Many of the items on the page are not actually broken, they're just blocked by s
 If you are just coming up to speed on proposed migration duty, you'll likely be wondering "Where do I even start?!"  A good suggestion is to look for build failures towards the top of the page; build failures tend to be more localized and more deterministic as to cause, and items towards the top of the page will have had fewer eyeballs on them since they're newer, and so have a higher chance of being something simple.
 
 
+Bug Reports for Migration Problems
+----------------------------------
+
+If you file a bug report about a build or test failure shown on the update excuses page, tag the bug report 'update-excuse'.  This helps other developers see the investigation work you've already done, and can be used to identify the next-action.  Mark yourself as the Assignee if you're actively working on the issue, and leave the bug unsubscribed if you aren't so that others can carry things forward.
+
+
 Failure to Build From Source (FTBFS)
 ------------------------------------
 
