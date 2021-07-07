@@ -17,12 +17,28 @@ Here is the typical lifecycle for an upload:
   6.  Verify other archive consistency checks
       a.  Are binary packages installable?
       b.  Are all required dependencies at the right version?
+      c.  Does it cause anything to become uninstallable?
+      d.  etc.
   7.  If (and only if) the fix is an SRU:
       a.  SRU bug updated with request to verify
       b.  Reporter or developer verifies fix, and updates tags
   8.  Release package from [codename]-proposed to [codename]
 
-Often the migration proceeds automatically, but when there are issues our involvement is needed to sort out build failures, test errors, and other archive inconsistencies.  Sometimes these can be tricky to sort out, and sometimes the corrections need core-dev or archive-admin permissions to apply.  Because of this, the Ubuntu project assigns developers to focus on migration issues on a rotating basis, each working a few days or a week at a time.
+Often the migration proceeds automatically, but when there are issues our involvement is needed to sort things out.  Sometimes the package having the problem is one we've uploaded ourselves, so naturally want to work on solving the issue.  But in other times the issue arises organically such as via something that auto-sync'd from Debian, or a side-effect from some other change in the distro, and thus have no defined "owner".  For these latter problems (and for the former when they've become tricky), the Ubuntu project requires distro developers to devote a portion of their time to focusing on migration issues generally, on a rotating basis each working a few days or week at a time.
+
+Following are tips and tricks for solving migration issues, and some guidance for people just starting the proposed migration duty.
+
+
+Update Excuses Page
+-------------------
+
+All current migration issues for the current devel release are displayed on the [https://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses.html](Update Excuses Page).  [https://people.canonical.com/~ubuntu-archive/proposed-migration/](Similar pages) exist for stable releases (these items generally relate to particular SRUs).  These pages are created by a software service named "Britney", which updates the page after each batch of test runs, typically every 2-3 hours depending on load.
+
+The page is ordered newest to oldest, and so the items at the top of the page may still be processing (indicated by "Test in progress" marked for one or more architectures).  In general, two things to watch for are "missing build", which can indicate a failure to build the source package (FTBFS), and "autopkgtest Regression", which indicates a test failure.  Both of these situations are described in more depth below.
+
+Many of the items on the page are not actually broken, they're just blocked by something else that needs resolution.  This often happens for new libraries or language runtimes, or really any package that a lot of other things depend on to build, install, or run tests against.
+
+If you are just coming up to speed on proposed migration duty, you'll likely be wondering "Where do I even start?!"  A good suggestion is to look for build failures towards the top of the page; build failures tend to be more localized and more deterministic as to cause, and items towards the top of the page will have had fewer eyeballs on them since they're newer, and so have a higher chance of being something simple.
 
 
 Failure to Build From Source (FTBFS)
