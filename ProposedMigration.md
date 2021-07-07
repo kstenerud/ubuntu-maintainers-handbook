@@ -128,7 +128,24 @@ rm: cannot remove '/var/cache/munin/www/localdomain/localhost.localdomain': Dire
 
 All autopkgtests follow this general format, although the output from the tests themselves varies widely.
 
-Beyond "regular" test case failures like this one, autopkgtest failures can also occur due to missing or incorrect dependencies, test framework timeouts, and network proxy issues.
+Beyond "regular" test case failures like this one, autopkgtest failures can also occur due to missing or incorrect dependencies, test framework timeouts, and other issues.  Each of these is discussed in more detail below.
+
+
+### Test Dependency Irregularities ###
+
+The package's debian/tests/control file defines what gets installed in the test environment before executing the tests.  You can review and verify the packages and versions in the DEP8 test log, between the lines 'autopkgtest...: test integration: preparing testbed' and 'Removing autopkgtest-satdep'.
+
+A common issue is that the test should be run against a version of a dependency present in the -proposed pocket, however it failed due to running against the version in -release.  Often this is straightforward to prove by running the autopkgtests locally in a container.  Another easy way to test this is to re-run the test but set it to preferentially pull packages from -proposed -- this is done by appending '&all-proposed=1' to the test URL.  If that passes, but the package still does not migrate, then look in the test log for all packages that were pulled from -proposed and include those as triggers.  [https://git.launchpad.net/~bryce/+git/excuses-kicker](Excuses Kicker) and retry-autopkgtest-regressions are handy tools for generating these URLs.
+
+
+### Test Framework Timeouts and Out of Memory ###
+
+The autopkgtest framework will kill tests that take too long to run.  In some cases it makes sense to just configure autopkgtest to let the test run longer.  This is done by setting the ```long_tests``` option.  Similarly, some tests may need more CPU or memory than in a standard worker.  The ```big_packages``` option directs autopkgtest to run these on workers with more CPU and memory.  Both these options are explained on the [https://wiki.ubuntu.com/ProposedMigration#autopkgtests](ProposedMigration) page.
+
+
+### Other Common Issues ###
+
+Autopkgtest runs tests in a controlled network environment, so if a test case expects to download material from the internet, it will likely fail.  If the test case is attempting to download a dependency (e.g. via PIP or Maven), sometimes this can be worked around by adding the missing dependency to ```debian/tests/control```.  If it is attempting to download an example file, then it may be possible to make the test case use a local file, or to load from the proxy network.
 
 
 Skipping tests
@@ -137,7 +154,7 @@ Skipping tests
 If an autopkgtest is badly written, it may be too challenging to get it to pass.  In these extreme cases, its possib\
 le to request that test failures be ignored for purposes of package migration.
 
-Checkout lp:~ubuntu-release/britney/hints-ubuntu
+Checkout [https://git.launchpad.net/~ubuntu-release/britney/+git/hints-ubuntu](lp:~ubuntu-release/britney/hints-ubuntu)
 
 File a MP against it with a description indicating the lp bug#, rationale for why the test can and should be skipped\
 , and explanation of what will be unblocked to migration.
