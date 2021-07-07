@@ -73,21 +73,62 @@ subdirs contain info for specific releases (so, SRUs)
 https://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses_by_team.html#ubuntu-server
 
 
-In proposed
------------
-- builds
-- track migration (check if it built successfully)
-- next, autopackagetests: check excuses page for test results. Can take a day to run tests.
+Autopkgtest Regressions
+-----------------------
 
+After a package has successfully built, the autopkgtest infrastructure will run its DEP8 tests for each of its supported architectures.  Failed tests can block the migration, and "Regression" listed for the failed architecture(s).
 
-When tests succeeded, built fine
---------------------------------
-- In disco, it would migrate from proposed to release
-- special cases: not installable, waiting on dependency
-3 things needed:
--- not installable: depends on something not existing, for example
--- dependency: Dependent package has not gone into release yet.
--- all pkg tests are OK
+You can view the recent test run history for a package's architecture by clicking on the respective architecture's name.
+
+Tests can fail for myriad reasons.
+
+Flaky tests, hardware instabilities, and intermittent network issues can cause false positive failures.  A simple retriggering of the test run (via the '♻ ' symbol) is typically all that's needed to resolve these.  Before doing this, it is worthwhile to check the recent test run history to see if someone else has already tried.
+
+When examining a failed autopkgtest's log, start from the end of the file, which typically will either show a summary of the test runs, or an error message if a fault was hit.  For example:
+
+```
+done.
+done.
+(Reading database ... 50576 files and directories currently installed.)
+Removing autopkgtest-satdep (0) ...
+autopkgtest [21:40:55]: test command1: true
+autopkgtest [21:40:55]: test command1: [-----------------------
+autopkgtest [21:40:58]: test command1: -----------------------]
+command1             PASS
+autopkgtest [21:41:03]: test command1:  - - - - - - - - - - results - - - - - - - - - -
+autopkgtest [21:41:09]: @@@@@@@@@@@@@@@@@@@@ summary
+master-cron-systemd  FAIL non-zero exit status 1
+master-cgi-systemd   PASS
+node-systemd         PASS
+command1             PASS
+```
+
+Here we see that the test named 'master-cron-systemd' has failed.  To see why it failed, do a search on the page for 'master-cron-systemd', and iterate until you get to the last line of the testrun, then scroll up to find the failed test cases:
+
+```
+autopkgtest [21:23:39]: test master-cron-systemd: preparing testbed
+...
+...
+autopkgtest [21:25:10]: test master-cron-systemd: [-----------------------
+...
+...
+not ok 3 - munin-html: no files in /var/cache/munin/www/ before first run
+#
+#	  find /var/cache/munin/www/ -mindepth 1 >unwanted_existing_files
+#	  test_must_be_empty unwanted_existing_files
+#
+...
+...
+autopkgtest [21:25:41]: test master-cron-systemd: -----------------------]
+master-cron-systemd  FAIL non-zero exit status 1
+autopkgtest [21:25:46]: test master-cron-systemd:  - - - - - - - - - - results - - - - - - - - - -
+autopkgtest [21:25:46]: test master-cron-systemd:  - - - - - - - - - - stderr - - - - - - - - - -
+rm: cannot remove '/var/cache/munin/www/localdomain/localhost.localdomain': Directory not empty
+```
+
+All autopkgtests follow this general format, although the output from the tests themselves varies widely.
+
+Beyond "regular" test case failures like this one, autopkgtest failures can also occur due to missing or incorrect dependencies, test framework timeouts, and network proxy issues.
 
 
 Skipping tests
