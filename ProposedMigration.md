@@ -1,30 +1,32 @@
 Proposed Migration
 ==================
 
-Uploads of fixed or merged packages don't automatically get released to Ubuntu users, but rather go into a special pocket called 'proposed' for testing and integration.  Once a package is deemed ok, it 'migrates' into the release pocket for users to consume.  This is called the "Proposed Migration" process.
+Uploads of fixed or merged packages don't automatically get released to Ubuntu users, but rather go into a special pocket called 'proposed' for testing and integration.  Once a package is deemed ok, it 'migrates' into the release pocket for users to consume.  This is called the [https://wiki.ubuntu.com/ProposedMigration]("Proposed Migration" process).
 
 Here is the typical lifecycle for an upload:
 
   0.  Issue identified, fixed, and packaged
   1.  *source.changes uploaded
-  2.  If (and only if) the fix is an SRU:
-      a.  Upload goes into an 'unapproved' queue
-      b.  SRU team reviews and approves... (goto 3)
-      c.  ...or disapproves (goto 0)
+  2.  If the fix is an SRU, or if we're in a [https://wiki.ubuntu.com/FreezeExceptionProcess](freeze):
+      *  Upload goes into an 'unapproved' queue
+      *  SRU team reviews and approves... (goto 3)
+      *  ...or disapproves (goto 0)
   3.  Upload goes into [codename]-proposed queue
-  4.  Build binary package(s) from source package
-  5.  Run autopkgtests
+  4.  Launchpad builds binary package(s) from source package
+  5.  Run [https://packaging.ubuntu.com/html/auto-pkg-test.html](autopkgtests)
+      * Autopkgtests for the package itself
+      * Autopkgtests for the reverse{-build}-dependencies, as well
   6.  Verify other archive consistency checks
-      a.  Are binary packages installable?
-      b.  Are all required dependencies at the right version?
-      c.  Does it cause anything to become uninstallable?
-      d.  etc.
+      *  Are binary packages installable?
+      *  Are all required dependencies at the right version?
+      *  Does it cause anything to become uninstallable?
+      *  etc.
   7.  If (and only if) the fix is an SRU:
-      a.  SRU bug updated with request to verify
-      b.  Reporter or developer verifies fix, and updates tags
+      *  [https://wiki.ubuntu.com/StableReleaseUpdates#Verification](SRU bug) updated with request to verify
+      *  Reporter or developer verifies fix, and updates tags
   8.  Release package from [codename]-proposed to [codename]
 
-Often the migration proceeds automatically, but when there are issues our involvement is needed to sort things out.  Sometimes the package having the problem is one we've uploaded ourselves, so naturally want to work on solving the issue.  But in other times the issue arises organically such as via something that auto-sync'd from Debian, or a side-effect from some other change in the distro, and thus have no defined "owner".  For these latter problems (and for the former when they've become tricky), the Ubuntu project requires distro developers to devote a portion of their time to focusing on migration issues generally, on a rotating basis each working a few days or week at a time.
+Often the migration proceeds automatically, but when there are issues our involvement is needed to sort things out.  Sometimes the package having the problem is one we've uploaded ourselves, so naturally want to work on solving the issue.  But in other times the issue arises organically such as via something that auto-sync'd from Debian, or a side-effect from some other change in the distro, and thus have no defined "owner".  For these latter problems (and for the former when they've become tricky), the Ubuntu project requires some of its distro developers to devote a portion of their time to focusing on migration issues generally, on a rotating basis each working a few days or week at a time.
 
 Following are tips and tricks for solving migration issues, and some guidance for people just starting the proposed migration duty.
 
@@ -38,45 +40,42 @@ The page is ordered newest to oldest, and so the items at the top of the page ma
 
 Many of the items on the page are not actually broken, they're just blocked by something else that needs resolution.  This often happens for new libraries or language runtimes, or really any package that a lot of other things depend on to build, install, or run tests against.
 
-If you are just coming up to speed on proposed migration duty, you'll likely be wondering "Where do I even start?!"  A good suggestion is to look for build failures towards the top of the page; build failures tend to be more localized and more deterministic as to cause, and items towards the top of the page will have had fewer eyeballs on them since they're newer, and so have a higher chance of being something simple.
+If you are just coming up to speed on proposed migration duty, you'll likely be wondering "Where do I even start?!"  A good suggestion is to look for build failures towards the upper-middle of the page affecting only one architecture; single-arch build failures tend to be more localized and more deterministic as to cause, and items towards the top of the page but after all the "Test in progress" items will have had fewer eyeballs on them since they're newer, and so have a higher chance of being something simple, yet not so new that it's still being actively worked on by someone.  If you suspect there may already be eyeballs on the issue, the #ubuntu-devel IRC channel can be a good place to ask if anyone's already looking at it.
+
+But don't worry too much about where to start; the Update Excuses page is much like a wool sweater in that you start pulling at one thread and end up unraveling the whole affair.
 
 
 Bug Reports for Migration Problems
 ----------------------------------
 
-If you file a bug report about a build or test failure shown on the update excuses page, tag the bug report 'update-excuse'.  This helps other developers see the investigation work you've already done, and can be used to identify the next-action.  Mark yourself as the Assignee if you're actively working on the issue, and leave the bug unsubscribed if you aren't so that others can carry things forward.
+If you file a bug report about a build or test failure shown on the update excuses page, tag the bug report `update-excuse`.  Britney will include a link to the bug report next time it refreshes the update_excuses.html page.  This helps other developers see the investigation work you've already done, and can be used to identify the next-action.  Mark yourself as the Assignee if you're actively working on the issue, and leave the bug unsubscribed if you aren't so that others can carry things forward.
+
 
 
 Failure to Build From Source (FTBFS)
 ------------------------------------
 
-The build step can hit failures for several general classes of problems.  First are regular build problems that can be easily reproduced locally (and that should have been addressed before uploading).  Second are intermittent platform problems, where simply retrying the build once or twice can result in a successful build.  Third are dependency problems, where the task is to get some other package to be the right version in the release pocket so that the build will succeed.  Fourth are ABI changes with dependencies; these often just need a no-change rebuild.  And last are all the other myriad package-specific build problems, that typically require some particular tweak to the package itself.
+The build step can hit failures for several general classes of problems.  First are regular build problems that can be easily reproduced locally (and that should have been addressed before uploading).  Second are platform-specific issues that may have been overlooked due to being present only on unfamiliar hardware.  Third are intermittent network or framework problems, where simply retrying the build once or twice can result in a successful build.  Fourth are dependency problems, where the task is to get some other package to be the right version in the release pocket so that the build will succeed.  Fifth are ABI changes with dependencies; these often just need a no-change rebuild.  And last are all the other myriad package-specific build problems, that typically require some particular tweak to the package itself.
 
 The first case covers all the usual normal build issues like syntax errors and so on.  In practice these are typically quite rare because developers tend to be very diligent at making sure their packages build before uploading.  Fixes for these is the usual standard development work.
 
-In the second case, local building was fine but the uploaded build may have failed on Launchpad due to a transitory issue such as a network outage, or a race condition, or other stressed resource.  Or it might have failed due to a strange dependence on some variable like the day of the week.  In these cases, clicking on the "Retry Build" button in Launchpad once or twice can sometimes cause the build to randomly succeed, thus allowing the transition to proceed.  Needless to say, we don't wish for such unpredictabilities in the build process, so if the problem reoccurs and if you can narrow down the cause, it can be worthwhile to find the root cause and figure out how to fix it properly.
+The second case is similar to the first but pertains to issues that arise only on specific platforms.  Common situations are tests or code that relies on [https://en.wikipedia.org/wiki/Endianness](endianness) of data types and so breaks on big-endian systems (e.g. s390x), code expecting 64-bit data types that breaks on 32-bit (e.g. armhf), and so on.  [https://wiki.canonical.com/InformationInfrastructure/IS/CanoniStack-BOS01](Canonistack provides hardware) that Canonical employees can use to attempt reproduction of these problems.  Take note with i386 particularly in that it often fails less due to data type issues but more because it is a partial port and has numerous limitations that require special handling, as described on the [https://wiki.ubuntu.com/i386](i386 troubleshooting page).
 
-For the third case, where a dependency is not the right version or is not present in the right pocket, the question becomes one of identifying what's wrong with the dependency and fixing it.  Be aware there may be some situations where the problem really is with the dependency itself, and the solution is to change the version of the dependency, or adjust the dependency version requirement, or so forth.  These latter solutions often require asking for an archive admin's help on the #ubuntu-release IRC channel.
+In the third case, local building was fine but the uploaded build may have failed on Launchpad due to a transitory issue such as a network outage, or a race condition, or other stressed resource.  Or it might have failed due to a strange dependence on some variable like the day of the week.  In these cases, clicking on the "Retry Build" button in Launchpad once or twice can sometimes cause the build to randomly succeed, thus allowing the transition to proceed (if you're not yet a core-dev, ask for a core-dev on the #ubuntu-devel IRC channel if they can click the link for you).  Needless to say, we don't wish for such unpredictabilities in the build process, so if the problem reoccurs and if you can narrow down the cause, it can be worthwhile to find the root cause and figure out how to fix it properly.
 
-The fourth case of ABI changes comes up particularly when Ubuntu is introducing new versions of language runtime environments or core libraries; i.e. new glibc, ruby, python3, phpunit, et al.  Your package may fail to build because one of its dependencies was built against a different version of glibc or whatever, and needs (no-change) rebuilt (and/or patched) to build with the new version.
+For the fourth case, where a dependency is not the right version or is not present in the right pocket, the question becomes one of identifying what's wrong with the dependency and fixing it.  Be aware there may be some situations where the problem really is with the dependency itself, and the solution is to change the version of the dependency, or adjust the dependency version requirement, or removing invalid binary packages, or so forth.  These latter solutions often require asking for an archive admin's help on the #ubuntu-release IRC channel.
+
+The fifth case of ABI changes comes up particularly when Ubuntu is introducing new versions of toolchains, language runtime environments or core libraries; i.e. new glibc, gcc, glib2.0, ruby, python3, phpunit, et al.  This happens when the release of the underlying libraries/toolchain is newer than the consuming project.  Your package may fail to build because one of its dependencies was built against a different version of glibc, or with less strict gcc options, or whatever, and needs (no-change) rebuilt (and/or patched) to build with the new version or stricter options.  Assuming the upstream project has already made the changes to adapt to the changed behavior or function-prototypes and produced a release, then if we already have that release in Ubuntu a simple no-change rebuild may suffice; if we don't have the release, then it will take a sync or merge, or patching in the changes to what we're carrying.  If upstream has not released the changes, then you could also consider packaging a snapshot of their git repo.  If upstream has not yet made the changes, and there aren't already existing bug reports or pull requests, it may be necessary to make the changes on our end.  Communication with Debian and upstream can be effective here, and where it isn't filing bug reports can be worth the effort.
+
+With this fifth case, it's worth noting that quite often these updates cause the same kind of errors in many places.  It's worth asking in the #ubuntu-devel IRC channel in case standard solutions are already known that you can re-use, such as ignoring a new warning via a `-W...` option or switching to the old behavior via a `-f...` option.  It's also worth reporting your findings in ways others can easily re-use when they run into more cases.
 
 Finally, there are also a miscellania of other problems that can result in build failures.  Many of these will be package-specific or situation-specific.  As you run into situations that crop up more than a couple times please update these docs.
-
-
-Documentation: https://wiki.ubuntu.com/ProposedMigration
-Stage 1: http://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses.html
-Stage 2: http://people.canonical.com/~ubuntu-archive/proposed-migration/update_output.txt
-
-http://people.canonical.com/~ubuntu-archive/proposed-migration
-subdirs contain info for specific releases (so, SRUs)
-
-https://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses_by_team.html#ubuntu-server
 
 
 Autopkgtest Regressions
 -----------------------
 
-After a package has successfully built, the autopkgtest infrastructure will run its DEP8 tests for each of its supported architectures.  Failed tests can block the migration, and "Regression" listed for the failed architecture(s).
+After a package has successfully built, the [https://autopkgtest.ubuntu.com/](autopkgtest infrastructure) will run its [https://packaging.ubuntu.com/html/auto-pkg-test.html](DEP8 tests) for each of its supported architectures.  Failed tests can block the migration, and "Regression" listed for the failed architecture(s).
 
 You can view the recent test run history for a package's architecture by clicking on the respective architecture's name.
 
@@ -133,9 +132,11 @@ Beyond "regular" test case failures like this one, autopkgtest failures can also
 
 ### Test Dependency Irregularities ###
 
-The package's debian/tests/control file defines what gets installed in the test environment before executing the tests.  You can review and verify the packages and versions in the DEP8 test log, between the lines 'autopkgtest...: test integration: preparing testbed' and 'Removing autopkgtest-satdep'.
+The package's [https://salsa.debian.org/ci-team/autopkgtest/blob/master/doc/README.package-tests.rst](debian/tests/control file defines what gets installed) in the test environment before executing the tests.  You can review and verify the packages and versions in the DEP8 test log, between the lines 'autopkgtest...: test integration: preparing testbed' and 'Removing autopkgtest-satdep'.
 
-A common issue is that the test should be run against a version of a dependency present in the -proposed pocket, however it failed due to running against the version in -release.  Often this is straightforward to prove by running the autopkgtests locally in a container.  Another easy way to test this is to re-run the test but set it to preferentially pull packages from -proposed -- this is done by appending '&all-proposed=1' to the test URL.  If that passes, but the package still does not migrate, then look in the test log for all packages that were pulled from -proposed and include those as triggers.  [https://git.launchpad.net/~bryce/+git/excuses-kicker](Excuses Kicker) and retry-autopkgtest-regressions are handy tools for generating these URLs.
+A common issue is that the test should be run against a version of a dependency present in the -proposed pocket, however it failed due to running against the version in -release.  Often this is straightforward to prove by running the autopkgtests locally in a container.  Another easy way to test this is to re-run the test but set it to preferentially pull packages from -proposed -- this is done by appending '&all-proposed=1' to the test URL.  If that passes, but the package still does not migrate, then look in the test log for all packages that were pulled from -proposed and include those as triggers.  [https://git.launchpad.net/~bryce/+git/excuses-kicker](Excuses Kicker) and [https://bazaar.launchpad.net/~ubuntu-archive/ubuntu-archive-tools/trunk/view/head:/retry-autopkgtest-regressions](retry-autopkgtest-regressions) are handy tools for generating these URLs.
+
+As with rebuilds, these retriggers also require core-dev permissions, so if you're not yet core-dev give the links to someone who is for assistance.
 
 
 ### Test Framework Timeouts and Out of Memory ###
@@ -151,16 +152,13 @@ Autopkgtest runs tests in a controlled network environment, so if a test case ex
 Skipping tests
 --------------
 
-If an autopkgtest is badly written, it may be too challenging to get it to pass.  In these extreme cases, its possib\
-le to request that test failures be ignored for purposes of package migration.
+If an autopkgtest is badly written, it may be too challenging to get it to pass.  In these extreme cases, its possible to request that test failures be ignored for purposes of package migration.
 
 Checkout [https://git.launchpad.net/~ubuntu-release/britney/+git/hints-ubuntu](lp:~ubuntu-release/britney/hints-ubuntu)
 
-File a MP against it with a description indicating the lp bug#, rationale for why the test can and should be skipped\
-, and explanation of what will be unblocked to migration.
+File a MP against it with a description indicating the lp bug#, rationale for why the test can and should be skipped, and explanation of what will be unblocked to migration.
 
-Reviewers should be 'canonical-server', 'ubuntu-release', and any archive admins or foundations team members you've \
-discussed the issue with.
+Reviewers should be 'canonical-server', 'ubuntu-release', and any archive admins or foundations team members you've discussed the issue with.
 
 
 Excuse Glossary
@@ -230,6 +228,15 @@ Excuse Glossary
   There are three reasons why a rejection can occur:  a) it needs
   approval, b) cannot determine if permanent, or c) permanent rejection.
 
+* Has no binaries on arch <xyz>
+
+  Usually this means the package has either failed to build or failed to
+  upload the binaries for a build.  The FTBFS section (above) covers how
+  to handle this class of problem.
+
+  Packages that fail on a single arch can be great candidates for
+  debugging and resolving, since the failures are more likely to be
+  limited in scope and reproducible either locally or via Canonistack.
 
 * Has no binaries on any arch (- to x.y.z)
 
