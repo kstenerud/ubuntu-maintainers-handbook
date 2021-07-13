@@ -67,7 +67,7 @@ Before that, we need to set up an environment for doing the testing.  There's ma
 
 #### Make a container for testing:
 
-    $ lxc launch ubuntu-daily:bionic tester
+    $ lxc launch images:ubuntu/bionic tester
     $ lxc exec tester -- bash
 
 #### Alternatively: Make a VM for testing:
