@@ -24,7 +24,7 @@ This method will directly install any dependencies it needs to build, so it's re
 
 From within the package repository:
 
-    $ lxc launch ubuntu-daily:focal builder &&
+    $ lxc launch images:ubuntu/focal builder &&
       sleep 5 &&
       lxc exec builder -- mkdir -p /root/build/package &&
       tar cf - . | lxc exec builder -- tar xf - -C /root/build/package &&

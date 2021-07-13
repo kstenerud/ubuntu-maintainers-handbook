@@ -24,7 +24,7 @@ Example SRU merge proposal:
 
     Steps to test:
 
-    # lxc launch ubuntu-daily:bionic builder
+    # lxc launch images:ubuntu/bionic builder
     # lxc exec builder bash
 
     # apt dist-upgrade
