@@ -34,7 +34,7 @@ Copy the resulting image (autopkgtest-focal-amd64.img) to a common directory lik
 
 #### Building a Container Image
 
-    $ autopkgtest-build-lxd ubuntu-daily:focal/amd64
+    $ autopkgtest-build-lxd images:ubuntu/impish/amd64
 
 You should see an autopkgtest image now when you run `lxc image list`.
 
