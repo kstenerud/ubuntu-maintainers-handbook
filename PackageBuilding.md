@@ -45,9 +45,9 @@ From within the package repository:
 
 ### Signing the Changes File
 
-In order for a source package to be accepted by Launchpad, it must be signed. You can sign it manually with `debsign`:
+In order for a source package to be accepted by Launchpad, it must be signed. You can sign it manually with `debsign` (within the package folder):
 
-    debsign $(grep "Source: " debian/control | sed "s/Source: \(.*\)/\1/g")_$(grep "urgency=" debian/changelog|head -1|sed "s/.*(\(.*\)).*/\1/g")_source.changes
+    debsign ../$(grep "Source: " debian/control | sed "s/Source: \(.*\)/\1/g")_$(grep "urgency=" debian/changelog|head -1|sed "s/.*(\(.*\)).*/\1/g")_source.changes
 
 
 
