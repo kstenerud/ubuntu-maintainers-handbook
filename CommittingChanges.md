@@ -38,7 +38,7 @@ Here is a more complex example:
         - d/p/important.patch: Reroute the inertial dampeners
           through the auxiliary power relay. Thanks to Miles O'Brien
           <miles.obrien@ds9.fed>. (LP: #19999999)
-        - d/p/control, d/p/rules: Adjust long range sensor power levels
+        - d/control, d/rules: Adjust long range sensor power levels
           + Increase power input draw from auxiliary power relay.
           + Set scan range to subatomic frequencies.
 ```
