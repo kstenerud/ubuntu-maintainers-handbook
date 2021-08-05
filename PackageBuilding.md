@@ -46,9 +46,9 @@ Even though the recommended way to build a source package is to use a pristine e
 
 ### Signing the Changes File
 
-In order for a source package to be accepted by Launchpad, it must be signed. You can build the sources using `git-ubuntu` with the `--sign` flag, or you can sign it manually with `debsign`:
+In order for a source package to be accepted by Launchpad, it must be signed. You can sign it manually with `debsign` (within the package folder):
 
-    debsign $(grep "Source: " debian/control | sed "s/Source: \(.*\)/\1/g")_$(grep "urgency=" debian/changelog|head -1|sed "s/.*(\(.*\)).*/\1/g")_source.changes
+    debsign ../$(grep "Source: " debian/control | sed "s/Source: \(.*\)/\1/g")_$(grep "urgency=" debian/changelog|head -1|sed "s/.*(\(.*\)).*/\1/g")_source.changes
 
 
 
