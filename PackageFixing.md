@@ -430,7 +430,7 @@ For stable release updates (SRUs), on the other hand, you need to add a bit more
 
 Go back to the bug report (in my case, https://bugs.launchpad.net/ubuntu/+source/postfix/+bug/1753470).
 
-Modify the bug description (yellow pencil icon) and update it to conform with https://wiki.ubuntu.com/StableReleaseUpdates#SRU_Bug_Template  These are normally the [Impact], [Test Case] and [Regression Potential] sections.  It is good practice to make the Test Case section itemized with explicit steps, "paint by numbers" style.  It is also best practice to include both a [Development Fix] and [Stable Fix]; the former explains the situation with the fix in the current development release, while the latter explains your strategy for addressing (or skipping) it in LTS and other stable releases.
+Modify the bug description (yellow pencil icon) and update it to conform with https://wiki.ubuntu.com/StableReleaseUpdates#SRU_Bug_Template  These are normally the [Impact], [Test Case] and [Where problems could occur] sections.  It is good practice to make the Test Case section itemized with explicit steps, "paint by numbers" style.  It is also best practice to include both a [Development Fix] and [Stable Fix]; the former explains the situation with the fix in the current development release, while the latter explains your strategy for addressing (or skipping) it in LTS and other stable releases.
 
 Note: Keep the original description as-is, in a section called `[Original Description]` at the bottom.
 
