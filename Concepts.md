@@ -439,4 +439,4 @@ See Also
 
 https://www.debian.org/doc/debian-policy/
 
-apt install ubuntu-policy 
+apt install ubuntu-policy
