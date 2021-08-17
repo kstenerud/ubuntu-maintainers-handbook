@@ -141,7 +141,11 @@ As with rebuilds, these retriggers also require core-dev permissions, so if you'
 
 ### Test Framework Timeouts and Out of Memory ###
 
-The autopkgtest framework will kill tests that take too long to run.  In some cases it makes sense to just configure autopkgtest to let the test run longer.  This is done by setting the ```long_tests``` option.  Similarly, some tests may need more CPU or memory than in a standard worker.  The ```big_packages``` option directs autopkgtest to run these on workers with more CPU and memory.  Both these options are explained on the [https://wiki.ubuntu.com/ProposedMigration#autopkgtests](ProposedMigration) page.
+The autopkgtest framework will kill tests that take too long to run.  In some cases it makes sense to just configure autopkgtest to let the test run longer.  This is done by setting the ```long_tests``` option.  Similarly, some tests may need more CPU or memory than in a standard worker.  The ```big_packages``` option directs autopkgtest to run these on workers with more CPU and memory.  Both these options and the effective memory/cpu sizes are explained on the [https://wiki.ubuntu.com/ProposedMigration#autopkgtests](ProposedMigration) page.
+It is worth to mention that Debian test sizing is currently (as of 2021) equivalent to our big_packages.
+
+The configuration that associates source packages to either `big_packages` / `long_tests` and the actual deployment code was recently split.
+[The new docs](https://autopkgtest-cloud.readthedocs.io/en/latest/administration.html#give-a-package-more-time-or-more-resources) explain this and link [a repository](https://code.launchpad.net/~ubuntu-release/autopkgtest-cloud/+git/autopkgtest-package-configs) which is now mergeable by any release team member.
 
 
 ### Other Common Issues ###
