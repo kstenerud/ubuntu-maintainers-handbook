@@ -39,6 +39,7 @@ How to perform a sync
 ---------------------
 
 If you have the permissions to upload the package to Ubuntu, you can issue a sync request using the [**syncpackage** tool](http://manpages.ubuntu.com/manpages/impish/man1/syncpackage.1.html) as stated [here](https://wiki.ubuntu.com/SyncRequestProcess#For_people_with_permission_to_upload_the_package_to_Ubuntu).
+To be able to `syncpackage` the package needs to be known to launchpad and there is a slight delay between a Debian upload and the availability to launchpad. You can check the Debian publishing history of a package in `https://launchpad.net/ubuntu/+source/<name_of_the_package>open-vm-tools/+publishinghistory` like for [freeipmi here](https://launchpad.net/ubuntu/+source/freeipmi/+publishinghistory).
 
 For our example case of freeipmi, the sync was done in this way:
 
