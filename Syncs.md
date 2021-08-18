@@ -17,7 +17,7 @@ Why a sync is better?
 In Ubuntu, we have an automated mechanism that synchronizes new versions of a Debian package to
 our Ubuntu series (without Ubuntu delta on top of Debian source package). Such is the case that, if we find a package can become a sync again, it is better to ask for a sync than to deal with manual empty merges.
 
-The syncing packages from Debian automatically is active for only some of the Ubuntu release cycle: [the Debian Import Freeze](https://wiki.ubuntu.com/DebianImportFreeze).
+The automatic syncing of packages from Debian is active for only some of the Ubuntu release cycle: [the Debian Import Freeze](https://wiki.ubuntu.com/DebianImportFreeze).
 
 
 Asking for a sync
@@ -27,8 +27,8 @@ In our case (we have han empty Ubuntu delta before Debian Import Freeze - check 
 
 - Specify that the MP is for a sync request.
 - Write down how did you find it is a sync: changelog entries, step in where the empty commit message appeared, point to upstream git repository, etc ...
-- Change the changelog using *dch -i* for getting new version with *ubuntu1* suffix and check the Ubuntu series for which the package is to be built. The text in that new changelog entry should say "build debian version to verify before a sync".
-- Build the source package as recommended [here](https://github.com/mirespace/ubuntu-maintainers-handbook/blob/master/PackageBuilding.md#using-dpkg-buildpackage) and upload to the PPA you're using in this MP.
+- Change the changelog using *dch -i* to get a new version with *ubuntu1* suffix and check the Ubuntu series for which the package is to be built. The text in that new changelog entry should say "build debian version to verify before a sync".
+- Build the source package as recommended [here](https://github.com/canonical/ubuntu-maintainers-handbook/blob/master/PackageBuilding.md#using-dpkg-buildpackage) and upload to the PPA you're using in this MP.
 
 An example of this situation is [here](https://code.launchpad.net/~mirespace/ubuntu/+source/freeipmi/+git/freeipmi/+merge/407014).
 
@@ -39,8 +39,9 @@ How to perform a sync
 ---------------------
 
 If you have the permissions to upload the package to Ubuntu, you can issue a sync request using the [**syncpackage** tool](http://manpages.ubuntu.com/manpages/impish/man1/syncpackage.1.html) as stated [here](https://wiki.ubuntu.com/SyncRequestProcess#For_people_with_permission_to_upload_the_package_to_Ubuntu).
+To be able to `syncpackage` the package needs to be known to launchpad and there is a slight delay between a Debian upload and the availability to launchpad. You can check the Debian publishing history of a package in `https://launchpad.net/ubuntu/+source/<name_of_the_package>/+publishinghistory` like for [freeipmi here](https://launchpad.net/ubuntu/+source/freeipmi/+publishinghistory).
 
-For the example case we are handling, the freeipmi, the sync was done in this way:
+For our example case of freeipmi, the sync was done in this way:
 
 ```shell
 syncpackage -r impish-proposed -d unstable -v freeipmi --force
