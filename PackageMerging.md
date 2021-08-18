@@ -384,6 +384,10 @@ In such a case, the commit can be dropped.
 
 Keep a copy of the unneeded commit's commit message, then delete it in the rebase.
 
+#### Sync request
+
+If all the commits are empty, or you realized there aren't logical changes, you're facing a **Sync Request**, not a merge anymore. Check [this](Syncs.md) to continue.
+
 #### Check that the patches still apply cleanly:
 
     $ quilt push -a --fuzz=0
