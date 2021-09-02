@@ -52,7 +52,7 @@ You should also work towards understanding some more advanced packaging topics:
   * [Ubuntu's release process](https://wiki.ubuntu.com/UbuntuDevelopment/ReleaseProcess), including the
     [freeze exception process](https://wiki.ubuntu.com/FreezeExceptionProcess)
   * Running [Autopkgtest](PackageTests)
-  * Troubleshooting [https://wiki.ubuntu.com/ProposedMigration](migration of packages) from -proposed
+  * Troubleshooting [migration of packages](https://wiki.ubuntu.com/ProposedMigration) from -proposed
 
 While you may not have direct experience with some or most of these topics, you should at least be conversant in all of them conceptually.
 
