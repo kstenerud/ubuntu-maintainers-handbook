@@ -56,6 +56,8 @@ Process Steps
    - [Other smoke tests](#other-smoke-tests)
  * [Submit Merge Proposal](#submit-merge-proposal)
  * [Follow Migration](#follow-migration)
+ * [Known Issues](#known-issues)
+   - [Empty directories](#empty-directories)
 
 
 
@@ -161,8 +163,23 @@ If `git ubuntu merge start` fails, [do it manually](#start-a-merge-manually)
 Use the merge tracking bug and the ubuntu version it's going into (for example `disco`).
 
     $ git checkout -b merge-lp1802914-disco
-    
+
 If there's no merge bug than the Debian package version you're merging onto can be used (for example `merge-3.1.23-1-disco`)
+
+Sometimes you can notice a message like the following one when making the merge branch:
+
+    $ git checkout -b merge-augeas-mirespace-testing
+    Switched to a new branch 'merge-augeas-mirespace-testing'
+
+    WARNING: empty directories exist but are not tracked by git:
+
+    tests/root/etc/postfix
+    tests/root/etc/xinetd.d/arch
+
+    These will silently disappear on commit, causing extraneous
+    unintended changes. See: LP: #1687057.
+
+These empty directories can cause that the rich history can get lost when uploading them to the archive. Fortunately, [a workaround exists](#empty-directories).
 
 ### Split Commits
 
@@ -791,3 +808,81 @@ Next step: [Check the source for errors](#check-the-source-for-errors)
 Then, create a MP manually in launchpad, and save the URL.
 
 Next step: [Update the merge proposal](#update-the-merge-proposal)
+
+Known Issues
+------------
+
+### Empty directories
+
+We need to use a [python script](https://git.launchpad.net/~racb/usd-importer/plain/wip/emptydirfixup.py?h=emptydirfixup) written by Robie Basak (@racb). Why is it a problem that we get empty dirs?
+
+git's frontend doesn't let you add an empty directory. Usually the workaround is to create any necessary empty directory at build time, or failing that to create a placeholder file like ".empty" and check that in.
+
+Neither of these approaches work for git-ubuntu's importer in the general case. A source package can ship an empty directory by nature of the source package format. But the build system (ie. debian/rules) in the source package expects the source exactly as packed. Just as some builds break if empty directories are missing, other builds might break if empty directories are not actually
+empty.
+
+Internally, git supports empty directories just fine. Directories map to git tree objects. An empty tree object is the obvious way of representing an empty directory, and git seems to accept them if they are represented this way. It's just the git index and front end that do not support them.
+
+In git-ubuntu, we therefore import empty directories "correctly" and losslessly by using empty tree objects as necessary. However when at the client end such a tree is checked out, the empty directories disappear as they pass through the index, and get lost. A subsequent commit made by a developer then gets created from the index, so does not include the empty directories even if they haven't been touched.
+
+This becomes an issue if a such a commit is subsequently presented back to git-ubuntu as rich history to be adopted against an upload. git-ubuntu finds that the upload (with empty directories) doesn't match the rich history commit (with missing empty directories).
+
+This tool restores the empty directories locally as a workaround. It takes a non-merge commit and examines its parent to examine what empty directories have been lost. It provides an equivalent replacement commit.
+
+Run it with "fix-head" to replace HEAD with a commit that has empty directories restored.
+
+Run it with "fix-many" and a parameter pointing to a base commit to run git-rebase to fix a set of commits.
+
+Note that in both cases, the parent must have the empty directories in order for them to be copied down through the fixed up commits. In the common case where this tool is needed, you'll be starting from an "official" git-ubuntu import tag or branch, so this will be true in these cases. However, this does mean that you need to use "fix-many" all the way back to the first commit after such an "official" commit. If you have intermediary un-fixed commits and then
+just try to apply "fix-head" to the end, then it won't work as the empty directories won't get copied forward.
+
+Example of use:
+
+    git ubuntu clone apache2
+    cd apache2
+    git tag -f base
+    <add commits>
+    python3 emptydirfixup.py fix-many base
+    git ubuntu tag --upload
+
+For an entire real case you can follow this workflow:
+
+    # get emptydirfxup script
+    wget -O ../emptydirfixup.py "https://git.launchpad.net/~racb/usd-importer/plain/wip/emptydirfixup.py?h=emptydirfixup"
+
+    # clone as usual
+    git ubuntu clone "${source_package}" "${source_package}-gu"
+    cd "${source_package}-gu/"
+
+    # make the merge branch (here you see the warning message)
+    git checkout "${last_remote}" -b "${branch_name}"
+
+    # tag the base and rebase on ubuntu/devel
+    git tag -f base
+    git checkout ubuntu/devel
+    git rebase base
+
+    # start the merge
+    git ubuntu merge -f start
+
+    #... Merge work as usual ...
+
+    # Workaround LP: #1939747
+    rm .git/hooks/pre-commit
+
+    # finish the merge
+    git ubuntu merge finish pkg/ubuntu/devel debian/sid
+
+    #... Create MP as usual, get reviewed/approved, etc. ...
+
+    # Fix the empty dir set of commits
+    python3 ../emptydirfixup.py fix-many base
+
+    # Build the package
+    debuild -S $(git ubuntu push-for-upload)
+
+    # Uploading
+    git push pkg "upload/${version}"
+    dput ubuntu "${changes_file}"
+
+    #... Done! ...
