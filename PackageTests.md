@@ -11,7 +11,7 @@ Preparing a Testing Image
 
 You'll need an image to test from. `autopkgtest` will build a suitable image for you. You may want to regenerate the image from time to time to cut down on the number of updates it must run.
 
-The type of image you can use (chroot, container, or VM) depends on the restrictions in `debian/tests/control`(see https://people.debian.org/~mpitt/autopkgtest/README.package-tests.html)
+The type of image you can use (chroot, container, or VM) depends on the restrictions in `debian/tests/control`(see https://salsa.debian.org/ci-team/autopkgtest/-/blob/master/doc/README.package-tests.rst)
 
 Important restrictions:
 

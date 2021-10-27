@@ -180,7 +180,7 @@ we might:
 In some cases a package maintainer might already be aware and follow a case.
 To avoid endless re-pings on such a case the agreement is that if the maintainer
 is personally subscribed (i.e. with his launchpad user, not just indirectly via
-teams like [Ubuntu storage interest](https://launchpad.net/~ubuntu-storage))
+teams like [Ubuntu Virtualisation](https://launchpad.net/~ubuntu-virt))
 then we consider the maintainer to be aware and will not do extra
 pings/mentions/CC.
 

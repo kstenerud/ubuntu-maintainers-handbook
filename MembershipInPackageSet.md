@@ -35,7 +35,7 @@ We're going to describe an idealized training program here, however no applicati
 
 Ideally, you should have a solid mastery of the [basic packaging skills](https://packaging.ubuntu.com/html/) for Debian/Ubuntu distributions, including the following:
 
-  * [Fixing bugs in packages](PackageFixing)
+  * [Fixing bugs in packages](PackageFixing.md)
   * Building binary packages from source using sbuild or debuild in a chroot or lxc environment
   * Creating the initial packaging for new software
   * Merging updates from Debian
@@ -51,7 +51,7 @@ You should also work towards understanding some more advanced packaging topics:
   * [Debian policy](http://www.debian.org/doc/debian-policy/)
   * [Ubuntu's release process](https://wiki.ubuntu.com/UbuntuDevelopment/ReleaseProcess), including the
     [freeze exception process](https://wiki.ubuntu.com/FreezeExceptionProcess)
-  * Running [Autopkgtest](PackageTests)
+  * Running [Autopkgtest](PackageTests.md)
   * Troubleshooting [migration of packages](https://wiki.ubuntu.com/ProposedMigration) from -proposed
 
 While you may not have direct experience with some or most of these topics, you should at least be conversant in all of them conceptually.

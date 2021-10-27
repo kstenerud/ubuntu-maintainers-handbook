@@ -101,7 +101,7 @@ It is also helpful to enable all architectures to ensure no build regressions we
 
     $ dput ppa:kstenerud/postfix-sru-lp1753470-segfault ../bionic-postfix_3.3.0-1ubuntu0.1~ppa1_source.changes
 
-When it finishes, you should be able to see it e.g. https://launchpad.net/~kstenerud/+archive/ubuntu/postfix-sru-lp1753470-segfault/+packages
+When it finishes, you should be able to see it e.g. https://launchpad.net/~kstenerud/+archive/ubuntu/postfix-postconf-segfault-1753470/+packages
 
 Note: You must wait for the package to build server-side before you can use the PPA to install packages. This might take time depending on how busy things are!
 Launchpad also sends status updates notification mails, so monitor your inbox.
