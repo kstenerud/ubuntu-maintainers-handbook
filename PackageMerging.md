@@ -537,7 +537,7 @@ You'll need to have a PPA for reviewers to test.
 
 #### Create a PPA repository
 
-https://launchpad.net/~kstenerud/+activate-ppa
+https://launchpad.net/~your-username/+activate-ppa
 
 Give it a name that identifies the ubuntu version, package name, and bug number, such as `at-merge-lp1802914`
 
@@ -549,9 +549,9 @@ Give it a name that identifies the ubuntu version, package name, and bug number,
 
 #### Wait for packages to be ready
 
-Check the PPA page to see when packages are finished building: https://launchpad.net/~kstenerud/+archive/ubuntu/at-merge-lp1802914
+Check the PPA page to see when packages are finished building: https://launchpad.net/~kstenerud/+archive/ubuntu/disco-at-merge-1802914
 
-Also, look at the package contents to make sure they have actually been published: https://launchpad.net/~kstenerud/+archive/ubuntu/at-merge-lp1802914/+packages
+Also, look at the package contents to make sure they have actually been published: https://launchpad.net/~kstenerud/+archive/ubuntu/disco-at-merge-1802914/+packages
 
 
 
@@ -634,7 +634,7 @@ NOTE: Git branch with % in name doesn't work. Use something like _
 
 Example:
 
-    PPA: https://launchpad.net/~kstenerud/+archive/ubuntu/at-merge-lp1802914
+    PPA: https://launchpad.net/~kstenerud/+archive/ubuntu/disco-at-merge-1802914
 
     Basic test:
 
@@ -660,7 +660,7 @@ Once the merge proposal goes through, you must follow the package to make sure i
 
 The results from the latest package tests will be published for each ubuntu release.
 
-For example: http://autopkgtest.ubuntu.com/packages/o/openssh/cosmic/amd64
+For example: http://autopkgtest.ubuntu.com/packages/o/openssh/focal/amd64
 
 ### Proposed Migration
 

@@ -6,7 +6,7 @@ In this tutorial we walk through the process of evaluating a bug, finding a fix 
 Required Reading
 ----------------
 
- * https://blog.ubuntu.com/2017/08/09/git-ubuntu-clone
+ * https://ubuntu.com/blog/git-ubuntu-clone
  * http://dep.debian.net/deps/dep3
  * https://wiki.ubuntu.com/SecurityTeam/UpdatePreparation
  * https://wiki.ubuntu.com/StableReleaseUpdates
@@ -339,7 +339,7 @@ If the only changes you made are within the debian subdir, you don't need a patc
 
 On the other hand, if you've made changes to the upstream code (anything outside of the debian directory), you'll need to generate a patch in debian/patches.
 
-See [Making a Patchfile](DebianPatch)
+See [Making a Patchfile](DebianPatch.md)
 
 
 #### Step 5: Commit the patch
