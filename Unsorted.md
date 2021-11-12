@@ -1,9 +1,6 @@
 Unsorted Notes
 --------------
 
-https://code.launchpad.net/~ubuntu-release/britney/hints-ubuntu
-https://code.launchpad.net/~ubuntu-sru/britney/hints-ubuntu-cosmic
-
 These repos determine which failing tests are to be ignored. Example:
 
     ubuntu-release:64:force-badtest gvfs/1.36.1-0ubuntu3/ppc64el gvfs/1.36.1-0ubuntu3/s390x gvfs/1.38.0-2ubuntu2/s390

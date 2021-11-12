@@ -164,6 +164,15 @@ File a MP against it with a description indicating the lp bug#, rationale for wh
 
 Reviewers should be 'canonical-server', 'ubuntu-release', and any archive admins or foundations team members you've discussed the issue with.
 
+Please be aware that some old docs or habits might mislead you.
+The most common hint used to be "force-badtest" to mark one bad, which
+was superseded by the more useful 'force-reset' allowing results to come
+back to be good without further action on the hints.
+But even that recently got replaced by `migration-reference/0`.
+It essentially allows the functionality of `force-reset` without needing
+to bother the release team.
+See [here for details](https://lists.ubuntu.com/archives/ubuntu-devel/2021-November/041663.html).
+
 
 Excuse Glossary
 ---------------
