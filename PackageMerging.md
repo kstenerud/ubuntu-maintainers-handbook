@@ -507,7 +507,7 @@ The switches are:
 
  * -S = build source only
  * -nc = no clean
- * -d = ?
+ * -d = do not check build dependencies and conflicts
  * -sa = include orig tarball (required on a merge)
  * -vXYZ = include changelog since XYZ
 
