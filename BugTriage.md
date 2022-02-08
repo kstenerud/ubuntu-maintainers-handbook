@@ -138,6 +138,11 @@ handled in different ways:
 * Already Fixed Upstream.
   - Make sure steps to reproduce it are identified
 
+* If in doubt or none of the above applies consider bringing it up via
+  chat or if looking for a group discussion and decision tag it
+  `server-triage-discuss`. Those bugs we will try to resolve together
+  in our weekly meeting.
+
 
 Add to Server-Next Queue
 ------------------------
