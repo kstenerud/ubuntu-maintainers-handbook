@@ -1,5 +1,4 @@
-Bug Triage
-==========
+# Bug Triage
 
 New bugs get reported every day, and existing tickets in Launchpad get
 updated with comments, patches, and status changes.  The triager's job
@@ -25,8 +24,7 @@ through their normal workflow. But watch for comments providing new
 information that may make the issue more actionable.
 
 
-Types of Issue Tickets
-----------------------
+## Types of Issue Tickets
 
 Items in the triaging queue tend to fall into a few categories, that are
 handled in different ways:
@@ -163,25 +161,78 @@ handled in different ways:
   in our weekly meeting.
 
 
-Add to Server-Next Queue
-------------------------
+## Process and Policy
 
-In Launchpad, adding a tag 'server-next' puts the issue onto the server
-team's main work list.
+### Direct team subscriptions
 
-Since this is a main source of work for the team, only add issues that
-are important and that can (and should) be fixed soon.  The issues
-should have enough information to be worked on, and it's either a major
-use case for Ubuntu server users or work on it will likely stimulate
-more community contributions.
+We subscribe *~ubuntu-server* directly to a bug to track our community bug backlog when the bug meets the following criteria.
+When the bug no longer meets these criteria, we unsubscribe it:
 
-The specific policy for classifying server-next bugs is described in the
-wiki (https://wiki.ubuntu.com/ServerTeam).
+1. Anything that, if the bug turns out to valid, is something that would be under the *~ubuntu-server* remit to fix (common use
+   cases but not obscure ones - but nothing stops an individual volunteering to work on an obscure use case, of course).
+2. By definition, if it's something that we wouldn't fix and request volunteers even if we had time, then it doesn't warrant a
+   subscription.
+3. This subscription is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests.   
+   Whether a Canonical customer has made a request in relation to a particular bug makes no difference and provides no
+   additional priority under this process. A Canonical customer bug may still be subscribed if it qualifies under these
+   criteria.
+4. If the bug is assigned to someone on our team, leave it subscribed. No need to subscribe, and feel free to unsubscribe.
+
+### tagging `server-next`
+
+Since the backlog is bigger than what can be achieved in a short time, there is the extra classification via the tag
+`server-next`. That tag is set by the Triager (or anyone else working on doing the Root-Cause-Analysis or a Fix) to
+reflect that this is an issue that shall be tackled by the Teams resources "next".
+
+Another reason to add `server-next` in some cases is to preserve high quality contributions of the community. An example might be a report that the user already bisected and created a patch for - in those cases the benefit diminishes by bit rot way too fast, so handling that next helps to retain the work the reporters did. And vice versa it might encourage one or the other to provide more high quality bugs.
+
+The goal is to have this list around ~20 bugs most of the time, if dropping below we can refill with candidates from the *~ubuntu-server* subscribed bugs. But if it grows significantly out of this range it is non-realistic to expect those issues to be handled in time, we should communicate so to the reporters.
+
+The rules of the `server-next` tag are as follows:
+
+1. Must not tag unless bug is actionable. Doesn't mean it must have a patch, only that a developer has enough information to
+   work on the bug, even if it means more debugging.
+2. Tag only if one of these two things are true:
+    1. Delays will discourage this excellent community contribution.
+    2. If you believe it affects a major use case for Ubuntu server users. In this case you should also set the bug Importance.
+3. The set of all bugs tagged `server-next` must be kept small. If it grows, the lowest priority bugs tagged `server-next` must
+   be removed until the list isn’t too big.
+4. This tag is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests. Whether a
+   Canonical customer has made a request in relation to a particular bug makes no difference and provides no additional priority
+   under this process. A Canonical customer bug may still be tagged if it qualifies under these criteria.
+5. If the bug is assigned to or otherwise owned by someone on our team, there is no need to tag it.
+6. Remove the tag when the bug is assigned to or otherwise owned by someone on our team.
+
+### Daily Bug Expiration
+
+There are two levels of expiration. The tooling will help to report these to the Triager.
+
+* **Server-next expiration** - default after **60 days**  
+  If we considered a bug actionable and added it to server-next, but then no update happened in 60 days that usually means
+  something went wrong. Often bugs are blocked on external constraints. This needs to be evaluated as a case-by-case decision.
+  Most common cases are, that it turns out:
+    * that the bug is not solvable/reasonable the way it was planned -> re-triage, maybe drop server-next.
+    * that it is actually fixed or otherwise progressed without update -> update bug
+    * that we failed to give it the required focus -> add the server-triage-discuss tag to the bug and bring it in the next 
+      standup
+
+* **Server subscription expiration** - default after **180 days**  
+  If nobody touched a bug for 180 days (~= 1 release cycle) it is reasonable to check for changed conditions. Quite often e.g.
+  a patch one was waiting on is available now. In other cases a newer release fixed it already. Essentially anything that is
+  listed here needs to be fully re-triaged to ensure the list is reflecting the current status. It also can after this time be
+  used as a metric how many more people chimed in got dupped on the bug (importance/#affected). Most common cases are, that it
+  turns out:
+    * that recent releases upstream or even already in Ubuntu have the fix -> re-triage, consider tagging `server-next` for SRU
+    * that the bug should have been supported by the community but nothing happened -> re-triage importance, consider dropping
+      *~ubuntu-server* subscription
+    * that a bug that was formerly considered a real case is not qualifying anymore (e.g. alternative solutions
+      have taken hold as *the* way to do it) -> re-triage importance, consider dropping *~ubuntu-server* subscription
+    * If unsure, add the server-triage-discuss tag and bring it up at the next standup
+
+Overall for all of these we have to be honest to the bug reporter, try to understand why an issue was not worked on and explain it if possible. Also if we drop `server-next` or the *~ubuntu-server* subscrription for any of the reasons above always add a explanatory comment. If reporters disagree with our re-triage they will report on the bug and it will show up in the daily triage duty the next day to be reconsidered with that point of view taken into consideration.
 
 
-
-Awareness of the Triage
------------------------
+## Awareness of the Triage
 
 We have several stakeholders we want to keep up-to-date on things that
 we've found on triage. On one hand we want to keep the community generally
@@ -209,8 +260,7 @@ then we consider the maintainer to be aware and will not do extra
 pings/mentions/CC.
 
 
-Triage Rotation
----------------
+## Triage Rotation
 
 According to load we might shift things, but generally every day Tue-Fri
 has a team member assigned. Monday is often more work and includes more
@@ -219,8 +269,7 @@ a rotation through all eligible bug triagers.
 This is organized internally int he teams Jira and automation will create
 a Task with the "bug-triage" label assigned to the person on rotation.
 
-Tooling
--------
+## Tooling
 
 The [ustriage](https://snapcraft.io/ustriage) tool is available as a snap
 and serves as the tool a triager would use. It is maintained publicly on github
