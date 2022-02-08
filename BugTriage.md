@@ -216,6 +216,5 @@ According to load we might shift things, but generally every day Tue-Fri
 has a team member assigned. Monday is often more work and includes more
 low quality bugs as it includes all of the weekend - therefore Monday is
 a rotation through all eligible bug triagers.
-This is organized in our "Daily Ubuntu Server" board. The regular cards are
-created via the "Repeat" power-up. If one needs to change the templates that
-it copies from search for `is:archived label:origin` to find them.
+This is organized internally int he teams Jira and automation will create
+a Task with the "bug-triage" label assigned to the person on rotation.
