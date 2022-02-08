@@ -160,6 +160,23 @@ handled in different ways:
   `server-triage-discuss`. Those bugs we will try to resolve together
   in our weekly meeting.
 
+### Special cases
+
+A few of our packages have common issue patterns or best practise triaging actions. This section shall
+list them so that anyone on triage duty can find all of it in one place.
+
+* Mysql  
+  MySQL often has low quality bug reports by users not fully aware which dependency brought it onto their system.
+  Those often fall into a few common usage errors.  
+  Furthermore there are a few long standing issues that affect many users but often are reported as new.
+    * Due to that we've found that quite often as a first step in triaging mysql one might want to check for duplicates.
+        * In the days of mysql-5.7 (Xenial/Bionic) we tagged the common core bugs that one would dup new bugs to, those are
+          available as (mysql-5.7 triage tag](https://bugs.launchpad.net/ubuntu/+source/mysql-5.7/+bugs?&field.tag=triage)
+        * Since mysql-8.0 we no more use that tag, instead it turned out to be more reliable to just look at recent
+          [mysql-8.0 bugs by heat](https://bugs.launchpad.net/ubuntu/+source/mysql-8.0/+bugs?orderby=-heat&start=0) to spot the
+          duplication candidates
+    * If not a duplicate, then still please update the bug title from the usual apport "failed on postinst" to whatever the bug
+      really is about for better recognizing the issue in any kind of overview that just lists the title.
 
 ## Process and Policy
 
