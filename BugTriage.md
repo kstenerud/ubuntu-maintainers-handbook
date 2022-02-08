@@ -203,6 +203,32 @@ The rules of the `server-next` tag are as follows:
 5. If the bug is assigned to or otherwise owned by someone on our team, there is no need to tag it.
 6. Remove the tag when the bug is assigned to or otherwise owned by someone on our team.
 
+### tagging `server-todo`
+
+This is our new tag we use from now on to represent valid and work we should do (better than just backlog),
+but not as important/easy/urgent as `server-next`
+
+We want to assign bugs from this queue as well, just not as urgently/desperately:
+
+Definition to qualify for server-todo:
+
+* Whatever we think that we want to work on soon. For example:
+    * An important new technology for Ubuntu-Server users
+    * Great community engagement that provide debugging and patches, but might be too unimportant for `server-next`
+    * OTOH we don’t want to put in bugs where the next step is significantly larger than one day to complete, unless the bug
+      is particularly important. Examples:
+        * A feature that is Ubuntu only and important for our users -> ok to be in the list despite likely needing more time
+        * A valid crash report, but being a corner case and having just one affected user; All low hanging fruits and obvious
+          checks are done, therefore the next debug step is estimated to take at least a week -> this might be ok for the
+          backlog, but not really for `server-todo`
+    * Make sure it is clear if the bug needs work in development or needs SRUs, by defining bug tasks accordingly.
+      (These bug tasks can help in identifying current vs. obsolete bugs.)
+* As with `server-next` we want to limit the number of all bugs tagged with this at ~40
+    * If we exceed the size, drop the oldest/least recently touched ones
+* These bugs are not necesarily assigned/progressing at all time, but available for anyone from the team to grab
+* Only bugs that qualify for the backlog qualify here. If they aren’t suitable for the backlog (eg. not actionable by us)
+  then they get dropped from both `server-todo` and the backlog.
+
 ### Daily Bug Expiration
 
 There are two levels of expiration. The tooling will help to report these to the Triager.
