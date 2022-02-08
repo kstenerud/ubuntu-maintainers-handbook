@@ -135,8 +135,14 @@ handled in different ways:
     determine which supported Ubuntu releases will need the fix and add
     Bug Tasks as appropriate.
 
-* Already Fixed Upstream.
-  - Make sure steps to reproduce it are identified
+* Already Fixed Upstream.  All the steps of the "already fixed in Debian" category above apply,
+  here as well - in addition when appropriate ensure to help Debian as
+  well by:
+  - filing a Debian bug about it or chime in if there is an existing one
+  - If your create a PR for Ubuntu that can be uses almost as-is consider
+    sending one via salsa as well
+  - Aligning our solution with Debian not only is kind, but additionally
+    helps to avoid long term complex divergence and delta
 
 * If in doubt or none of the above applies consider bringing it up via
   chat or if looking for a group discussion and decision tag it
