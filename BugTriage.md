@@ -21,7 +21,7 @@ it's set to a more appropriate state with a comment explaining why, and
 what next actions are, if any.
 
 Older issues generally require no triager action if they're progressing
-through their normal workflow.  But watch for comments providing new
+through their normal workflow. But watch for comments providing new
 information that may make the issue more actionable.
 
 
