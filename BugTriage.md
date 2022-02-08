@@ -218,3 +218,14 @@ low quality bugs as it includes all of the weekend - therefore Monday is
 a rotation through all eligible bug triagers.
 This is organized internally int he teams Jira and automation will create
 a Task with the "bug-triage" label assigned to the person on rotation.
+
+Tooling
+-------
+
+The [ustriage](https://snapcraft.io/ustriage) tool is available as a snap
+and serves as the tool a triager would use. It is maintained publicly on github
+as [ubuntu server triage](https://github.com/canonical/ubuntu-server-triage).
+It has options to identify bugs for the triage of the day as well as serving
+as a helper to check our tagged bugs ensuring that nothing falls through the
+cracks. The Readme.md of the linked project has some more details and use
+case example.
