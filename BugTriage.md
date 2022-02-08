@@ -80,9 +80,8 @@ handled in different ways:
   user for what's needed, set the ticket to "Incomplete" due to 'Not
   Enough Info.'
 
-* Duplicate.
-  - If the issue is clearly the same as another report, mark one as
-    duplicate of the better reported (or older) issue.
+* Duplicate.  If the issue is clearly the same as another report
+  - mark one as duplicate of the better reported (or older) issue.
   - If there are existing tickets that sound very similar, make sure
     they are mentioned in a comment.  Ask the reporter(s) to review
     those and identify if it is indeed a dupe, or if not to then
