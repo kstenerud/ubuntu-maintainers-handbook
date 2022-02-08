@@ -795,7 +795,7 @@ Next step: [Fix the Changelog](#fix-the-changelog)
     $ git checkout merge-lp1802914-disco
     $ cd /tmp
     $ pull-debian-source at
-    $ mv at_3.1.23.orig.tar.gz ~/work/packages/ubuntu/
+    $ mv at_3.1.23.orig.tar.gz{,.asc} ~/work/packages/ubuntu/
     $ cd -
 
 Next step: [Check the source for errors](#check-the-source-for-errors)
