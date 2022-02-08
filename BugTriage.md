@@ -178,6 +178,11 @@ list them so that anyone on triage duty can find all of it in one place.
     * If not a duplicate, then still please update the bug title from the usual apport "failed on postinst" to whatever the bug
       really is about for better recognizing the issue in any kind of overview that just lists the title.
 
+* Virtualization controlled through libvirt  
+  If these reports are about the inability to access devices or *permission denied* issues the user often does not realize that
+  libvirt applies an apparmor profile to the guest for enhanced security. If not available in the bug report (dmesg of the time
+  of occurance) please make sure to ask to check for apparmor denials at the time the problem triggers.
+
 ## Process and Policy
 
 ### Direct team subscriptions
