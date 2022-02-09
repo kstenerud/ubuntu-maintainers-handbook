@@ -146,10 +146,9 @@ handled in different ways:
 
 * Already Fixed Upstream.  
   All the steps of the "already fixed in Debian" category above apply,
-  here as well - in addition when appropriate ensure to help Debian as
-  well by:
+  here as well -  in addition, help Debian when appropriate by:
   - filing a Debian bug about it or chime in if there is an existing one
-  - If your create a PR for Ubuntu that can be uses almost as-is consider
+  - If you create a PR for Ubuntu that can be used almost as-is consider
     sending one via salsa as well
   - Aligning our solution with Debian not only is kind, but additionally
     helps to avoid long term complex divergence and delta
@@ -190,7 +189,7 @@ list them so that anyone on triage duty can find all of it in one place.
 We subscribe *~ubuntu-server* directly to a bug to track our community bug backlog when the bug meets the following criteria.
 When the bug no longer meets these criteria, we unsubscribe it:
 
-1. Anything that, if the bug turns out to valid, is something that would be under the *~ubuntu-server* remit to fix (common use
+1. Anything that, if the bug turns out to be valid, is something that would be under the *~ubuntu-server* remit to fix (common use
    cases but not obscure ones - but nothing stops an individual volunteering to work on an obscure use case, of course).
 2. By definition, if it's something that we wouldn't fix and request volunteers even if we had time, then it doesn't warrant a
    subscription.
@@ -198,7 +197,7 @@ When the bug no longer meets these criteria, we unsubscribe it:
    Whether a Canonical customer has made a request in relation to a particular bug makes no difference and provides no
    additional priority under this process. A Canonical customer bug may still be subscribed if it qualifies under these
    criteria.
-4. If the bug is assigned to someone on our team, leave it subscribed. No need to subscribe, and feel free to unsubscribe.
+4. If the bug is assigned to someone on our team, leave it subscribed. No need to subscribe, and feel free to unsubscribe the team.
 
 ### tagging `server-next`
 
@@ -314,7 +313,7 @@ According to load we might shift things, but generally every day Tue-Fri
 has a team member assigned. Monday is often more work and includes more
 low quality bugs as it includes all of the weekend - therefore Monday is
 a rotation through all eligible bug triagers.
-This is organized internally int he teams Jira and automation will create
+This is organized internally in the teams Jira and automation will create
 a Task with the "bug-triage" label assigned to the person on rotation.
 
 ## Tooling
