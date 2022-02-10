@@ -1,5 +1,4 @@
-Bug Triage
-==========
+# Bug Triage
 
 New bugs get reported every day, and existing tickets in Launchpad get
 updated with comments, patches, and status changes.  The triager's job
@@ -21,17 +20,17 @@ it's set to a more appropriate state with a comment explaining why, and
 what next actions are, if any.
 
 Older issues generally require no triager action if they're progressing
-through their normal workflow.  But watch for comments providing new
+through their normal workflow. But watch for comments providing new
 information that may make the issue more actionable.
 
 
-Types of Issue Tickets
-----------------------
+## Types of Issue Tickets
 
 Items in the triaging queue tend to fall into a few categories, that are
 handled in different ways:
 
-* Process Tickets.  Bug reports are often used to track status of
+* Process Tickets.  
+  Bug reports are often used to track status of
   packaging workflow tasks:
 
   - Sync requests
@@ -44,9 +43,14 @@ handled in different ways:
   These will generally either be filed by or assigned to a team member;
   if not, investigate further.  Generally, for properly owned tickets
   'No action is required' by the triager, unless something unusually
-  weird is going on in which case 'Raise with the Team'.
+  weird is going on in which case 'Raise with the Team' (that *raising* can
+  be "bringing it up in post-standup", "bringing it up in the weekly bug
+  meeting" or "bringing it up in a chat channel pinging related developers"
+  TL;DR do not stay alone with the weirdness - group experience and group
+  decisions win).
 
-* SRU Regression Bugs.  Problems that look like the result of an SRU
+* SRU Regression Bugs.  
+  Problems that look like the result of an SRU
   update to a server package need to receive top priority.  For such
   bugs, 'Add to Server-Next Queue' and 'Raise with the Team'.  If
   possible, verify rolling back to the prior version of the package
@@ -59,36 +63,41 @@ handled in different ways:
   notices the problem and files a bug, thinking it was the update that
   introduced it.
 
-* Severe Bugs.  Urgently important issues such as ones with potential
+* Severe Bugs.  
+  Urgently important issues such as ones with potential
   for widespread breakage, should immediately 'Add to Server-Next
   Queue'.
 
-* High Profile Bugs.  Issues which involve an important customer or VIP,
+* High Profile Bugs.  
+  Issues which involve an important customer or VIP,
   or that turn up frequently in search results, can generate a lot of
   "repeat visits" so to speak.  Just 'Raise issue with the team', unless
   its already well known in which case 'No action required' by the
   triager.
 
-* Support Requests.  Sometimes users report problems that are really
+* Support Requests.  
+  Sometimes users report problems that are really
   just a misunderstanding of how to use their system.  Kindly redirect
   them to more appropriate venues for help, and/or lend any obvious
   advice, but otherwise close the ticket as "Invalid" due to being 'Not
   a Bug'.
 
-* Unclear.  If the ticket is missing log files, version details, or
+* Unclear.  
+  If the ticket is missing log files, version details, or
   other information necessary to decide how to handle the bug, ask the
   user for what's needed, set the ticket to "Incomplete" due to 'Not
   Enough Info.'
 
-* Duplicate.
-  - If the issue is clearly the same as another report, mark one as
-    duplicate of the better reported (or older) issue.
+* Duplicate.  
+  If the issue is clearly the same as another report
+  - mark one as duplicate of the better reported (or older) issue.
   - If there are existing tickets that sound very similar, make sure
     they are mentioned in a comment.  Ask the reporter(s) to review
     those and identify if it is indeed a dupe, or if not to then
     elaborate on how this new one differs.
 
-* Non-actionable Comment.  If an existing ticket pops up in the queue due
+* Non-actionable Comment.  
+  If an existing ticket pops up in the queue due
   to a comment, check if it is adding information.
   - If it's just noise (e.g. "me too!"), 'No action is required' by the
     triager.
@@ -98,17 +107,20 @@ handled in different ways:
   - Otherwise suggest logical next steps, to put current interest to
     work at helping the bug make forward progress.
 
-* Unreproducible Bug.  If the issue can't be reproduced (e.g. in an lxc
+* Unreproducible Bug.  
+  If the issue can't be reproduced (e.g. in an lxc
   container) then request the reporter provide the 'Missing Steps to
   Reproduce' it.
 
-* Reproducible Bug.  If there seems to be enough information to
+* Reproducible Bug.  
+  If there seems to be enough information to
   reproduce the bug, try to do so in an lxc container, and then itemize
   the steps to follow, and how to identify that the bug has indeed
   occurred.  If it all looks good, subscribe the server team, or if the
   issue looks urgent and/or important 'Add to Server-Next Queue'.
 
-* Already Fixed in Development.  An issue that can be reproduced in a
+* Already Fixed in Development.  
+  An issue that can be reproduced in a
   supported Ubuntu release, but not in the current development version
   of Ubuntu, may qualify for SRU processing.
   - Make sure the reproduction steps are clearly outlined
@@ -124,40 +136,160 @@ handled in different ways:
     leave the main task *open* in this case because otherwise Launchpad
     may not display it in reports and lists.
 
-* Already Fixed in Debian.  If the issue has been solved in Debian, it
+* Already Fixed in Debian.  
+  If the issue has been solved in Debian, it
   will likely be worth merging and/or sru'ing the fix.
   - Make sure steps to reproduce it are identified.
   - If the issue affects the development release, it is a merge
     opportunity.  If past feature-freeze, decide if is it worth a freeze
-    exception.  Make sure there is a Trello card on the merges board for
-    the package, and 'Add to Server-Next Queue'.
+    exception.  Make sure there is a merge bug in launchpad for
+    the package, and consider to Add to Server-Next/Server-Todo Queue.
   - If the issue affects a stable release and looks SRU-worthy,
     determine which supported Ubuntu releases will need the fix and add
     Bug Tasks as appropriate.
 
-* Already Fixed Upstream.
-  - Make sure steps to reproduce it are identified
+* Already Fixed Upstream.  
+  All the steps of the "already fixed in Debian" category above apply,
+  here as well -  in addition, help Debian when appropriate by:
+  - filing a Debian bug about it or chime in if there is an existing one
+  - If you create a PR for Ubuntu that can be used almost as-is consider
+    sending one via salsa as well
+  - Aligning our solution with Debian not only is kind, but additionally
+    helps to avoid long term complex divergence and delta
+
+* Unclear.  
+  If in doubt or none of the above applies consider bringing it up via
+  chat or if looking for a group discussion and decision tag it
+  `server-triage-discuss`. Those bugs we will try to resolve together
+  in our weekly meeting.
+
+### Special cases
+
+A few of our packages have common issue patterns or best practise triaging actions. This section shall
+list them so that anyone on triage duty can find all of it in one place.
+
+* Mysql  
+  MySQL often has low quality bug reports by users not fully aware which dependency brought it onto their system.
+  Those often fall into a few common usage errors.  
+  Furthermore there are a few long standing issues that affect many users but often are reported as new.
+    * Due to that we've found that quite often as a first step in triaging mysql one might want to check for duplicates.
+        * In the days of mysql-5.7 (Xenial/Bionic) we tagged the common core bugs that one would dup new bugs to, those are
+          available as (mysql-5.7 triage tag](https://bugs.launchpad.net/ubuntu/+source/mysql-5.7/+bugs?&field.tag=triage)
+        * Since mysql-8.0 we no more use that tag, instead it turned out to be more reliable to just look at recent
+          [mysql-8.0 bugs by heat](https://bugs.launchpad.net/ubuntu/+source/mysql-8.0/+bugs?orderby=-heat&start=0) to spot the
+          duplication candidates
+    * If not a duplicate, then still please update the bug title from the usual apport "failed on postinst" to whatever the bug
+      really is about for better recognizing the issue in any kind of overview that just lists the title.
+
+* Virtualization controlled through libvirt  
+  If these reports are about the inability to access devices or *permission denied* issues the user often does not realize that
+  libvirt applies an apparmor profile to the guest for enhanced security. If not available in the bug report (dmesg of the time
+  of occurance) please make sure to ask to check for apparmor denials at the time the problem triggers.
+
+## Process and Policy
+
+### Direct team subscriptions
+
+We subscribe *~ubuntu-server* directly to a bug to track our community bug backlog when the bug meets the following criteria.
+When the bug no longer meets these criteria, we unsubscribe it:
+
+1. Anything that, if the bug turns out to be valid, is something that would be under the *~ubuntu-server* remit to fix (common use
+   cases but not obscure ones - but nothing stops an individual volunteering to work on an obscure use case, of course).
+2. By definition, if it's something that we wouldn't fix and request volunteers even if we had time, then it doesn't warrant a
+   subscription.
+3. This subscription is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests.   
+   Whether a Canonical customer has made a request in relation to a particular bug makes no difference and provides no
+   additional priority under this process. A Canonical customer bug may still be subscribed if it qualifies under these
+   criteria.
+4. If the bug is assigned to someone on our team, leave it subscribed. No need to subscribe, and feel free to unsubscribe the team.
+
+### tagging `server-next`
+
+Since the backlog is bigger than what can be achieved in a short time, there is the extra classification via the tag
+`server-next`. That tag is set by the Triager (or anyone else working on doing the Root-Cause-Analysis or a Fix) to
+reflect that this is an issue that shall be tackled by the Teams resources "next".
+
+Another reason to add `server-next` in some cases is to preserve high quality contributions of the community. An example might be a report that the user already bisected and created a patch for - in those cases the benefit diminishes by bit rot way too fast, so handling that next helps to retain the work the reporters did. And vice versa it might encourage one or the other to provide more high quality bugs.
+
+The goal is to have this list around ~20 bugs most of the time, if dropping below we can refill with candidates from the *~ubuntu-server* subscribed bugs. But if it grows significantly out of this range it is non-realistic to expect those issues to be handled in time, we should communicate so to the reporters.
+
+The rules of the `server-next` tag are as follows:
+
+1. Must not tag unless bug is actionable. Doesn't mean it must have a patch, only that a developer has enough information to
+   work on the bug, even if it means more debugging.
+2. Tag only if one of these two things are true:
+    1. Delays will discourage this excellent community contribution.
+    2. If you believe it affects a major use case for Ubuntu server users. In this case you should also set the bug Importance.
+3. The set of all bugs tagged `server-next` must be kept small. If it grows, the lowest priority bugs tagged `server-next` must
+   be removed until the list isn’t too big.
+4. This tag is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests. Whether a
+   Canonical customer has made a request in relation to a particular bug makes no difference and provides no additional priority
+   under this process. A Canonical customer bug may still be tagged if it qualifies under these criteria.
+5. If the bug is assigned to or otherwise owned by someone on our team, there is no need to tag it.
+6. Remove the tag when the bug is assigned to or otherwise owned by someone on our team.
+
+### tagging `server-todo`
+
+This is our new tag we use from now on to represent valid and work we should do (better than just backlog),
+but not as important/easy/urgent as `server-next`
+
+We want to assign bugs from this queue as well, just not as urgently/desperately:
+
+Definition to qualify for server-todo:
+
+* Whatever we think that we want to work on soon. For example:
+    * An important new technology for Ubuntu-Server users
+    * Great community engagement that provide debugging and patches, but might be too unimportant for `server-next`
+    * OTOH we don’t want to put in bugs where the next step is significantly larger than one day to complete, unless the bug
+      is particularly important. Examples:
+        * A feature that is Ubuntu only and important for our users -> ok to be in the list despite likely needing more time
+        * A valid crash report, but being a corner case and having just one affected user; All low hanging fruits and obvious
+          checks are done, therefore the next debug step is estimated to take at least a week -> this might be ok for the
+          backlog, but not really for `server-todo`
+    * Make sure it is clear if the bug needs work in development or needs SRUs, by defining bug tasks accordingly.
+      (These bug tasks can help in identifying current vs. obsolete bugs.)
+* As with `server-next` we want to limit the number of all bugs tagged with this at ~40
+    * If we exceed the size, drop the oldest/least recently touched ones
+* These bugs are not necesarily assigned/progressing at all time, but available for anyone from the team to grab
+* Only bugs that qualify for the backlog qualify here. If they aren’t suitable for the backlog (eg. not actionable by us)
+  then they get dropped from both `server-todo` and the backlog.
+
+### Daily Bug Expiration
+
+There are two levels of expiration. The tooling will help to report these to the Triager.
+
+* **Server-next expiration** - default after **60 days**  
+  If we considered a bug actionable and added it to server-next, but then no update happened in 60 days that usually means
+  something went wrong. Often bugs are blocked on external constraints. This needs to be evaluated as a case-by-case decision.
+  Most common cases are, that it turns out:
+    * that the bug is not solvable/reasonable the way it was planned -> re-triage, maybe drop server-next.
+    * that it is actually fixed or otherwise progressed without update -> update bug
+    * that we failed to give it the required focus -> add the server-triage-discuss tag to the bug and bring it in the next 
+      standup
+
+* **Server subscription expiration** - default after **180 days**  
+  If nobody touched a bug for 180 days (~= 1 release cycle) it is reasonable to check for changed conditions. Quite often e.g.
+  a patch one was waiting on is available now. In other cases a newer release fixed it already. Essentially anything that is
+  listed here needs to be fully re-triaged to ensure the list is reflecting the current status. It also can after this time be
+  used as a metric how many more people chimed in got dupped on the bug (importance/#affected). Most common cases are, that it
+  turns out:
+    * that recent releases upstream or even already in Ubuntu have the fix -> re-triage, consider tagging `server-next` for SRU
+    * that the bug should have been supported by the community but nothing happened -> re-triage importance, consider dropping
+      *~ubuntu-server* subscription
+    * that a bug that was formerly considered a real case is not qualifying anymore (e.g. alternative solutions
+      have taken hold as *the* way to do it) -> re-triage importance, consider dropping *~ubuntu-server* subscription
+    * If unsure, add the server-triage-discuss tag and bring it up at the next standup
+
+Overall for all of these we have to be honest to the bug reporter, try to
+understand why an issue was not worked on and explain it if possible. Also if
+we drop `server-next` or the *~ubuntu-server* subscription for any of the
+reasons above always add a explanatory comment. If reporters disagree with our
+re-triage they will report on the bug and it will show up in the daily triage
+duty the next day to be reconsidered with that point of view taken into
+consideration.
 
 
-Add to Server-Next Queue
-------------------------
-
-In Launchpad, adding a tag 'server-next' puts the issue onto the server
-team's main work list.
-
-Since this is a main source of work for the team, only add issues that
-are important and that can (and should) be fixed soon.  The issues
-should have enough information to be worked on, and it's either a major
-use case for Ubuntu server users or work on it will likely stimulate
-more community contributions.
-
-The specific policy for classifying server-next bugs is described in the
-wiki (https://wiki.ubuntu.com/ServerTeam).
-
-
-
-Awareness of the Triage
------------------------
+## Awareness of the Triage
 
 We have several stakeholders we want to keep up-to-date on things that
 we've found on triage. On one hand we want to keep the community generally
@@ -185,13 +317,21 @@ then we consider the maintainer to be aware and will not do extra
 pings/mentions/CC.
 
 
-Triage Rotation
----------------
+## Triage Rotation
 
 According to load we might shift things, but generally every day Tue-Fri
 has a team member assigned. Monday is often more work and includes more
 low quality bugs as it includes all of the weekend - therefore Monday is
 a rotation through all eligible bug triagers.
-This is organized in our "Daily Ubuntu Server" board. The regular cards are
-created via the "Repeat" power-up. If one needs to change the templates that
-it copies from search for `is:archived label:origin` to find them.
+This is organized internally in the teams Jira and automation will create
+a Task with the "bug-triage" label assigned to the person on rotation.
+
+## Tooling
+
+The [ustriage](https://snapcraft.io/ustriage) tool is available as a snap
+and serves as the tool a triager would use. It is maintained publicly on github
+as [ubuntu server triage](https://github.com/canonical/ubuntu-server-triage).
+It has options to identify bugs for the triage of the day as well as serving
+as a helper to check our tagged bugs ensuring that nothing falls through the
+cracks. The Readme.md of the linked project has some more details and use
+case example.
