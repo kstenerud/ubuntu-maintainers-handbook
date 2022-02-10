@@ -43,7 +43,11 @@ handled in different ways:
   These will generally either be filed by or assigned to a team member;
   if not, investigate further.  Generally, for properly owned tickets
   'No action is required' by the triager, unless something unusually
-  weird is going on in which case 'Raise with the Team'.
+  weird is going on in which case 'Raise with the Team' (that *raising* can
+  be "bringing it up in post-standup", "bringing it up in the weekly bug
+  meeting" or "bringing it up in a chat channel pinging related developers"
+  TL;DR do not stay alone with the weirdness - group experience and group
+  decisions win).
 
 * SRU Regression Bugs.  
   Problems that look like the result of an SRU
@@ -138,8 +142,8 @@ handled in different ways:
   - Make sure steps to reproduce it are identified.
   - If the issue affects the development release, it is a merge
     opportunity.  If past feature-freeze, decide if is it worth a freeze
-    exception.  Make sure there is a Trello card on the merges board for
-    the package, and 'Add to Server-Next Queue'.
+    exception.  Make sure there is a merge bug in launchpad for
+    the package, and consider to Add to Server-Next/Server-Todo Queue.
   - If the issue affects a stable release and looks SRU-worthy,
     determine which supported Ubuntu releases will need the fix and add
     Bug Tasks as appropriate.
@@ -276,7 +280,13 @@ There are two levels of expiration. The tooling will help to report these to the
       have taken hold as *the* way to do it) -> re-triage importance, consider dropping *~ubuntu-server* subscription
     * If unsure, add the server-triage-discuss tag and bring it up at the next standup
 
-Overall for all of these we have to be honest to the bug reporter, try to understand why an issue was not worked on and explain it if possible. Also if we drop `server-next` or the *~ubuntu-server* subscrription for any of the reasons above always add a explanatory comment. If reporters disagree with our re-triage they will report on the bug and it will show up in the daily triage duty the next day to be reconsidered with that point of view taken into consideration.
+Overall for all of these we have to be honest to the bug reporter, try to
+understand why an issue was not worked on and explain it if possible. Also if
+we drop `server-next` or the *~ubuntu-server* subscription for any of the
+reasons above always add a explanatory comment. If reporters disagree with our
+re-triage they will report on the bug and it will show up in the daily triage
+duty the next day to be reconsidered with that point of view taken into
+consideration.
 
 
 ## Awareness of the Triage
