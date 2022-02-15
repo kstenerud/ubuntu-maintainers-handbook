@@ -552,7 +552,7 @@ Run the suggested command to push to your repository.
 
 #### Push your lp tags
 
-    $ git push kstenerud $(git tag |grep 1802914 | xargs)
+    $ git push kstenerud $(git tag |grep "^lp1802914" | xargs)
     To ssh://git.launchpad.net/~kstenerud/ubuntu/+source/at
      * [new tag]         lp1802914/split/3.1.20-3.1ubuntu2 -> lp1802914/split/3.1.20-3.1ubuntu2
      * [new tag]         lp1802914/logical/3.1.20-3.1ubuntu2 -> lp1802914/logical/3.1.20-3.1ubuntu2
