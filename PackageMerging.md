@@ -163,7 +163,7 @@ Use the merge tracking bug and the ubuntu version it's going into (for example `
 
     $ git checkout -b merge-lp1802914-disco
 
-If there's no merge bug than the Debian package version you're merging onto can be used (for example `merge-3.1.23-1-disco`)
+If there's no merge bug, the Debian package version you're merging onto can be used (for example `merge-3.1.23-1-disco`)
 
 Sometimes you can notice a message like the following one when making the merge branch:
 
@@ -552,7 +552,7 @@ Run the suggested command to push to your repository.
 
 #### Push your lp tags
 
-    $ git push kstenerud $(git tag |grep 1802914 | xargs)
+    $ git push kstenerud $(git tag |grep "^lp1802914" | xargs)
     To ssh://git.launchpad.net/~kstenerud/ubuntu/+source/at
      * [new tag]         lp1802914/split/3.1.20-3.1ubuntu2 -> lp1802914/split/3.1.20-3.1ubuntu2
      * [new tag]         lp1802914/logical/3.1.20-3.1ubuntu2 -> lp1802914/logical/3.1.20-3.1ubuntu2
