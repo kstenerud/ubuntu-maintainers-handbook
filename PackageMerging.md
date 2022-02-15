@@ -163,7 +163,7 @@ Use the merge tracking bug and the ubuntu version it's going into (for example `
 
     $ git checkout -b merge-lp1802914-disco
 
-If there's no merge bug than the Debian package version you're merging onto can be used (for example `merge-3.1.23-1-disco`)
+If there's no merge bug, the Debian package version you're merging onto can be used (for example `merge-3.1.23-1-disco`)
 
 Sometimes you can notice a message like the following one when making the merge branch:
 
