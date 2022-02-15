@@ -305,6 +305,13 @@ Finally, complete the rebase:
 
     $ git rebase --continue
 
+The result of this rebase should be a sequence of smaller commits, one per
+`debian/changelog` entry (with potentially additional commits for previously
+undocumented changes).
+
+It should represent a broken-out history (viewable with git-log) for the latest
+Ubuntu version and no contentful differences to that Ubuntu version. This can
+be verified with `git diff -p lp1803562/old/ubuntu`.
 
 #### Tag Split
 
