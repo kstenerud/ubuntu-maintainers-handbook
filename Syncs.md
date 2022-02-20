@@ -23,7 +23,7 @@ The automatic syncing of packages from Debian is active for only some of the Ubu
 Asking for a sync
 -----------------
 
-In our case (we have han empty Ubuntu delta before Debian Import Freeze - check Release Schedule for current release in development [here](https://wiki.ubuntu.com/ReleaseSchedule) and the Debian package is on sid -testing-), doing an [explicit sync](https://wiki.ubuntu.com/SyncRequestProcess#Content_of_a_sync_request) is not necessary, but we have to fill the MP for the unfinished-and-not-necessary-merge in the following way:
+In our case (we have an empty Ubuntu delta before Debian Import Freeze - check Release Schedule for current release in development [here](https://wiki.ubuntu.com/ReleaseSchedule) and the Debian package is on sid -testing-), doing an [explicit sync](https://wiki.ubuntu.com/SyncRequestProcess#Content_of_a_sync_request) is not necessary, but we have to fill the MP for the unfinished-and-not-necessary-merge in the following way:
 
 - Specify that the MP is for a sync request.
 - Write down how did you find it is a sync: changelog entries, step in where the empty commit message appeared, point to upstream git repository, etc ...
