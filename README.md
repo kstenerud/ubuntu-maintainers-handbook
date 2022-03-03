@@ -29,3 +29,5 @@ Sections
    - [Bug Triage](BugTriage.md)
  * Requesting Upload Rights
    - [PackageSet](MembershipInPackageSet.md)
+ * Quick References
+   - [Check Lists](CheckListsSheets.md)
