@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8; mode: sh -*
+
+(which pandoc >/dev/null && which xelatex >/dev/null) || {
+    echo "Please install pandoc and xelatex to use this script:"
+    echo "  $ sudo apt-get install pandoc texlive-latex-extra texlive-xetex"
+    exit 1
+}
+
+src=$(grep \.md README.md | cut -d\( -f2 | cut -d\) -f1)
+
+# FIXME: UTF-8 characters don't work with the default font
+pandoc --pdf-engine=xelatex README.md ${src} -o ubuntu-maintainers-handbook.pdf || {
+    echo "Failed to generate PDF"
+    exit 1
+}
+
+echo
+echo "PDF generated:"
+ls -l  ubuntu-maintainers-handbook.pdf
