@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8; mode: sh -*
+
+(which pandoc >/dev/null) || {
+    echo "Please install pandoc to use this script:"
+    echo "  $ sudo apt-get install pandoc"
+    exit 1
+}
+
+mkdir -p html
+
+tmp_filter=$(mktemp links-to-html-XXXX.lua)
+trap "rm -f '${tmp_filter}'" EXIT
+cat <<EOF > ${tmp_filter}
+function Link(el)
+  el.target = string.gsub(el.target, "%.md", ".html")
+  return el
+end
+EOF
+
+src=$(grep \.md README.md | cut -d\( -f2 | cut -d\) -f1)
+
+for file in README.md ${src}; do
+    pandoc -f gfm \
+           -t html5 "${file}" \
+           --lua-filter="${tmp_filter}" \
+           -o "html/${file%%.md}.html"
+done
+
+echo
+echo "HTML generated:"
+ls -l  html/
