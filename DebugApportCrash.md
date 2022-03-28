@@ -13,10 +13,8 @@ from one of these .crash files.
 
 There are various ways to enable debug symbols; one way is to append ddebs to your apt sources:
 
-    $ echo "deb http://ddebs.ubuntu.com focal main restricted universe multiverse" | sudo tee -a
-/etc/apt/sources.list
-    $ echo "deb http://ddebs.ubuntu.com focal-updates main restricted universe multiverse" | sudo tee -a
-/etc/apt/sources.list
+    $ echo "deb http://ddebs.ubuntu.com focal main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
+    $ echo "deb http://ddebs.ubuntu.com focal-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
 
     $ sudo apt install ubuntu-dbgsym-keyring
     $ sudo apt update
@@ -37,20 +35,20 @@ need.  This examines the binary for other possible dbgsym's:
 
 
 
-2.  Download the .crash file to a tmp directory
+### 2.  Download the .crash file to a tmp directory
 
     $ mkdir /tmp/bind9-crash
     $ cd /tmp/bind9-crash
     $ wget https://bugs.launchpad.net/ubuntu/+source/bind9/+bug/1954854/+attachment/5551855/+files/_usr_sbin_named.114.crash
 
-### 2.  Register the package with the crash file
+### 3.  Register the package with the crash file
 
     $ cat <(echo "Package: bind9") _usr_sbin_named.114.crash > bind9_named.114.crash
 
 Apport-retrace complains if the package isn't specified, but apport
 hooks don't insert it, so you have to do it manually.  ¯\\_(ツ)_/¯
 
-### 3.  Doublecheck that your installed version matches the reporter's version exactly:
+### 4.  Doublecheck that your installed version matches the reporter's version exactly:
 
     $ apt-cache policy bind9 | grep '^  Installed'
       Installed: 1:9.16.1-0ubuntu2.9
@@ -60,7 +58,7 @@ but the LP bug report will show it:
 
      Package: bind9 1:9.16.1-0ubuntu2.9
 
-### 4.  Retrace symbols
+### 5.  Retrace symbols
 
     $ sudo apt-get install apport-retrace
     $ apport-retrace bind9_named.114.crash
@@ -70,7 +68,7 @@ file, which apport-unpack will choke on, so delete that line:
 
     $ sed -i '/^separator: *$/d' ./bind9_named.114.crash
 
-### 5.  Unpack crash
+### 6.  Unpack crash
 
     $ apport-unpack bind9_named.114.crash crash-114
 
@@ -82,7 +80,7 @@ great but the full stacktrace is rather TMI.
     415 crash-114/ThreadStacktrace
 
 
-### 6.  (Advanced) GDB
+### 7.  (Advanced) GDB
 
     $ apt-get source bind9
     $ cd bind9-9.16.1/
