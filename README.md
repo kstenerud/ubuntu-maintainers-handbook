@@ -24,6 +24,7 @@ Sections
    - [Package Merging](PackageMerging.md)
    - [Main Inclusion](MainInclusion.md)
    - [Proposed Migration](ProposedMigration.md)
+   - [Salsa Package Maintenance](SalsaDualMaintenance.md)
  * Debugging
    - [Apport Crash Files](DebugApportCrash.md)
  * Reviewing
