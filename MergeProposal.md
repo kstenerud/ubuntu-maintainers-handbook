@@ -128,3 +128,32 @@ Once your MP has been reviewed, request sponsorship, pointing to the git commit 
 
 The sponsor will tag the upload and dput it to where it belongs.
 
+Retiring a Merge Proposal
+=========================
+
+If a merge proposal should no longer land as-is, you have four options:
+
+1. *Mark it Rejected*. You can do this by changing the Status of the
+merge proposal from near the top left of the Web UI. Doing this will
+remove it from the [Active Reviews page](https://code.launchpad.net/~canonical-server/+activereviews).
+
+2. *Force push a replacement*. If the essential topic of the change
+should remain, but the proposed changes be completely replaced, then you
+can force push to the source branch. This will cause all previous merge
+proposal comments and the source branch name to be retained, but to
+progress the merge proposal by proposing a replacement set of commits.
+
+3. *Supersede the merge proposal*. You can do this by using the
+"Resubmit proposal" link near the top right of the Web UI. This allows
+you to create a replacement merge proposal that links to the one being
+superseded. The supserseded merge proposal will be marked as such. This
+allows you to supply a new branch name and start with a fresh set of
+comments, but without losing the previous history.
+
+4. *Delete the merge proposal*. You can do this by using the "Delete
+proposal to merge" link near the top right of the Web UI. This should
+generally only be done as a last resort since it will lose all history,
+such as comments, as if the merge proposal had never existed. This might
+be necessary for appropriateness or legal reasons, but normally we'd
+prefer to use one of the other options since retaining the history of
+what happened may be useful in the future.
