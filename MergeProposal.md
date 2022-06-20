@@ -135,7 +135,7 @@ If a merge proposal should no longer land as-is, you have four options:
 
 1. *Mark it Rejected*. You can do this by changing the Status of the
 merge proposal from near the top left of the Web UI. Doing this will
-remove it from the Active Reviews page.
+remove it from the [Active Reviews page](https://code.launchpad.net/~canonical-server/+activereviews).
 
 2. *Force push a replacement*. If the essential topic of the change
 should remain, but the proposed changes be completely replaced, then you
