@@ -35,8 +35,7 @@ Software
         pastebinit \
         piuparts \
         pkg-config \
-        qemu \
-        qemu-kvm \
+        qemu-system \
         quilt \
         sbuild \
         snapcraft \
