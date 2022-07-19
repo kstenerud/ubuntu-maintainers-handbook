@@ -234,6 +234,45 @@ Otherwise, there are several things worth checking (note: These links are for ja
 
   - [Stuck in Unapproved queue](https://launchpad.net/ubuntu/jammy/+queue?queue_state=1)
 
+### No reason - still stuck?
+
+If the package as shown in [excuses](https://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses.html) is looking all-good but not migrating it might mean an installability conflict.
+So do not be confused by the status "Will attempt migration (Any information below is purely informational)" - there are more checks happening afterwards.
+This is checked and reported in [update output.txt](https://people.canonical.com/~ubuntu-archive/proposed-migration/update_output.txt)
+
+Here an example of `exim4` hitting that:
+
+```
+trying: exim4
+skipped: exim4 (4, 0, 137)
+    got: 11+0: a-0:a-0:a-0:i-2:p-1:r-7:s-1
+    * riscv64: sa-exim
+```
+
+That is hard to read [as explained here](https://wiki.ubuntu.com/ProposedMigration#The_update_output.txt_file_is_completely_unreadable.21), but in this example means that a few packages on those architectures got uninstallable.
+
+You can usually reproduce that in a -proposed enabled container and in this example we see:
+
+```
+root@k:~# apt install exim4 sa-exim
+...
+The following packages have unmet dependencies:
+ sa-exim : Depends: exim4-localscanapi-4.1
+```
+
+And now that we know that let us compare the old and new exim4, it has:
+
+```
+root@k:~# apt-cache show exim4-daemon-light | grep -e scanapi -e '^Versi'
+Version: 4.96-3ubuntu1
+Provides: exim4-localscanapi-6.0, mail-transport-agent
+Version: 4.95-4ubuntu3
+Provides: exim4-localscanapi-4.1, mail-transport-agent
+```
+
+So our example needs - and that is most often the solution in these cases - a no change rebuild to pick up the new dependency.
+After a test build to be sure that works fine you can often upload and resolve this situation that seemeed so odd at first.
+
 
 Autopkgtest Log Files
 ---------------------
