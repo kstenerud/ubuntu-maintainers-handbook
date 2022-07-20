@@ -52,7 +52,7 @@ handled in different ways:
 * SRU Regression Bugs.  
   Problems that look like the result of an SRU
   update to a server package need to receive top priority.  For such
-  bugs, 'Add to Server-Next Queue' and 'Raise with the Team'.  If
+  bugs, 'Add to Server-Todo Queue' and 'Raise with the Team'.  If
   possible, verify rolling back to the prior version of the package
   fixes the issue, and re-installing the update brings the issue back.
   In this case, also tag the bug 'regression-update'.  Be aware that
@@ -65,7 +65,7 @@ handled in different ways:
 
 * Severe Bugs.  
   Urgently important issues such as ones with potential
-  for widespread breakage, should immediately 'Add to Server-Next
+  for widespread breakage, should immediately 'Add to Server-Todo
   Queue'.
 
 * High Profile Bugs.  
@@ -117,7 +117,7 @@ handled in different ways:
   reproduce the bug, try to do so in an lxc container, and then itemize
   the steps to follow, and how to identify that the bug has indeed
   occurred.  If it all looks good, subscribe the server team, or if the
-  issue looks urgent and/or important 'Add to Server-Next Queue'.
+  issue looks urgent and/or important 'Add to Server-Todo Queue'.
 
 * Already Fixed in Development.  
   An issue that can be reproduced in a
@@ -143,7 +143,7 @@ handled in different ways:
   - If the issue affects the development release, it is a merge
     opportunity.  If past feature-freeze, decide if is it worth a freeze
     exception.  Make sure there is a merge bug in launchpad for
-    the package, and consider to Add to Server-Next/Server-Todo Queue.
+    the package, and consider to Add to Server-Todo Queue.
   - If the issue affects a stable release and looks SRU-worthy,
     determine which supported Ubuntu releases will need the fix and add
     Bug Tasks as appropriate.
@@ -205,41 +205,56 @@ When the bug no longer meets these criteria, we unsubscribe it:
 
 ### tagging `server-next`
 
-Since the backlog is bigger than what can be achieved in a short time, there is the extra classification via the tag
-`server-next`. That tag is set by the Triager (or anyone else working on doing the Root-Cause-Analysis or a Fix) to
-reflect that this is an issue that shall be tackled by the Teams resources "next".
+This section is mostly kept around in case someone sees old bugs and wonders
+what the tag used to imply.
 
-Another reason to add `server-next` in some cases is to preserve high quality contributions of the community. An example might be a report that the user already bisected and created a patch for - in those cases the benefit diminishes by bit rot way too fast, so handling that next helps to retain the work the reporters did. And vice versa it might encourage one or the other to provide more high quality bugs.
+Since early 2022 we have had enough control over the backlog bugs that the
+former set of `server-next` + `server-todo` bugs was reduced to just
+`server-todo`. The reason for that was that we found the capacity to work even
+on bugs that didn't fulfil the rather strict rules we used to have for
+`server-next`.
 
-The goal is to have this list around ~20 bugs most of the time, if dropping below we can refill with candidates from the *~ubuntu-server* subscribed bugs. But if it grows significantly out of this range it is non-realistic to expect those issues to be handled in time, we should communicate so to the reporters.
-
-The rules of the `server-next` tag are as follows:
-
-1. Must not tag unless bug is actionable. Doesn't mean it must have a patch, only that a developer has enough information to
-   work on the bug, even if it means more debugging.
-2. Tag only if one of these two things are true:
-    1. Delays will discourage this excellent community contribution.
-    2. If you believe it affects a major use case for Ubuntu server users. In this case you should also set the bug Importance.
-3. The set of all bugs tagged `server-next` must be kept small. If it grows, the lowest priority bugs tagged `server-next` must
-   be removed until the list isn’t too big.
-4. This tag is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests. Whether a
-   Canonical customer has made a request in relation to a particular bug makes no difference and provides no additional priority
-   under this process. A Canonical customer bug may still be tagged if it qualifies under these criteria.
-5. If the bug is assigned to or otherwise owned by someone on our team, there is no need to tag it.
-6. Remove the tag when the bug is assigned to or otherwise owned by someone on our team.
+> Since the backlog is bigger than what can be achieved in a short time, there is the extra classification via the tag
+> `server-next`. That tag is set by the Triager (or anyone else working on doing the Root-Cause-Analysis or a Fix) to
+> reflect that this is an issue that shall be tackled by the Teams resources "next".
+>
+> Another reason to add `server-next` in some cases is to preserve high quality contributions of the community. An example might be a report that the user already bisected and created a patch for - in those cases the benefit diminishes by bit rot way too fast, so handling that next helps to retain the work the reporters did. And vice versa it might encourage one or the other to provide more high quality bugs.
+>
+> The goal is to have this list around ~20 bugs most of the time, if dropping below we can refill with candidates from the *~ubuntu-server* subscribed bugs. But if it grows significantly out of this range it is non-realistic to expect those issues to be handled in time, we should communicate so to the reporters.
+>
+> The rules of the `server-next` tag are as follows:
+>
+> 1. Must not tag unless bug is actionable. Doesn't mean it must have a patch, only that a developer has enough information to
+>    work on the bug, even if it means more debugging.
+> 2. Tag only if one of these two things are true:
+>     1. Delays will discourage this excellent community contribution.
+>     2. If you believe it affects a major use case for Ubuntu server users. In this case you should also set the bug Importance.
+> 3. The set of all bugs tagged `server-next` must be kept small. If it grows, the lowest priority bugs tagged `server-next` must
+>    be removed until the list isn’t too big.
+> 4. This tag is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests. Whether a
+>    Canonical customer has made a request in relation to a particular bug makes no difference and provides no additional priority
+>    under this process. A Canonical customer bug may still be tagged if it qualifies under these criteria.
+> 5. If the bug is assigned to or otherwise owned by someone on our team, there is no need to tag it.
+> 6. Remove the tag when the bug is assigned to or otherwise owned by someone on our team.
 
 ### tagging `server-todo`
 
-This is our new tag we use from now on to represent valid and work we should do (better than just backlog),
-but not as important/easy/urgent as `server-next`
+This is our tag we use to represent valid and work we should work on (better than just average valid backlog).
 
-We want to assign bugs from this queue as well, just not as urgently/desperately:
+We want to assign bugs from this queue regularly. To avoid losing traction
+there is a weekly bug housekeeping meeting (see below) to ensure non bug gets
+blocked or forgotten for too long.
+
+The goal is to have this list around ~30-40 bugs most of the time, if dropping
+below we can refill with candidates from the *~ubuntu-server* subscribed bugs.
+But if it grows significantly out of this range it is non-realistic to expect
+those issues to be handled in time, we should communicate so to the reporters.
 
 Definition to qualify for server-todo:
 
 * Whatever we think that we want to work on soon. For example:
     * An important new technology for Ubuntu-Server users
-    * Great community engagement that provide debugging and patches, but might be too unimportant for `server-next`
+    * Great community engagement that provide debugging and/or patches
     * OTOH we don’t want to put in bugs where the next step is significantly larger than one day to complete, unless the bug
       is particularly important. Examples:
         * A feature that is Ubuntu only and important for our users -> ok to be in the list despite likely needing more time
@@ -248,11 +263,9 @@ Definition to qualify for server-todo:
           backlog, but not really for `server-todo`
     * Make sure it is clear if the bug needs work in development or needs SRUs, by defining bug tasks accordingly.
       (These bug tasks can help in identifying current vs. obsolete bugs.)
-* As with `server-next` we want to limit the number of all bugs tagged with this at ~40
-    * If we exceed the size, drop the oldest/least recently touched ones
-* These bugs are not necesarily assigned/progressing at all time, but available for anyone from the team to grab
 * Only bugs that qualify for the backlog qualify here. If they aren’t suitable for the backlog (eg. not actionable by us)
   then they get dropped from both `server-todo` and the backlog.
+  * If there are any updates to the case they will come in via triage again and can be reevaluated
 
 ### Daily Bug Expiration
 
@@ -287,6 +300,44 @@ reasons above always add a explanatory comment. If reporters disagree with our
 re-triage they will report on the bug and it will show up in the daily triage
 duty the next day to be reconsidered with that point of view taken into
 consideration.
+
+### Weekly Bug Housekeeping
+
+In addition to the daily triage and our ongoing dedication to resolve bugs we
+picked up that way, the Server Team has introduced a weekly bug housekeeping
+session. In there we go through various lists ensuring that none are
+forgotten, blocked or stalled for too long.
+
+There are a few additional steps that we do always changing over time based on
+current priorities - for example looking for good candidates to do MREs in the
+future or trying to assign our remaining cleanup on discourese documentation
+feedback backlog. But while those change there is a core structure of what we
+always look at in this meeting:
+
+
+1. Check the `server-todo` tagged bug list
+   1. Get list via ustriage
+      1. `clear; ustriage --no-show-triage --extended --show-tagged --tag server-todo -S savebugs/todo-$(date -I'seconds').yaml -C $(ls -1t savebugs/* | head -n 1)`
+      2. the list of last weeks bugs helps to identify new/closed cases and is
+         [tracked in the helpers repository](https://git.launchpad.net/~ubuntu-server/+git/ubuntu-helpers/tree/savebugs)
+   3. Check size (see min/max above) of the `server-todo` tagged bug list
+   4. Ensure assigned bugs make reasonable progress
+      1. discuss blockers/reasons if there was no progress
+      2. Notice, enjoy and celebrate progress that was made
+   5. Ensure unassigned bugs find an owner
+      1. Ensure long term unassigned bugs are re-reevaluated (is there a reason they are not tackled?)
+2. Look at [update-excuses by team](https://people.canonical.com/~ubuntu-archive/proposed-migration/update_excuses_by_team.html#ubuntu-server)
+   to spot anything that needs our attention to migrate. If there are any assign
+   team members to analyze the case and ensure things are progressing.
+3. Look at our [merges schedule](http://pinot.endarchy.org:4200/merges-schedule)
+   to identify if we have fallen behing on any of them
+
+
+Future outlook:
+> as capacity permits we want in the future to start also having
+> a look at the [sponsoring queue](http://reqorts.qa.ubuntu.com/reports/sponsoring/index.html)
+> and (not yet sure if it will be weekly or part of daily triage) look at recent
+> feedback to our documentation using [dsctriage](https://snapcraft.io/dsctriage)
 
 
 ## Awareness of the Triage
