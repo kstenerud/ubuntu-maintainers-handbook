@@ -64,18 +64,28 @@ Configuration
 Your user should be a member of the following groups:
 
  * adm
- * kvm
  * libvirt
  * lxd
  * sbuild
  * sudo
 
-    $ groups my_user
-    my_user : my_user root adm cdrom sudo dip plugdev lpadmin
+Please ensure you have installed the packages as mentioned above
+which will be the trigger to create most of these groups.
+For those group membership to be really active one usually needs to re-login.
+Then afterwards one can double check group membership via:
 
-    $ sudo groupadd lxc
+```
+    $ groups my_user
+    my_user : my_user adm cdrom sudo dip plugdev lpadmin sambashare libvirt sbuild lxd
+```
+
+If any group is missing for your user one can fix it up via `groupadd` like:
+
+```
+    $ sudo groupadd lxd
     $ sudo groupadd sbuild
     $ sudo groupadd libvirt
+```
 
 
 ### Profile
