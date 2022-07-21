@@ -203,40 +203,6 @@ When the bug no longer meets these criteria, we unsubscribe it:
    criteria.
 4. If the bug is assigned to someone on our team, leave it subscribed. No need to subscribe, and feel free to unsubscribe the team.
 
-### tagging `server-next`
-
-This section is mostly kept around in case someone sees old bugs and wonders
-what the tag used to imply.
-
-Since early 2022 we have had enough control over the backlog bugs that the
-former set of `server-next` + `server-todo` bugs was reduced to just
-`server-todo`. The reason for that was that we found the capacity to work even
-on bugs that didn't fulfil the rather strict rules we used to have for
-`server-next`.
-
-> Since the backlog is bigger than what can be achieved in a short time, there is the extra classification via the tag
-> `server-next`. That tag is set by the Triager (or anyone else working on doing the Root-Cause-Analysis or a Fix) to
-> reflect that this is an issue that shall be tackled by the Teams resources "next".
->
-> Another reason to add `server-next` in some cases is to preserve high quality contributions of the community. An example might be a report that the user already bisected and created a patch for - in those cases the benefit diminishes by bit rot way too fast, so handling that next helps to retain the work the reporters did. And vice versa it might encourage one or the other to provide more high quality bugs.
->
-> The goal is to have this list around ~20 bugs most of the time, if dropping below we can refill with candidates from the *~ubuntu-server* subscribed bugs. But if it grows significantly out of this range it is non-realistic to expect those issues to be handled in time, we should communicate so to the reporters.
->
-> The rules of the `server-next` tag are as follows:
->
-> 1. Must not tag unless bug is actionable. Doesn't mean it must have a patch, only that a developer has enough information to
->    work on the bug, even if it means more debugging.
-> 2. Tag only if one of these two things are true:
->     1. Delays will discourage this excellent community contribution.
->     2. If you believe it affects a major use case for Ubuntu server users. In this case you should also set the bug Importance.
-> 3. The set of all bugs tagged `server-next` must be kept small. If it grows, the lowest priority bugs tagged `server-next` must
->    be removed until the list isn’t too big.
-> 4. This tag is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests. Whether a
->    Canonical customer has made a request in relation to a particular bug makes no difference and provides no additional priority
->    under this process. A Canonical customer bug may still be tagged if it qualifies under these criteria.
-> 5. If the bug is assigned to or otherwise owned by someone on our team, there is no need to tag it.
-> 6. Remove the tag when the bug is assigned to or otherwise owned by someone on our team.
-
 ### tagging `server-todo`
 
 This is our tag we use to represent valid and work we should work on (better than just average valid backlog).
@@ -269,16 +235,7 @@ Definition to qualify for server-todo:
 
 ### Daily Bug Expiration
 
-There are two levels of expiration. The tooling will help to report these to the Triager.
-
-* **Server-next expiration** - default after **60 days**  
-  If we considered a bug actionable and added it to server-next, but then no update happened in 60 days that usually means
-  something went wrong. Often bugs are blocked on external constraints. This needs to be evaluated as a case-by-case decision.
-  Most common cases are, that it turns out:
-    * that the bug is not solvable/reasonable the way it was planned -> re-triage, maybe drop server-next.
-    * that it is actually fixed or otherwise progressed without update -> update bug
-    * that we failed to give it the required focus -> add the server-triage-discuss tag to the bug and bring it in the next 
-      standup
+The tooling will help to report these to the Triager.
 
 * **Server subscription expiration** - default after **180 days**  
   If nobody touched a bug for 180 days (~= 1 release cycle) it is reasonable to check for changed conditions. Quite often e.g.
@@ -286,20 +243,19 @@ There are two levels of expiration. The tooling will help to report these to the
   listed here needs to be fully re-triaged to ensure the list is reflecting the current status. It also can after this time be
   used as a metric how many more people chimed in got dupped on the bug (importance/#affected). Most common cases are, that it
   turns out:
-    * that recent releases upstream or even already in Ubuntu have the fix -> re-triage, consider tagging `server-next` for SRU
+    * that recent releases upstream or even already in Ubuntu have the fix -> re-triage, consider tagging `server-todo` for SRU
     * that the bug should have been supported by the community but nothing happened -> re-triage importance, consider dropping
       *~ubuntu-server* subscription
     * that a bug that was formerly considered a real case is not qualifying anymore (e.g. alternative solutions
       have taken hold as *the* way to do it) -> re-triage importance, consider dropping *~ubuntu-server* subscription
     * If unsure, add the server-triage-discuss tag and bring it up at the next standup
 
-Overall for all of these we have to be honest to the bug reporter, try to
-understand why an issue was not worked on and explain it if possible. Also if
-we drop `server-next` or the *~ubuntu-server* subscription for any of the
-reasons above always add a explanatory comment. If reporters disagree with our
-re-triage they will report on the bug and it will show up in the daily triage
-duty the next day to be reconsidered with that point of view taken into
-consideration.
+Overall we want to be honest to the bug reporter, try to understand why an
+issue was not worked on and explain it if possible. Also if we drop `server-todo`
+or the *~ubuntu-server* subscription for any of the reasons above always add a
+explanatory comment. If reporters disagree with our re-triage they will report
+on the bug and it will show up in the daily triage duty the next day to be
+reconsidered with that point of view taken into consideration.
 
 ### Weekly Bug Housekeeping
 
@@ -386,3 +342,50 @@ It has options to identify bugs for the triage of the day as well as serving
 as a helper to check our tagged bugs ensuring that nothing falls through the
 cracks. The Readme.md of the linked project has some more details and use
 case example.
+
+## Outdated/Deprecated
+
+These info is kept around for a while in case one encounters older bugs
+which still use those tags or processes. Sometime later these sections will
+be removed.
+
+### tagging `server-next` (deprecated)
+
+Since early 2022 we have had enough control over the backlog bugs that the
+former set of `server-next` + `server-todo` bugs was reduced to just
+`server-todo`. The reason for that was that we found the capacity to work even
+on bugs that didn't fulfil the rather strict rules we used to have for
+`server-next`.
+
+> Since the backlog is bigger than what can be achieved in a short time, there is the extra classification via the tag
+> `server-next`. That tag is set by the Triager (or anyone else working on doing the Root-Cause-Analysis or a Fix) to
+> reflect that this is an issue that shall be tackled by the Teams resources "next".
+>
+> Another reason to add `server-next` in some cases is to preserve high quality contributions of the community. An example might be a report that the user already bisected and created a patch for - in those cases the benefit diminishes by bit rot way too fast, so handling that next helps to retain the work the reporters did. And vice versa it might encourage one or the other to provide more high quality bugs.
+>
+> The goal is to have this list around ~20 bugs most of the time, if dropping below we can refill with candidates from the *~ubuntu-server* subscribed bugs. But if it grows significantly out of this range it is non-realistic to expect those issues to be handled in time, we should communicate so to the reporters.
+>
+> The rules of the `server-next` tag are as follows:
+>
+> 1. Must not tag unless bug is actionable. Doesn't mean it must have a patch, only that a developer has enough information to
+>    work on the bug, even if it means more debugging.
+> 2. Tag only if one of these two things are true:
+>     1. Delays will discourage this excellent community contribution.
+>     2. If you believe it affects a major use case for Ubuntu server users. In this case you should also set the bug Importance.
+> 3. The set of all bugs tagged `server-next` must be kept small. If it grows, the lowest priority bugs tagged `server-next` must
+>    be removed until the list isn’t too big.
+> 4. This tag is for the Ubuntu Server triage community and is not for tracking of internal Canonical customer requests. Whether a
+>    Canonical customer has made a request in relation to a particular bug makes no difference and provides no additional priority
+>    under this process. A Canonical customer bug may still be tagged if it qualifies under these criteria.
+> 5. If the bug is assigned to or otherwise owned by someone on our team, there is no need to tag it.
+> 6. Remove the tag when the bug is assigned to or otherwise owned by someone on our team.
+
+> * **Server-next expiration** - default after **60 days**  
+>   If we considered a bug actionable and added it to server-next, but then no update happened in 60 days that usually means
+>   something went wrong. Often bugs are blocked on external constraints. This needs to be evaluated as a case-by-case decision.
+>   Most common cases are, that it turns out:
+>     * that the bug is not solvable/reasonable the way it was planned -> re-triage, maybe drop server-next.
+>     * that it is actually fixed or otherwise progressed without update -> update bug
+>     * that we failed to give it the required focus -> add the server-triage-discuss tag to the bug and bring it in the next 
+>       standup
+
