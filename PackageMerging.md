@@ -540,10 +540,9 @@ We do not consider this part of the logical delta. So any commits that contain o
 #### Protip 
     
 If you diff your final logical tag against the Ubuntu package it analyses, then the diff should be empty, except:
-    1. All changes to debian/changelog: we deliberately exclude these from the logical tag, relying on commit messages instead.
-    2. The change that “update-maintainer” introduced, and (rarely) similar changes like a change to Vcs-Git headers to point to an Ubuntu VCS instead.    
-       For the purposes of this workflow, these are not considered part of our “logical delta”, and instead re-added at the end.
-
+1. All changes to debian/changelog: we deliberately exclude these from the logical tag, relying on commit messages instead.
+2. The change that “update-maintainer” introduced, and (rarely) similar changes like a change to Vcs-Git headers to point to an Ubuntu VCS instead.    
+   For the purposes of this workflow, these are not considered part of our “logical delta”, and instead re-added at the end.
 
     
 
