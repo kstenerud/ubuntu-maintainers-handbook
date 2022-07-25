@@ -319,6 +319,12 @@ Note: Do this even if there were no commits to split.
 
     $ git ubuntu tag --split --bug 1803562
 
+#### Purpose of logical tag
+
+- If we do this step, then we will have a distinct boundary between looking at the past (analysis of what is there already) and the actual work we want    to perform (bringing the old Ubuntu delta forward).
+- By having a well-defined point, it is easier to do the future work, and also for a reviewer to start from the same point. The reviewer can very easily and nearly completely automatically determine if the logical tag is correct.
+- The logical tag is the cleanest possible representation of a previous Ubuntu delta. By determining this representation, we make it as easy as possible to bring the delta forward.
+
 
 ### Prepare the Logical View
 
@@ -353,6 +359,10 @@ At the end of the squash and clean phase, the only delta you should see from the
 Only changelog and control were changed, which is what we want.
 
 #### Create logical tag
+    
+What is the logical tag? 
+The logical tag is a representation of the Ubuntu delta present against a specific historical package version in Ubuntu.
+
 
     $ git ubuntu tag --logical --bug 1803562
 
@@ -393,6 +403,21 @@ Continue with the rebase:
 
     $ git add debian/control
     $ git rebase --continue
+    
+#### Corollaries
+
+Mistake corrections are squashed.
+Changes that fix mistakes made previous in the same delta are squashed against them. 
+
+For example:
+1. 2.3-4ubuntu1 was the previous merge.
+2. 2.3-4ubuntu2 adjusted debian/rules to add a configure flag “--build-beter”
+3. 2.3-4ubuntu3 fixed the typo in debian/rules to say “--build-better” instead.
+4. When the logical tag is created, there will be only one commit relating to –build-better, which omits any mention of the typo.
+
+Note: if a mistake exists in the delta itself, then it is retained. 
+For example, if 2.3-4ubuntu3 was never uploaded and the typo is still present in 2.3-4ubuntu2, then logical/2.3.-4ubuntu2 should contain a commit adding the configure flag with the typo still present.
+
 
 #### Empty commits
 
@@ -505,6 +530,23 @@ to:
     pick 21cea1a update-maintainer
 
 Notice above that you must also change the `changelog` rebase command to `fixup` (or `f`).
+
+
+#### No changes to debian/changelog
+
+The range old/ubuntu..logical/<version> should contain no changes to debian/changelog at all. 
+We do not consider this part of the logical delta. So any commits that contain only changes to debian/changelog should be dropped.
+
+#### Protip 
+    
+If you diff your final logical tag against the Ubuntu package it analyses, then the diff should be empty, except:
+    1. All changes to debian/changelog: we deliberately exclude these from the logical tag, relying on commit messages instead.
+    2. The change that “update-maintainer” introduced, and (rarely) similar changes like a change to Vcs-Git headers to point to an Ubuntu VCS instead.    
+       For the purposes of this workflow, these are not considered part of our “logical delta”, and instead re-added at the end.
+
+
+    
+
 
 
 
