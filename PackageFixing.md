@@ -53,7 +53,7 @@ Sometimes these types of bug reports will also include an attached
 "something.crash" file.  This is created by the Apport process running
 on the user's system at the time of segfault, and typically includes the
 core dump, logs, and other relevant information.  If the user has
-provided a .crash file, you can (examine it manually)[DebugApportCrash.md]
+provided a .crash file, you can [examine the Apport Crash manually](DebugApportCrash.md)
 to get a useful stacktrace.
 
 
