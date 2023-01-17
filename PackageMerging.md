@@ -135,11 +135,8 @@ The Merge Process
 
 From within the git source tree:
 
-    git ubuntu merge start ubuntu/devel --bug [bug number]
+    git ubuntu merge start ubuntu/devel
 
-For example:
-
-    $ git ubuntu merge start ubuntu/devel --bug 1802914
 
 This will generate the following tags for you:
 
@@ -149,6 +146,15 @@ This will generate the following tags for you:
 | old/debian | last import tag prior to old/ubuntu without ubuntu suffix in version |
 | new/debian | debian/sid                                                           |
 
+
+There is another approach with --bug flag at the end:
+
+    git ubuntu merge start ubuntu/devel --bug [bug number]
+
+For example:
+
+    git ubuntu merge start ubuntu/devel --bug 1802914
+ 
 The tags themselves will be name-spaced to the current bug in the format `lp12345678`. Thus, for example, your tags may look like:
 
  * `lp1802914/old/ubuntu`
@@ -159,7 +165,8 @@ If `git ubuntu merge start` fails, [do it manually](#start-a-merge-manually)
 
 #### Make a merge branch
 
-Use the merge tracking bug and the ubuntu version it's going into (for example `disco`).
+Use the merge tracking bug and the current ubuntu devel version it's going into. (that time it was disco)
+The best approach to name our branch is to use 'merge' word, then lp number and ubuntu devel version at the end.
 
     $ git checkout -b merge-lp1802914-disco
 
@@ -193,18 +200,51 @@ In this phase, you split out old-style commits that lumped multiple changes toge
     9c3cf29 (tag: pkg/import/3.1.20-3.1) Import patches-unapplied version 3.1.20-3.1 to debian/sid
     ...
 
-Get all commit hashes since old/debian, and:
+Get all commit hashes since old/debian:
 
-    git show [hash] | diffstat
+The best command for that:
 
-Example:
+    git log --stat old/debian..
 
-    $ git show 2af0cb7 | diffstat
-    changelog |    6 ++++++
-    control   |    4 ++--
-    2 files changed, 8 insertions(+), 2 deletions(-)
+That command lists you all commit hashes since old/debian including 
+commit message of each commit and files which have been changed.
 
-Here's another typical example, for the nspr package:
+Example: (example comes from different merge (heimdal merge))
+
+    ~/MERGES/heimdal/heimdal-gu$ git log --stat old/debian..
+    commit 9fc91638b0a50392eb9f79d45d68bc5ac6cd6944 (HEAD -> 
+    merge-7.8.git20221117.28daf24+dfsg-1-lunar)
+    Author: Michal Maloszewski <michal.maloszewski@canonical.com>
+    Date:   Tue Jan 17 16:16:01 2023 +0100
+
+        Changelog for 7.8.git20221117.28daf24+dfsg-1
+
+     debian/changelog | 1 -
+     1 file changed, 1 deletion(-)
+
+    commit e217fae2dc54a0a13e4ac5397ec7d3be527fa243
+    Author: Michal Maloszewski <michal.maloszewski@canonical.com>
+    Date:   Tue Jan 17 16:13:49 2023 +0100
+
+        update-maintainer
+
+     debian/control | 3 ++-
+     1 file changed, 2 insertions(+), 1 deletion(-)
+
+    commit 3c66d873330dd594d593d21870f4700b5e7fd153
+    Author: Michal Maloszewski <michal.maloszewski@canonical.com>
+    Date:   Tue Jan 17 16:13:49 2023 +0100
+
+        reconstruct-changelog
+
+     debian/changelog | 10 ++++++++++
+     1 file changed, 10 insertions(+)
+
+    
+
+Here's another typical example, for the nspr package: (using command 
+below, we are able to list what has been changed within one 
+specific commit)
 
     $ git show d7ebe661 | diffstat
     changelog                                   |  501 ++++++++++++++++++++++++++++
